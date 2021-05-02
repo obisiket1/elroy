@@ -1,0 +1,42 @@
+{
+  "name": "elroi-api",
+  "version": "1.0.0",
+  "description": "Backend for Elroi system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r esm src/",
+    "dev": "nodemon -r esm src/",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/team-elroi/elroi-api.git"
+  },
+  "keywords": [
+    "elroi",
+    "backend"
+  ],
+  "author": "Victor Onwukwe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/team-elroi/elroi-api/issues"
+  },
+  "homepage": "https://github.com/team-elroi/elroi-api#readme",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.7",
+    "morgan": "^1.10.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
