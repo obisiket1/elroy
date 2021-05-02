@@ -18,21 +18,23 @@ export default class AuthController {
    */
   static async signup (req, res) {
     try {
-    //   const { firstName, lastName, password, email, role } = req.body
+      const { fullName, password, email, role } = req.body
 
-    //   const encryptpassword = await Helper.encryptPassword(password)
+      const encryptpassword = await Helper.encryptPassword(password)
 
-    //   const newUser = {
-    //     firstName,
-    //     lastName,
-    //     password: encryptpassword,
-    //     email,
-    //     role
-    //   }
+      const user = {
+        fullName,
+        password: encryptpassword,
+        email,
+        role
+      }
 
-    //   const result = await User.create({ ...newUser })
+      const result = await User.create({ ...user })
 
-    //   return Response.Success(res, { user: result }, 201)
+      const token = Helper.generateToken(user._id, user.role, user.fullName);
+      Helper.setCookie(res, token);
+
+      return Response.Success(res, { user: result }, 201)
     return Response.Success(res, {message: 'Signup successful'})
     } catch (err) {
       return Response.InternalServerError(res, 'Error signing up user')
