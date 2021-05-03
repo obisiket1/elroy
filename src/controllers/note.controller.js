@@ -46,4 +46,15 @@ export default class NotesController {
       Response.InternalServerError(res, 'Error fetching note')
     }
   }
+
+  static async fetchNotes (req, res) {
+    try {
+      const { id: creatorId } = req.data
+      const notes = await Notes.find({ creatorId })
+
+      Response.Success(res, { notes })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching note')
+    }
+  }
 }
