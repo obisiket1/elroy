@@ -40,9 +40,7 @@ const UserSchema = new mongoose.Schema(
     profilePhotoUrl: {
       type: String,
     },
-    interests: {
-        type: Array
-    }
+    interests: [{ type : 'ObjectId' }]
   },
   {
     timestamps: true

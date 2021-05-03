@@ -1,4 +1,6 @@
 import { check, validationResult } from 'express-validator';
+import HelperUtils from '../utils/helpers.utils'
+import Response from '../utils/response.utils'
 
 /**
  *Contains Login Validator
@@ -57,22 +59,14 @@ class Auth {
 
   static validateSignupData() {
     return [
-      check('firstName')
+      check('fullName')
         .exists()
-        .withMessage('First name is required')
+        .withMessage('Full name is required')
         .isString()
-        .withMessage('First name must be a string')
+        .withMessage('Full name must be a string')
         .not()
         .isEmpty()
-        .withMessage('First name cannot be empty'),
-      check('lastName')
-        .exists()
-        .withMessage('Last name is required')
-        .isString()
-        .withMessage('Last name must be a string')
-        .not()
-        .isEmpty()
-        .withMessage('Last name cannot be empty'),
+        .withMessage('Full name cannot be empty'),
       check('email')
         .exists()
         .withMessage('Email is required')
