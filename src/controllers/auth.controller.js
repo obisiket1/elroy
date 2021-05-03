@@ -32,8 +32,8 @@ export default class AuthController {
       const result = await Users.create({ ...user })
       result.password = undefined
 
-      const token = Helper.generateToken(user._id, user.role, user.fullName);
-      Helper.setCookie(res, token);
+      const token = Helper.generateToken(user._id, user.role, user.fullName)
+      Helper.setCookie(res, token)
 
       return Response.Success(res, { user: result, token }, 201)
     } catch (err) {
@@ -47,23 +47,23 @@ export default class AuthController {
    * @param {ServerResponse} res
    * @returns {ServerResponse} response
    */
-   static async login(req, res) {
-    const signinError = "Incorrect email or password";
+  static async login (req, res) {
+    const signinError = 'Incorrect email or password'
     try {
-      const user = await Users.findOne({ email: req.body.email });
-      if (!user) return Response.UnauthorizedError(res, signinError);
-      const passwordsMatch = await Helper.validatePassword(
-        user,
-        req.body.password
-      );
-      if (!passwordsMatch) return Response.UnauthorizedError(res, signinError);
-      const token = Helper.generateToken(user._id, user.role, user.firstName);
-      Helper.setCookie(res, token);
+      const user = await Users.findOne({ email: req.body.email })
+      if (!user) return Response.UnauthorizedError(res, signinError)
+      const passwordsMatch = await Helper.verifyPassword(
+        req.body.password,
+        user.password
+      )
+      if (!passwordsMatch) return Response.UnauthorizedError(res, signinError)
+      const token = Helper.generateToken(user._id, user.role, user.firstName)
+      Helper.setCookie(res, token)
       user.password = undefined
-      const data = { token, user };
-      return Response.Success(res, data);
+      const data = { token, user }
+      return Response.Success(res, data)
     } catch (err) {
-       return Response.InternalServerError(res, "Error Logging in User");
+      return Response.InternalServerError(res, 'Error Logging in User')
     }
   }
 }

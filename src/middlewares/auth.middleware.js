@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import Response from "../utils/response.utils";
+import jwt from 'jsonwebtoken'
+import Response from '../utils/response.utils'
 
 /**
  *Contains Auth Middlewares
@@ -16,22 +16,22 @@ class AuthMiddleware {
    * @returns {JSON} Error response if no token provided or token is invalid
    * @returns {JSON} passes control to the next function
    */
-  static validateToken(req, res, next) {
-    const { token: headerToken = null } = req.headers;
-    const { token: queryToken = null } = req.query;
+  static validateToken (req, res, next) {
+    const { token: headerToken = null } = req.headers
+    const { token: queryToken = null } = req.query
 
-    const token = queryToken || headerToken || req.headers["x-access-token"];
+    const token = queryToken || headerToken || req.headers['x-access-token']
 
     if (!token) {
-      return Response.UnauthorizedError(res, "Not authorized to access data");
+      return Response.UnauthorizedError(res, 'Not authorized to access data')
     }
     jwt.verify(token, process.env.SECRET, (error, result) => {
       if (error) {
-        return Response.UnauthorizedError(res, "Not authorized to access data");
+        return Response.UnauthorizedError(res, 'Not authorized to access data')
       }
-      req.data = result.data;
-      return next();
-    });
+      req.data = result.data
+      return next()
+    })
   }
 
   /**
@@ -40,22 +40,19 @@ class AuthMiddleware {
    * @returns {JSON} Error response if user is not up to level
    * @returns {JSON} passes control to the next function
    */
-  static grantAccess(role = "608ebc218673c637b45fbc43") {
-    const roles = [
-      "608ebc0a8673c637b45fbc42",
-      "608ebc218673c637b45fbc43",
-    ];
-    const roleIndex = roles.findIndex((val) => val === role);
+  static grantAccess (role = '608ebc0a8673c637b45fbc42') {
+    const roles = ['608ebc0a8673c637b45fbc42', '608ebc218673c637b45fbc43']
+    const roleIndex = roles.findIndex(val => val === role)
     return (req, res, next) => {
-    //   if (
-    //     roleIndex < 0 ||
-    //     roles.findIndex((val) => val === req.data.role) < roleIndex
-    //   ) {
-    //     return Response.UnauthorizedError(res, "Not authorized to access data");
-    //   }
-      return next();
-    };
+      if (
+        roleIndex < 0 ||
+        roles.findIndex(val => val === req.data.role) < roleIndex
+      ) {
+        return Response.UnauthorizedError(res, 'Not authorized to access data')
+      }
+      return next()
+    }
   }
 }
 
-export default AuthMiddleware;
+export default AuthMiddleware

@@ -23,23 +23,14 @@ export default class UserUtils {
    * @param {string} lastName
    * @returns {string} token
    */
-  static generateToken(id, role, firstName) {
+  static generateToken(_id, role, firstName) {
     return jwt.sign(
       {
-        data: { id, role, firstName },
+        data: { _id, role, firstName },
       },
       process.env.SECRET,
       { expiresIn: '30d' },
     );
-  }
-
-  /**
-   * @param {object} user
-   * @param {string} password
-   * @returns {Promise} that resolves password validation
-   */
-  static validatePassword(user, password) {
-    return bcrypt.compare(password, user.password);
   }
 
   /**
@@ -54,5 +45,15 @@ export default class UserUtils {
       httpOnly: true,
       secure: true,
     });
+  }
+
+  /**
+   * Verifies that the passwords are the same
+   * @param {*} plainText
+   * @param {*} hashedText
+   * @returns {Boolean} returns true if passwords match
+   */
+  static async verifyPassword(plainText, hashedText) {
+    return await bcrypt.compare(plainText, hashedText);
   }
 }
