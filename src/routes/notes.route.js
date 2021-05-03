@@ -14,4 +14,13 @@ router.post(
   NoteController.createNote
 )
 
+router.put(
+  '/:noteId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  NoteValidator.validateNoteData(),
+  NoteValidator.noteValidationResult,
+  NoteController.editNote
+)
+
 export default router
