@@ -17,7 +17,7 @@ export default class UsersMiddleware {
    * @returns {JSON} passes control to the next function if user exists
    */
   static async checkUserExistence(req, res, next) {
-    const condition = { _id: req.body.userId || req.params.userId };
+    const condition = { _id: req.body.userId || req.params.userId || req.data._id };
     const user = await User.findOne(condition);
     if (!user) {
       return Response.NotFoundError(res, 'User with the given id does not exist');
