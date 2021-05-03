@@ -15,6 +15,17 @@ export default class UserController {
       return Response.InternalServerError(res, 'Error fetching user')
     }
   }
+  static async deleteUser (req, res) {
+    try {
+      const { userId } = req.params
+
+      await Users.findByIdAndDelete(userId)
+
+      Response.Success(res, { message: `User deleted successfully` })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error fetching user')
+    }
+  }
   /**
    * @memberof UserController
    * @param {*} req - Payload
