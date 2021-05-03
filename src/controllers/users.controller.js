@@ -3,6 +3,18 @@ import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
 
 export default class UserController {
+  static async fetchUser (req, res) {
+    try {
+      const { userId } = req.params
+
+      const user = await Users.findById(userId)
+      user.password = undefined
+
+      Response.Success(res, { user })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error fetching user')
+    }
+  }
   /**
    * @memberof UserController
    * @param {*} req - Payload
