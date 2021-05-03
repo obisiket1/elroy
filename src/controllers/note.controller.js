@@ -29,4 +29,21 @@ export default class NotesController {
       Response.InternalServerError(res, 'Error editing note')
     }
   }
+
+  static async fetchNote (req, res) {
+    try {
+      const { noteId } = req.params
+      const { id } = req.data
+      const note = await Notes.findById(noteId)
+      if (id !== note.creatorId.toHexString())
+        return Response.UnauthorizedError(
+          res,
+          'You are not authorized to access this note'
+        )
+
+      Response.Success(res, { note })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching note')
+    }
+  }
 }
