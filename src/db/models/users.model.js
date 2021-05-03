@@ -21,10 +21,6 @@ const UserSchema = new mongoose.Schema(
     dateOfBirth: {
       type: String,
     },
-    country: {
-      type: String,
-      trim: true,
-    },
     state: {
       type: String,
       trim: true,
@@ -41,21 +37,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    referralCode: {
-      type: String,
-      trim: true,
-    },
-    referee: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'user',
-    },
-    isActivated: {
-      type: Boolean,
-      default: false,
-    },
     profilePhotoUrl: {
       type: String,
     },
+    interests: [{ type : 'ObjectId' }]
   },
   {
     timestamps: true

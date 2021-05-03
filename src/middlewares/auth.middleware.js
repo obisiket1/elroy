@@ -40,11 +40,10 @@ class AuthMiddleware {
    * @returns {JSON} Error response if user is not up to level
    * @returns {JSON} passes control to the next function
    */
-  static grantAccess(role = "605b11ff2bb1d23ddc58f1d4") {
+  static grantAccess(role = "608ebc218673c637b45fbc43") {
     const roles = [
-      "605b11c92bb1d23ddc58f1d2",
-      "605b11e72bb1d23ddc58f1d3",
-      "605b11ff2bb1d23ddc58f1d4",
+      "608ebc0a8673c637b45fbc42",
+      "608ebc218673c637b45fbc43",
     ];
     const roleIndex = roles.findIndex((val) => val === role);
     return (req, res, next) => {

@@ -9,9 +9,9 @@ router.post(
   '/signup',
 //   AuthMiddleware.validateToken,
 //   AuthMiddleware.grantAccess(),
-//   SignUpValidator.validateSignupData(),
-//   SignUpValidator.signupValidationResult,
-//   UserMiddleware.checkUserInexistence,
+  SignUpValidator.validateSignupData(),
+  SignUpValidator.signupValidationResult,
+  UserMiddleware.checkUserInexistence,
   AuthController.signup,
 );
 
