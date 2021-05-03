@@ -30,4 +30,11 @@ router.get(
   NoteController.fetchNote
 )
 
+router.get(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  NoteController.fetchNotes
+)
+
 export default router
