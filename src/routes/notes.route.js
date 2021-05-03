@@ -23,4 +23,11 @@ router.put(
   NoteController.editNote
 )
 
+router.get(
+  '/:noteId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  NoteController.fetchNote
+)
+
 export default router
