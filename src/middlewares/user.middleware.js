@@ -1,6 +1,6 @@
-import User from '../db/models/users.model';
-import Response from '../utils/response.utils';
-import UserUtils from '../utils/user.utils';
+import User from '../db/models/user.model'
+import Response from '../utils/response.utils'
+import UserUtils from '../utils/user.utils'
 
 /**
  * Contains Users Middlewares
@@ -16,14 +16,19 @@ export default class UsersMiddleware {
    * @returns {JSON} Error response if user doesn't exist
    * @returns {JSON} passes control to the next function if user exists
    */
-  static async checkUserExistence(req, res, next) {
-    const condition = { _id: req.body.userId || req.params.userId || req.data._id };
-    const user = await User.findOne(condition);
-    if (!user) {
-      return Response.NotFoundError(res, 'User with the given id does not exist');
+  static async checkUserExistence (req, res, next) {
+    const condition = {
+      _id: req.body.userId || req.params.userId || req.data.id
     }
-    req.dbUser = user;
-    return next();
+    const user = await User.findOne(condition)
+    if (!user) {
+      return Response.NotFoundError(
+        res,
+        'User with the given id does not exist'
+      )
+    }
+    req.dbUser = user
+    return next()
   }
 
   /**
@@ -34,16 +39,16 @@ export default class UsersMiddleware {
    * @returns {JSON} Error response if user exists
    * @returns {JSON} passes control to the next function if doesn't doesn't exist
    */
-  static async checkUserInexistence(req, res, next) {
-    const condition = { email: req.body.email };
-    const user = await User.findOne(condition);
+  static async checkUserInexistence (req, res, next) {
+    const condition = { email: req.body.email }
+    const user = await User.findOne(condition)
     if (user) {
       return Response.ConflictError(
         res,
-        'User with the given email already exists',
-      );
+        'User with the given email already exists'
+      )
     }
-    return next();
+    return next()
   }
 
   /**
@@ -54,17 +59,17 @@ export default class UsersMiddleware {
    * @returns {JSON} Error response if passwords are equal
    * @returns {JSON} passes control to the next function if passwords are unequal
    */
-  static async checkPasswordsInequality(req, res, next) {
+  static async checkPasswordsInequality (req, res, next) {
     const passwordsEqual = await UserUtils.verifyPassword(
       req.body.password,
-      req.dbUser.password,
-    );
+      req.dbUser.password
+    )
     if (passwordsEqual) {
       return Response.BadRequestError(
         res,
-        'Submitted password is the same as current password',
-      );
+        'Submitted password is the same as current password'
+      )
     }
-    return next();
+    return next()
   }
 }

@@ -23,10 +23,10 @@ export default class UserUtils {
    * @param {string} lastName
    * @returns {string} token
    */
-  static generateToken(_id, role, firstName) {
+  static generateToken(id, role, firstName) {
     return jwt.sign(
       {
-        data: { _id, role, firstName },
+        data: { id, role, firstName },
       },
       process.env.SECRET,
       { expiresIn: '30d' },

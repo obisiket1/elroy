@@ -1,7 +1,6 @@
-import Users from '../db/models/users.model'
+import Users from '../db/models/user.model'
 import Helper from '../utils/user.utils'
 import Response from '../utils/response.utils'
-import jwt from 'jsonwebtoken'
 
 /**
  * Contains AuthController

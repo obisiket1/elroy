@@ -1,4 +1,4 @@
-import Users from '../db/models/users.model'
+import Users from '../db/models/user.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
 
