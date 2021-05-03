@@ -40,4 +40,30 @@ export default class AuthController {
       return Response.InternalServerError(res, 'Error signing up user')
     }
   }
+
+  /**
+   * Handles signIn requests
+   * @param {ServerRequest} req
+   * @param {ServerResponse} res
+   * @returns {ServerResponse} response
+   */
+   static async login(req, res) {
+    const signinError = "Incorrect email or password";
+    try {
+      const user = await Users.findOne({ email: req.body.email });
+      if (!user) return Response.UnauthorizedError(res, signinError);
+      const passwordsMatch = await Helper.validatePassword(
+        user,
+        req.body.password
+      );
+      if (!passwordsMatch) return Response.UnauthorizedError(res, signinError);
+      const token = Helper.generateToken(user._id, user.role, user.firstName);
+      Helper.setCookie(res, token);
+      user.password = undefined
+      const data = { token, user };
+      return Response.Success(res, data);
+    } catch (err) {
+       return Response.InternalServerError(res, "Error Logging in User");
+    }
+  }
 }

@@ -38,7 +38,7 @@ export default class UserUtils {
    * @param {string} password
    * @returns {Promise} that resolves password validation
    */
-  static validateUserPassword(user, password) {
+  static validatePassword(user, password) {
     return bcrypt.compare(password, user.password);
   }
 
@@ -54,16 +54,5 @@ export default class UserUtils {
       httpOnly: true,
       secure: true,
     });
-  }
-
-  /**
-   * Verifies that the passwords are the same
-   * @param {*} plainText
-   * @param {*} hashedText
-   * @returns {Boolean} returns true if passwords match
-   */
-  static async verifyPassword(plainText, hashedText) {
-    const isMatch = await bcrypt.compare(plainText, hashedText);
-    return isMatch;
   }
 }
