@@ -69,7 +69,7 @@ export default class NotesController {
         return Response.NotFoundError(res, 'This note does not exist')
       }
 
-      if (note.creatorId !== creatorId) {
+      if (note.creatorId.toHexString() !== creatorId) {
         return Response.UnauthorizedError(
           res,
           'You are not authorized to delete this note'
