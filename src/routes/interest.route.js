@@ -31,4 +31,11 @@ router.put(
   InterestsController.editInterest
 )
 
+router.get(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  InterestsController.fetchInterests
+)
+
 export default router
