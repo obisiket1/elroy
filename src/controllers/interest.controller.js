@@ -1,3 +1,4 @@
+import Interest from '../db/models/interest.model'
 import Interests from '../db/models/interest.model'
 import Response from '../utils/response.utils'
 
@@ -24,6 +25,16 @@ export default class InterestsController {
       )
 
       Response.Success(res, { interest })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing interest')
+    }
+  }
+
+  static async fetchInterests (req, res) {
+    try {
+      const interests = await Interests.find()
+
+      Response.Success(res, { interests })
     } catch (err) {
       Response.InternalServerError(res, 'Error editing interest')
     }
