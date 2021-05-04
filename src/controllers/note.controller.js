@@ -54,7 +54,7 @@ export default class NotesController {
 
       Response.Success(res, { notes })
     } catch (err) {
-      Response.InternalServerError(res, 'Error fetching note')
+      Response.InternalServerError(res, 'Error fetching notes')
     }
   }
 }
