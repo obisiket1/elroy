@@ -36,4 +36,11 @@ router.get(
   InterestsController.fetchInterests
 )
 
+router.delete(
+  '/:interestId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(admin),
+  InterestsController.deleteInterest
+)
+
 export default router

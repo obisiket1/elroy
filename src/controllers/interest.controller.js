@@ -39,4 +39,16 @@ export default class InterestsController {
       Response.InternalServerError(res, 'Error fetching interests')
     }
   }
+
+  static async deleteInterest (req, res) {
+    try {
+      const { interestId } = req.params
+      await Interests.findByIdAndDelete(interestId)
+
+      Response.Success(res, { message: 'Interest deleted successfully' })
+    } catch (err) {
+      console.log(err)
+      Response.InternalServerError(res, 'Error deleting interest')
+    }
+  }
 }
