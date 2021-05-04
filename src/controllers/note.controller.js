@@ -32,16 +32,7 @@ export default class NotesController {
 
   static async fetchNote (req, res) {
     try {
-      const { noteId } = req.params
-      const { id } = req.data
-      const note = await Notes.findById(noteId)
-      if (id !== note.creatorId.toHexString())
-        return Response.UnauthorizedError(
-          res,
-          'You are not authorized to access this note'
-        )
-
-      Response.Success(res, { note })
+      Response.Success(res, { note: req.dbDoc })
     } catch (err) {
       Response.InternalServerError(res, 'Error fetching note')
     }
@@ -60,20 +51,10 @@ export default class NotesController {
 
   static async deleteNote (req, res) {
     try {
-      const { noteId: _id } = req.params
-      const { id: creatorId } = req.data
-
-      const note = await Notes.findById(_id)
+      const note = req.dbDoc
 
       if (!note) {
         return Response.NotFoundError(res, 'This note does not exist')
-      }
-
-      if (note.creatorId.toHexString() !== creatorId) {
-        return Response.UnauthorizedError(
-          res,
-          'You are not authorized to delete this note'
-        )
       }
 
       await Notes.findByIdAndDelete(note._id)

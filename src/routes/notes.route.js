@@ -2,6 +2,8 @@ import { Router } from 'express'
 import NoteController from '../controllers/note.controller'
 import NoteValidator from '../validations/note.validator'
 import AuthMiddleware from '../middlewares/auth.middleware'
+import UsersMiddleware from '../middlewares/user.middleware'
+import Notes from '../db/models/note.model'
 
 const router = Router()
 
@@ -20,6 +22,7 @@ router.put(
   AuthMiddleware.grantAccess(),
   NoteValidator.validateNoteData(),
   NoteValidator.noteValidationResult,
+  UsersMiddleware.checkOwnership(Notes, 'noteId'),
   NoteController.editNote
 )
 
@@ -27,6 +30,7 @@ router.get(
   '/:noteId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
+  UsersMiddleware.checkOwnership(Notes, 'noteId'),
   NoteController.fetchNote
 )
 
@@ -41,6 +45,7 @@ router.delete(
   '/:noteId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
+  UsersMiddleware.checkOwnership(Notes, 'noteId'),
   NoteController.deleteNote
 )
 
