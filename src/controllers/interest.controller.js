@@ -10,7 +10,22 @@ export default class InterestsController {
 
       Response.Success(res, { interest })
     } catch (err) {
-      Response.InternalServerError(res, 'Error creating note')
+      Response.InternalServerError(res, 'Error creating interest')
+    }
+  }
+  static async editInterest (req, res) {
+    try {
+      const { name } = req.body
+      const { interestId } = req.params
+      const interest = await Interests.findByIdAndUpdate(
+        interestId,
+        { name },
+        { returnOriginal: false }
+      )
+
+      Response.Success(res, { interest })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing interest')
     }
   }
 }
