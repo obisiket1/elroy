@@ -1,6 +1,7 @@
 import Users from '../db/models/user.model'
 import Helper from '../utils/user.utils'
 import Response from '../utils/response.utils'
+import AuthServices from '../services/auth.services'
 
 /**
  * Contains AuthController
@@ -63,6 +64,52 @@ export default class AuthController {
       return Response.Success(res, data)
     } catch (err) {
       return Response.InternalServerError(res, 'Error Logging in User')
+    }
+  }
+
+  static async facebookLogin (req, res) {
+    try {
+      const { token } = req.body
+      const { data } = await axios({
+        url: 'https://graph.facebook.com/me',
+        method: 'get',
+        params: {
+          fields: ['id', 'email', 'first_name', 'last_name'].join(','),
+          access_token: token
+        }
+      })
+      if (data) {
+        const response = {
+          email: data.email,
+          fullName: `${data.first_name} ${data.last_name}`,
+          isActivated: true,
+          facebookUserId: data.id
+        }
+
+        let myUser = await AuthServices.checkEmailExistence(data.email, res)
+
+        // if the user does not have an account
+        if (!myUser) {
+          myUser = await Auth.create({ ...response })
+        }
+
+        const userToken = await Helper.generateToken(
+          myUser._id,
+          myUser.role,
+          myUser.fullName
+        )
+
+        return Response.Success(res, { user: myUser, token: userToken }, 201)
+      }
+      return res.status(200).json({
+        status: 'success',
+        data
+      })
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error logging in user through facebook'
+      })
     }
   }
 }
