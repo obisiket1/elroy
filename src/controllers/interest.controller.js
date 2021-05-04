@@ -36,7 +36,7 @@ export default class InterestsController {
 
       Response.Success(res, { interests })
     } catch (err) {
-      Response.InternalServerError(res, 'Error editing interest')
+      Response.InternalServerError(res, 'Error fetching interests')
     }
   }
 }
