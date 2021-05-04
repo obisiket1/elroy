@@ -44,4 +44,13 @@ router.delete(
   NoteController.deleteNote
 )
 
+router.delete(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  NoteValidator.validateNotesDeletionData(),
+  NoteValidator.noteValidationResult,
+  NoteController.deleteNotes
+)
+
 export default router

@@ -80,7 +80,25 @@ export default class NotesController {
 
       Response.Success(res, { message: 'Note deleted successfully' })
     } catch (err) {
-      Response.InternalServerError(res, 'Error fetching notes')
+      Response.InternalServerError(res, 'Error deleting note')
+    }
+  }
+
+  static async deleteNotes (req, res) {
+    try {
+      const { noteIds } = req.body
+      const { id: creatorId } = req.data
+
+      const notes = await Notes.deleteMany({ creatorId, _id: { $in: noteIds } })
+
+      if (!notes) {
+        return Response.UnauthorizedError(res, 'Notes could not be deleted')
+      }
+
+      Response.Success(res, { message: 'Notes deleted successfully' })
+    } catch (err) {
+      console.log(err)
+      Response.InternalServerError(res, 'Error deleting notes')
     }
   }
 }
