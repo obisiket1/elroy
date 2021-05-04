@@ -57,4 +57,30 @@ export default class NotesController {
       Response.InternalServerError(res, 'Error fetching notes')
     }
   }
+
+  static async deleteNote (req, res) {
+    try {
+      const { noteId: _id } = req.params
+      const { id: creatorId } = req.data
+
+      const note = await Notes.findById(_id)
+
+      if (!note) {
+        return Response.NotFoundError(res, 'This note does not exist')
+      }
+
+      if (note.creatorId !== creatorId) {
+        return Response.UnauthorizedError(
+          res,
+          'You are not authorized to delete this note'
+        )
+      }
+
+      await Notes.findByIdAndDelete(note._id)
+
+      Response.Success(res, { message: 'Note deleted successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching notes')
+    }
+  }
 }

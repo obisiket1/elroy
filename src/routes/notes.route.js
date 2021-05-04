@@ -37,4 +37,11 @@ router.get(
   NoteController.fetchNotes
 )
 
+router.delete(
+  '/:noteId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  NoteController.deleteNote
+)
+
 export default router

@@ -62,7 +62,6 @@ export default class AuthController {
       const data = { token, user }
       return Response.Success(res, data)
     } catch (err) {
-        console.log(err)
       return Response.InternalServerError(res, 'Error Logging in User')
     }
   }
