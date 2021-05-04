@@ -1,4 +1,4 @@
-import User from '../db/models/user.model'
+import Users from '../db/models/user.model'
 import Response from '../utils/response.utils'
 import UserUtils from '../utils/user.utils'
 
@@ -20,7 +20,7 @@ export default class UsersMiddleware {
     const condition = {
       _id: req.body.userId || req.params.userId || req.data.id
     }
-    const user = await User.findOne(condition)
+    const user = await Users.findOne(condition)
     if (!user) {
       return Response.NotFoundError(
         res,
@@ -41,7 +41,7 @@ export default class UsersMiddleware {
    */
   static async checkUserInexistence (req, res, next) {
     const condition = { email: req.body.email }
-    const user = await User.findOne(condition)
+    const user = await Users.findOne(condition)
     if (user) {
       return Response.ConflictError(
         res,
@@ -71,5 +71,20 @@ export default class UsersMiddleware {
       )
     }
     return next()
+  }
+
+  static checkOwnership (Collection, prop, field = 'params') {
+    return async (req, res, next) => {
+      const doc = await Collection.findById(req[field][prop])
+
+      if (doc.creatorId.toHexString() === req.data.id) {
+        req.dbDoc = doc
+        return next()
+      }
+      return Response.UnauthorizedError(
+        res,
+        'Only the creator is allowed to perform this action'
+      )
+    }
   }
 }
