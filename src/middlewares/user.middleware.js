@@ -77,7 +77,7 @@ export default class UsersMiddleware {
     return async (req, res, next) => {
       const doc = await Collection.findById(req[field][prop])
 
-      if (doc.creatorId.toHexString() === req.data.id) {
+      if (doc.creatorId.toHexString() === req.data.id || !doc) {
         req.dbDoc = doc
         return next()
       }
