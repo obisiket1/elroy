@@ -43,4 +43,13 @@ router.delete(
   InterestsController.deleteInterest
 )
 
+router.delete(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(admin),
+  InterestValidator.validateInterestDeletionData(),
+  InterestValidator.interestValidationResult,
+  InterestsController.deleteInterests
+)
+
 export default router

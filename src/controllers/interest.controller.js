@@ -47,8 +47,18 @@ export default class InterestsController {
 
       Response.Success(res, { message: 'Interest deleted successfully' })
     } catch (err) {
-      console.log(err)
       Response.InternalServerError(res, 'Error deleting interest')
+    }
+  }
+
+  static async deleteInterests (req, res) {
+    try {
+      const { interestIds } = req.body
+      await Interests.deleteMany({ _id: { $in: interestIds } })
+
+      Response.Success(res, { message: 'Interests deleted successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error deleting interests')
     }
   }
 }

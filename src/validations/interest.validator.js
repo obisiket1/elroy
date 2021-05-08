@@ -1,5 +1,5 @@
-import { check, validationResult } from 'express-validator';
-import Response from '../utils/response.utils';
+import { check, validationResult } from 'express-validator'
+import Response from '../utils/response.utils'
 
 /**
  * Contains Params Validations
@@ -8,10 +8,10 @@ import Response from '../utils/response.utils';
  */
 export default class interestValidator {
   /**
-     * @returns {Array} Array of errors if interest data is invalid
-     * @returns {EmptyArray} Empty array if interest data is valid
-     */
-  static validateInterestCreationData() {
+   * @returns {Array} Array of errors if interest data is invalid
+   * @returns {EmptyArray} Empty array if interest data is valid
+   */
+  static validateInterestCreationData () {
     return [
       check('name')
         .exists()
@@ -20,8 +20,18 @@ export default class interestValidator {
         .withMessage('Interest name must be a string')
         .not()
         .isEmpty()
-        .withMessage('Interest name cannot be empty'),
-    ];
+        .withMessage('Interest name cannot be empty')
+    ]
+  }
+
+  static validateInterestDeletionData () {
+    return [
+      check('interestIds')
+        .exists()
+        .withMessage('Interest ids are required')
+        .isArray({ min: 1 })
+        .withMessage('Interest ids must be a non-empty array')
+    ]
   }
 
   /**
@@ -31,12 +41,12 @@ export default class interestValidator {
    * @param {*} res - Response object
    * @param {*} next - Passes control to next function
    */
-  static interestValidationResult(req, res, next) {
-    const errors = validationResult(req);
+  static interestValidationResult (req, res, next) {
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      const errArr = errors.array().map(({ msg }) => msg);
-      return Response.InvalidRequestParamsError(res, errArr);
+      const errArr = errors.array().map(({ msg }) => msg)
+      return Response.InvalidRequestParamsError(res, errArr)
     }
-    return next();
+    return next()
   }
 }
