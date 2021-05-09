@@ -53,8 +53,15 @@ export default class UserController {
   static async followUser (req, res) {
     try {
       const { id: followingUser } = req.data
+      const { userId: followedUser } = req.params
+
+      if (followedUser === followingUser)
+        return Response.BadRequestError(
+          res,
+          'Users cannot follow their own account'
+        )
       await Follows.create({
-        followedUser: req.body.followedUser,
+        followedUser,
         followingUser
       })
 
@@ -67,7 +74,10 @@ export default class UserController {
   static async fetchFollowers (req, res) {
     try {
       const { userId: followedUser } = req.params
-      const followers = await Follows.find({ followedUser }).populate("followingUser", "fullName")
+      const followers = await Follows.find({ followedUser }).populate(
+        'followingUser',
+        'fullName'
+      )
 
       return Response.Success(res, { followers })
     } catch (err) {
@@ -78,11 +88,30 @@ export default class UserController {
   static async fetchFollowing (req, res) {
     try {
       const { userId: followingUser } = req.params
-      const followers = await Follows.find({ followingUser }).populate("followedUser", "fullName")
+      const following = await Follows.find({ followingUser }).populate(
+        'followedUser',
+        'fullName'
+      )
 
-      return Response.Success(res, { followers })
+      return Response.Success(res, { following })
     } catch (err) {
       return Response.InternalServerError(res, 'Error fetching following')
+    }
+  }
+
+  static async unfollowUser (req, res) {
+    try {
+      const { id: followingUser } = req.data
+      const { userId: followedUser } = req.params
+
+      await Follows.findOneAndDelete({
+        followedUser,
+        followingUser
+      })
+
+      return Response.Success(res, { message: 'User unfollowed successfully' })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error unfollowing user')
     }
   }
 }

@@ -25,11 +25,12 @@ router.delete(
 )
 
 router.post(
-  '/follow',
+  '/:userId/follow',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
-  ParamsValidator.validateMongooseId('followedUser'),
+  ParamsValidator.validateMongooseId('userId'),
   ParamsValidator.mongooseIdValidationResult,
+  UserMiddleware.checkFollowershipInexistence,
   UsersController.followUser
 )
 
@@ -47,6 +48,15 @@ router.get(
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkUserExistence,
   UsersController.fetchFollowing
+)
+
+router.delete(
+  '/:userId/unfollow',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  ParamsValidator.validateMongooseId('userId'),
+  ParamsValidator.mongooseIdValidationResult,
+  UsersController.unfollowUser
 )
 
 export default router
