@@ -1,6 +1,8 @@
 import Users from '../db/models/user.model'
+import Follows from '../db/models/follow.model'
 import Response from '../utils/response.utils'
 import UserUtils from '../utils/user.utils'
+import GeneralServices from '../services/general.services'
 
 /**
  * Contains Users Middlewares
@@ -75,16 +77,30 @@ export default class UsersMiddleware {
 
   static checkOwnership (Collection, prop, field = 'params') {
     return async (req, res, next) => {
-      const doc = await Collection.findById(req[field][prop])
+      try {
+        const doc = await Collection.findById(req[field][prop])
 
-      if (doc.creatorId.toHexString() === req.data.id || !doc) {
-        req.dbDoc = doc
-        return next()
+        if (doc.creatorId.toHexString() === req.data.id || !doc) {
+          req.dbDoc = doc
+          return next()
+        }
+        return Response.UnauthorizedError(
+          res,
+          'Only the creator is allowed to perform this action'
+        )
+      } catch (err) {
+        return Response.InternalServerError(res, 'Error checking ownership')
       }
-      return Response.UnauthorizedError(
-        res,
-        'Only the creator is allowed to perform this action'
-      )
     }
+  }
+
+  static checkFollowershipInexistence (req, res, next) {
+    GeneralServices.checkDocInexistence(
+      res,
+      next,
+      Follows,
+      { followedUser: req.params.userId, followingUser: req.data.id },
+      'This followership'
+    )
   }
 }
