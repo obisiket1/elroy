@@ -74,4 +74,15 @@ export default class UserController {
       return Response.InternalServerError(res, 'Error fetching followers')
     }
   }
+
+  static async fetchFollowing (req, res) {
+    try {
+      const { userId: followingUser } = req.params
+      const followers = await Follows.find({ followingUser }).populate("followedUser", "fullName")
+
+      return Response.Success(res, { followers })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error fetching following')
+    }
+  }
 }
