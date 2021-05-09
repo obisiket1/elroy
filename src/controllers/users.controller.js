@@ -1,5 +1,5 @@
 import Users from '../db/models/user.model'
-import Follow from '../db/models/follow.model'
+import Follows from '../db/models/follow.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
 
@@ -53,7 +53,7 @@ export default class UserController {
   static async followUser (req, res) {
     try {
       const { id: followingUser } = req.data
-      await Follow.create({
+      await Follows.create({
         followedUser: req.body.followedUser,
         followingUser
       })
@@ -61,6 +61,17 @@ export default class UserController {
       return Response.Success(res, { message: 'User followed successfully' })
     } catch (err) {
       return Response.InternalServerError(res, 'Error following user')
+    }
+  }
+
+  static async fetchFollowers (req, res) {
+    try {
+      const { userId: followedUser } = req.params
+      const followers = await Follows.find({ followedUser }).populate("followingUser", "fullName")
+
+      return Response.Success(res, { followers })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error fetching followers')
     }
   }
 }
