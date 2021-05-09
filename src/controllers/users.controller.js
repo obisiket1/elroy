@@ -1,4 +1,5 @@
 import Users from '../db/models/user.model'
+import Follow from '../db/models/follow.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
 
@@ -46,6 +47,20 @@ export default class UserController {
       Response.Success(res, { message: 'Password changed successfully' })
     } catch (err) {
       return Response.InternalServerError(res, 'Error changing password')
+    }
+  }
+
+  static async followUser (req, res) {
+    try {
+      const { id: followingUser } = req.data
+      await Follow.create({
+        followedUser: req.body.followedUser,
+        followingUser
+      })
+
+      return Response.Success(res, { message: 'User followed successfully' })
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error following user')
     }
   }
 }

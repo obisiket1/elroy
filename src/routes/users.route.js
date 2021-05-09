@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import UsersController from '../controllers/users.controller'
 import UserMiddleware from '../middlewares/user.middleware'
-import ParamsValidator from '../validations/params.validator';
+import ParamsValidator from '../validations/params.validator'
 import AuthMiddleware from '../middlewares/auth.middleware'
 
 const router = Router()
@@ -22,6 +22,15 @@ router.delete(
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkUserExistence,
   UsersController.deleteUser
+)
+
+router.post(
+  '/follow',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  ParamsValidator.validateMongooseId('followedUser'),
+  ParamsValidator.mongooseIdValidationResult,
+  UsersController.followUser
 )
 
 export default router
