@@ -33,4 +33,12 @@ router.post(
   UsersController.followUser
 )
 
+router.get(
+  '/:userId/followers',
+  ParamsValidator.validateMongooseId('userId'),
+  ParamsValidator.mongooseIdValidationResult,
+  UserMiddleware.checkUserExistence,
+  UsersController.fetchFollowers
+)
+
 export default router

@@ -51,9 +51,24 @@ const UserSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 )
+
+
+UserSchema.virtual('followers', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'followedUser',
+  justOne: false,
+});
+
+UserSchema.virtual('following', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'followingUser',
+  justOne: false,
+});
 
 const User = mongoose.model('user', UserSchema)
 
