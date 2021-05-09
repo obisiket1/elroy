@@ -18,12 +18,13 @@ export default class AuthController {
    */
   static async signup (req, res) {
     try {
-      const { fullName, password, email, role } = req.body
+      const { firstName, lastName, password, email, role } = req.body
 
       const encryptedPassword = await Helper.encryptPassword(password)
 
       const user = {
-        fullName,
+        firstName,
+        lastName,
         password: encryptedPassword,
         email,
         role

@@ -59,14 +59,22 @@ class Auth {
 
   static validateSignupData() {
     return [
-      check('fullName')
+      check('firstName')
         .exists()
-        .withMessage('Full name is required')
+        .withMessage('First name is required')
         .isString()
-        .withMessage('Full name must be a string')
+        .withMessage('First name must be a string')
         .not()
         .isEmpty()
-        .withMessage('Full name cannot be empty'),
+        .withMessage('First name cannot be empty'),
+      check('lastName')
+        .exists()
+        .withMessage('Last name is required')
+        .isString()
+        .withMessage('Last name must be a string')
+        .not()
+        .isEmpty()
+        .withMessage('Last name cannot be empty'),
       check('email')
         .exists()
         .withMessage('Email is required')
