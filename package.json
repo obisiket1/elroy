@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r esm src/",
     "dev": "nodemon -r esm src/",
-    "test": "test"
+    "test": "env-cmd -f ./test.env nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,9 @@
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "coveralls": "^3.1.0",
     "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-validator": "^6.10.1",
@@ -37,6 +40,24 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.4.0",
+    "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
+    "sinon": "^10.0.0",
+    "sinon-chai": "^3.6.0"
+  },
+  "nyc": {
+    "exclude": [
+      "src/index.js",
+      "src/config/index.js",
+      "src/db/*",
+      "src/routes/index.js",
+      "src/test/*"
+    ]
+  },
+  "engines": {
+    "node": "14.13.1"
   }
 }
