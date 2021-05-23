@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import logger from './config'
 import v1Router from './routes'
 import './db'
+import Response from './utils/response.utils'
 
 config()
 

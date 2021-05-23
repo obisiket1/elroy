@@ -1,13 +1,13 @@
 import GeneralServices from '../services/general.services';
-import Interest from '../db/models/interest.model';
+import category from '../db/models/category.model';
 
 /**
- * Interest Middleware class
+ * category Middleware class
  * @class InterestMiddleware
  */
 export default class InterestMiddleware {
   /**
-   * Checks if interest with the given name doesn't exist
+   * Checks if category with the given name doesn't exist
    * @param {*} req Request
    * @param {*} res Response object
    * @param {*} next Passes control to next function
@@ -18,14 +18,14 @@ export default class InterestMiddleware {
     GeneralServices.checkDocInexistence(
       res,
       next,
-      Interest,
+      category,
       { name: req.body.name },
-      'This interest',
+      'This category',
     );
   }
 
   /**
-   * Checks if interest with the given name exists
+   * Checks if category with the given name exists
    * @param {*} req Request
    * @param {*} res Response object
    * @param {*} next Passes control to next function
@@ -38,9 +38,9 @@ export default class InterestMiddleware {
       req,
       res,
       next,
-      Interest,
-      { _id: req.params.interestId },
-      'This interest',
+      category,
+      { _id: req.params.categoryId },
+      'This category',
     );
   }
 }
