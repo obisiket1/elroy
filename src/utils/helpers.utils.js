@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { validationResult } from 'express-validator'
+import Response from './response.utils'
 
 /**
  * Contains General Utils
@@ -17,5 +19,13 @@ export default class GeneralUtils {
       else if (mongoose.Types.ObjectId.isValid(val)) return true;
       throw new Error(`${fieldName} is not a valid mongoose ID`);
     };
+  }
+  static validationResult (req, res, next) {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const errArr = errors.array().map(({ msg }) => msg)
+      return Response.InvalidRequestParamsError(res, errArr)
+    }
+    return next()
   }
 }

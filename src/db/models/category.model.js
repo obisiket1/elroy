@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const InterestSchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String
@@ -15,6 +15,6 @@ const InterestSchema = new mongoose.Schema(
   }
 )
 
-const Interest = mongoose.model('interest', InterestSchema)
+const Category = mongoose.model('category', categorySchema)
 
-export default Interest
+export default Category

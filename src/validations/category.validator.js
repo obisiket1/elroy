@@ -8,29 +8,29 @@ import Response from '../utils/response.utils'
  */
 export default class interestValidator {
   /**
-   * @returns {Array} Array of errors if interest data is invalid
-   * @returns {EmptyArray} Empty array if interest data is valid
+   * @returns {Array} Array of errors if category data is invalid
+   * @returns {EmptyArray} Empty array if category data is valid
    */
   static validateInterestCreationData () {
     return [
       check('name')
         .exists()
-        .withMessage('Interest name is required')
+        .withMessage('Category name is required')
         .isString()
-        .withMessage('Interest name must be a string')
+        .withMessage('Category name must be a string')
         .not()
         .isEmpty()
-        .withMessage('Interest name cannot be empty')
+        .withMessage('Category name cannot be empty')
     ]
   }
 
   static validateInterestDeletionData () {
     return [
-      check('interestIds')
+      check('categoryIds')
         .exists()
-        .withMessage('Interest ids are required')
+        .withMessage('Category ids are required')
         .isArray({ min: 1 })
-        .withMessage('Interest ids must be a non-empty array')
+        .withMessage('Category ids must be a non-empty array')
     ]
   }
 

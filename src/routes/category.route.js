@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import AuthMiddleware from '../middlewares/auth.middleware'
-import InterestValidator from '../validations/interest.validator'
-import Interest from '../middlewares/interest.middleware'
-import InterestsController from '../controllers/interest.controller'
+import InterestValidator from '../validations/category.validator'
+import category from '../middlewares/category.middleware'
+import InterestsController from '../controllers/category.controller'
 import ParamsValidator from '../validations/params.validator'
 import {admin} from '../utils/roles.utils'
 
@@ -14,18 +14,18 @@ router.post(
   AuthMiddleware.grantAccess(admin),
   InterestValidator.validateInterestCreationData(),
   InterestValidator.interestValidationResult,
-  Interest.checkInterestInexistence,
+  category.checkInterestInexistence,
   InterestsController.createInterest
 )
 
 router.put(
-  '/:interestId',
+  '/:categoryId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(admin),
   InterestValidator.validateInterestCreationData(),
   InterestValidator.interestValidationResult,
-  ParamsValidator.validateMongooseId('interestId'),
-  Interest.checkInterestInexistence,
+  ParamsValidator.validateMongooseId('categoryId'),
+  category.checkInterestInexistence,
   InterestsController.editInterest
 )
 
@@ -37,7 +37,7 @@ router.get(
 )
 
 router.delete(
-  '/:interestId',
+  '/:categoryId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(admin),
   InterestsController.deleteInterest
