@@ -5,8 +5,8 @@ export default class NotesController {
   static async createNote (req, res) {
     try {
       const { title, content } = req.body
-      const { id: creatorId } = req.data
-      const note = await Notes.create({ title, content, creatorId })
+      const { id: creator } = req.data
+      const note = await Notes.create({ title, content, creator })
 
       Response.Success(res, { note })
     } catch (err) {

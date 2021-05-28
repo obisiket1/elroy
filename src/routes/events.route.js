@@ -16,4 +16,13 @@ router.post(
   EventController.createEvent
 )
 
+router.put(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventValidator.validateEventEditionData(),
+  Helper.validationResult,
+  EventController.editEvent
+)
+
 export default router

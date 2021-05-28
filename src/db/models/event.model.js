@@ -5,7 +5,7 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  host: {
+  creator: {
     type: mongoose.Schema.ObjectId,
     ref: 'user'
   },

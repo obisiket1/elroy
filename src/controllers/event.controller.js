@@ -7,14 +7,35 @@ export default class EventController {
     try {
       let data = { ...req.body }
       if (req.body.password) {
-        data = { ...req.body, password: await encryptPassword(req.body.password) }
+        data = {
+          ...req.body,
+          password: await encryptPassword(req.body.password)
+        }
       }
       const event = await Event.create(data)
 
       return Response.Success(res, { event })
     } catch (err) {
-      console.log(err)
       Response.InternalServerError(res, 'Error creating event')
+    }
+  }
+
+  static async editEvent (req, res) {
+    try {
+      let data = { ...req.body }
+      if (req.body.password) {
+        data = {
+          ...req.body,
+          password: await encryptPassword(req.body.password)
+        }
+      }
+      const event = await Event.findByIdAndUpdate(req.body._id, data, {
+        returnOriginal: false
+      })
+
+      return Response.Success(res, { event })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing event')
     }
   }
 }
