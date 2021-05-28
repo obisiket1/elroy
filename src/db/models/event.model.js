@@ -18,8 +18,10 @@ const eventSchema = new mongoose.Schema({
   startDate: Date,
   endDate: Date,
   attendanceLimit: Number,
-  isProtected: Boolean,
-  password: String
+  requirePassword: Boolean,
+  password: String,
+  requireAuthentication: Boolean,
+  backgroundImage: String,
 })
 
 const Event = mongoose.model('event', eventSchema)

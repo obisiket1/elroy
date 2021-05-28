@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator'
+import { check, body, oneOf, validationResult } from 'express-validator'
 import Response from '../utils/response.utils'
 
 /**
@@ -60,17 +60,33 @@ export default class EventsValidator {
         }),
       check('endDate')
         .exists()
-        .withMessage('Event end date must be a future date')
+        .withMessage('Event end date is required')
         .isDate()
         .withMessage('Event end date must be a date')
         .custom(date => {
           if (new Date(date) <= new Date())
-            throw new Error('End end date cannot be in the past')
+            throw new Error('End end date must be a future date')
           else return true
         }),
       check('attendanceLimit')
         .isNumeric()
-        .withMessage('Attendance limit must be a number')
+        .withMessage('Attendance limit must be a number'),
+      body().custom(body => {
+        if ((body.requirePassword && body.password) || !body.requirePassword) {
+          return true
+        } else {
+          throw new Error(
+            'Password must be provided for a password protected event'
+          )
+        }
+      }),
+      body().custom(body => {
+        if (body.startDate < body.endDate) {
+          return true
+        } else {
+          throw new Error('Event start date must be before end date')
+        }
+      })
     ]
   }
 
