@@ -1,24 +1,23 @@
-import category from '../db/models/category.model'
-import categories from '../db/models/category.model'
+import Categories from '../db/models/category.model'
 import Response from '../utils/response.utils'
 
-export default class InterestsController {
-  static async createInterest (req, res) {
+export default class CategoriesController {
+  static async createCategory (req, res) {
     try {
       const { name } = req.body
-      const { id: creatorId } = req.data
-      const category = await categories.create({ name, creatorId })
+      const { id: creator } = req.data
+      const category = await Categories.create({ name, creator })
 
       Response.Success(res, { category })
     } catch (err) {
       Response.InternalServerError(res, 'Error creating category')
     }
   }
-  static async editInterest (req, res) {
+  static async editCategory (req, res) {
     try {
       const { name } = req.body
       const { categoryId } = req.params
-      const category = await categories.findByIdAndUpdate(
+      const category = await Categories.findByIdAndUpdate(
         categoryId,
         { name },
         { returnOriginal: false }
@@ -30,9 +29,9 @@ export default class InterestsController {
     }
   }
 
-  static async fetchInterests (req, res) {
+  static async fetchCategories (req, res) {
     try {
-      const categories = await categories.find()
+      const categories = await Categories.find()
 
       Response.Success(res, { categories })
     } catch (err) {
@@ -40,10 +39,10 @@ export default class InterestsController {
     }
   }
 
-  static async deleteInterest (req, res) {
+  static async deleteCategory (req, res) {
     try {
       const { categoryId } = req.params
-      await categories.findByIdAndDelete(categoryId)
+      await Categories.findByIdAndDelete(categoryId)
 
       Response.Success(res, { message: 'category deleted successfully' })
     } catch (err) {
@@ -51,10 +50,10 @@ export default class InterestsController {
     }
   }
 
-  static async deleteInterests (req, res) {
+  static async deleteCategories (req, res) {
     try {
       const { categoryIds } = req.body
-      await categories.deleteMany({ _id: { $in: categoryIds } })
+      await Categories.deleteMany({ _id: { $in: categoryIds } })
 
       Response.Success(res, { message: 'categories deleted successfully' })
     } catch (err) {

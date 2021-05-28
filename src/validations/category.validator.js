@@ -6,12 +6,12 @@ import Response from '../utils/response.utils'
  *
  * @class ParamsValidator
  */
-export default class interestValidator {
+export default class categoryValidator {
   /**
    * @returns {Array} Array of errors if category data is invalid
    * @returns {EmptyArray} Empty array if category data is valid
    */
-  static validateInterestCreationData () {
+  static validateCategoryCreationData () {
     return [
       check('name')
         .exists()
@@ -24,7 +24,7 @@ export default class interestValidator {
     ]
   }
 
-  static validateInterestDeletionData () {
+  static validateCategoryDeletionData () {
     return [
       check('categoryIds')
         .exists()
@@ -41,7 +41,7 @@ export default class interestValidator {
    * @param {*} res - Response object
    * @param {*} next - Passes control to next function
    */
-  static interestValidationResult (req, res, next) {
+  static categoryValidationResult (req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({ msg }) => msg)

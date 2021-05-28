@@ -3,9 +3,9 @@ import category from '../db/models/category.model';
 
 /**
  * category Middleware class
- * @class InterestMiddleware
+ * @class CategoryMiddleware
  */
-export default class InterestMiddleware {
+export default class CategoryMiddleware {
   /**
    * Checks if category with the given name doesn't exist
    * @param {*} req Request
@@ -14,7 +14,7 @@ export default class InterestMiddleware {
    * @returns {JSON} error if it exists
    * @returns {Function} (next) passes control to next function
    */
-  static checkInterestInexistence(req, res, next) {
+  static checkCategoryInexistence(req, res, next) {
     GeneralServices.checkDocInexistence(
       res,
       next,
@@ -33,7 +33,7 @@ export default class InterestMiddleware {
    * @returns {Function} (next) Populates req.dbResult with fetched doc
    * and passes control to next function
    */
-  static checkInterestExistence(req, res, next) {
+  static checkCategoryExistence(req, res, next) {
     GeneralServices.checkDocExistence(
       req,
       res,
