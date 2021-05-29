@@ -4,6 +4,7 @@ import UsersMiddleware from '../middlewares/user.middleware'
 import EventValidator from '../validations/event.validator'
 import EventController from '../controllers/event.controller'
 import Helper from '../utils/helpers.utils'
+import Events from '../db/models/event.model'
 
 const router = Router()
 
@@ -17,10 +18,11 @@ router.post(
 )
 
 router.put(
-  '/',
+  '/:eventId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
   EventValidator.validateEventEditionData(),
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
   Helper.validationResult,
   EventController.editEvent
 )

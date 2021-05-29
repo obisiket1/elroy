@@ -29,12 +29,13 @@ export default class EventController {
           password: await encryptPassword(req.body.password)
         }
       }
-      const event = await Event.findByIdAndUpdate(req.body._id, data, {
+      const event = await Event.findByIdAndUpdate(req.params.eventId, data, {
         returnOriginal: false
       })
 
       return Response.Success(res, { event })
     } catch (err) {
+      console.log(err)
       Response.InternalServerError(res, 'Error editing event')
     }
   }
