@@ -78,4 +78,30 @@ export default class EventController {
       Response.InternalServerError(res, 'Error deleting event')
     }
   }
+
+  static async deleteEvents (req, res) {
+    try {
+      const { eventIds } = req.body
+      const { id: creator } = req.data
+
+      //Delete events that are provided in the body array whose creator is the requesting user
+      const returnValue = await Event.deleteMany({
+        _id: { $in: eventIds },
+        creator
+      })
+      const { deletedCount: count } = returnValue
+      const diff = eventIds.length - count
+
+      Response.Success(res, {
+        message: `${count} event(s) deleted successfully.${
+          diff !== 0
+            ? ` ${diff} event(s) could not be deleted likely because you're not the creator`
+            : ''
+        }`
+      })
+    } catch (err) {
+      console.log(err)
+      Response.InternalServerError(res, 'Error deleting events')
+    }
+  }
 }

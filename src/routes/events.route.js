@@ -48,4 +48,11 @@ router.delete(
   EventController.deleteEvent
 )
 
+router.delete(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventController.deleteEvents
+)
+
 export default router
