@@ -80,7 +80,7 @@ export default class UsersMiddleware {
       try {
         const doc = await Collection.findById(req[field][prop])
 
-        if (doc.creatorId.toHexString() === req.data.id || !doc) {
+        if (doc.creator.toHexString() === req.data.id || !doc) {
           req.dbDoc = doc
           return next()
         }
