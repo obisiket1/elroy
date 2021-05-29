@@ -4,6 +4,7 @@ import UsersMiddleware from '../middlewares/user.middleware'
 import EventValidator from '../validations/event.validator'
 import EventController from '../controllers/event.controller'
 import Helper from '../utils/helpers.utils'
+import Events from '../db/models/event.model'
 
 const router = Router()
 
@@ -34,9 +35,17 @@ router.get(
 
 router.get(
   '/:eventId',
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventController.fetchEvent
+)
+
+router.delete(
+  '/:eventId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
-  EventController.fetchEvent
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
+  EventController.deleteEvent
 )
 
 export default router

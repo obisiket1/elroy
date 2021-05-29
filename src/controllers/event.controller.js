@@ -64,4 +64,18 @@ export default class EventController {
       Response.InternalServerError(res, 'Error fetching event')
     }
   }
+
+  static async deleteEvent (req, res) {
+    try {
+      const { eventId } = req.params
+
+      const event = await Event.findByIdAndDelete(eventId)
+
+      Response.Success(res, {
+        message: `Event "${event.title}" deleted successfully`
+      })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error deleting event')
+    }
+  }
 }
