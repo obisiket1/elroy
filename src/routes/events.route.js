@@ -32,4 +32,11 @@ router.get(
   EventController.fetchEvents
 )
 
+router.get(
+  '/:eventId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventController.fetchEvent
+)
+
 export default router

@@ -52,4 +52,16 @@ export default class EventController {
       Response.InternalServerError(res, 'Error fetching events')
     }
   }
+
+  static async fetchEvent (req, res) {
+    try {
+      const { eventId } = req.params
+
+      const event = await Event.findById(eventId)
+
+      Response.Success(res, { event })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching event')
+    }
+  }
 }
