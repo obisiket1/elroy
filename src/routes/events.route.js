@@ -18,10 +18,11 @@ router.post(
 )
 
 router.put(
-  '/',
+  '/:eventId',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
   EventValidator.validateEventEditionData(),
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
   Helper.validationResult,
   EventController.editEvent
 )

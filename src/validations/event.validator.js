@@ -91,7 +91,7 @@ export default class EventsValidator {
         .not()
         .exists()
         .withMessage('Event creator cannot be changed'),
-      check('_id')
+      check('eventId')
         .exists()
         .withMessage('Event id is required')
         .custom(Helper.validateMongooseId('Event id')),
@@ -143,7 +143,6 @@ export default class EventsValidator {
         .isNumeric()
         .withMessage('Attendance limit should be a number'),
       body().custom(body => {
-        console.log(body)
         if ((body.requirePassword && body.password) || !body.requirePassword) {
           return true
         } else {
