@@ -38,4 +38,18 @@ export default class EventController {
       Response.InternalServerError(res, 'Error editing event')
     }
   }
+
+  static async fetchEvents (req, res) {
+    try {
+      const { limit, sort, ...query } = req.query
+
+      const events = await Event.find(query)
+        .sort(sort)
+        .limit(parseInt(limit))
+
+      Response.Success(res, { events })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching events')
+    }
+  }
 }
