@@ -25,4 +25,11 @@ router.put(
   EventController.editEvent
 )
 
+router.get(
+  '/',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventController.fetchEvents
+)
+
 export default router
