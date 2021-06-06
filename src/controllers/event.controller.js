@@ -83,12 +83,12 @@ export default class EventController {
   static async deleteEvents (req, res) {
     try {
       const { eventIds } = req.body
-      const { id: creator } = req.data
+      const { id: creatorId } = req.data
 
-      //Delete events that are provided in the body array whose creator is the requesting user
+      //Delete events that are provided in the body array whose creatorId is the requesting user
       const returnValue = await Event.deleteMany({
         _id: { $in: eventIds },
-        creator
+        creatorId
       })
       const { deletedCount: count } = returnValue
       const diff = eventIds.length - count
@@ -96,7 +96,7 @@ export default class EventController {
       Response.Success(res, {
         message: `${count} event(s) deleted successfully.${
           diff !== 0
-            ? ` ${diff} event(s) could not be deleted likely because you're not the creator`
+            ? ` ${diff} event(s) could not be deleted likely because you're not the creatorId`
             : ''
         }`
       })

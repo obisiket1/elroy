@@ -51,3 +51,7 @@ describe('No Matching Endpoint', () => {
     })
   })
 })
+
+describe('SIGNUP', () => {
+  
+})

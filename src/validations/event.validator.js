@@ -23,9 +23,9 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage('Event title cannot be empty'),
-      check('creator')
+      check('creatorId')
         .exists()
-        .withMessage('Event creator is required')
+        .withMessage('Event creatorId is required')
         .custom(Helper.validateMongooseId('Event host')),
       check('description')
         .exists()
@@ -87,10 +87,10 @@ export default class EventsValidator {
 
   static validateEventEditionData () {
     return [
-      check('creator')
+      check('creatorId')
         .not()
         .exists()
-        .withMessage('Event creator cannot be changed'),
+        .withMessage('Event creatorId cannot be changed'),
       check('eventId')
         .exists()
         .withMessage('Event id is required')
