@@ -17,7 +17,7 @@ const eventReviewSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true
     },
-    userId: {
+    creatorId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true
     }

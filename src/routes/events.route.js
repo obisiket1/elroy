@@ -67,4 +67,11 @@ router.post(
   EventReviewController.addReview
 )
 
+router.get(
+  '/:eventId/reviews',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventReviewController.fetchReviews
+)
+
 export default router
