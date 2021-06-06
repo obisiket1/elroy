@@ -2,7 +2,9 @@ import { Router } from 'express'
 import AuthMiddleware from '../middlewares/auth.middleware'
 import UsersMiddleware from '../middlewares/user.middleware'
 import EventValidator from '../validations/event.validator'
+import EventReviewValidator from '../validations/eventReview.validator'
 import EventController from '../controllers/event.controller'
+import EventReviewController from '../controllers/eventReview.controller'
 import Helper from '../utils/helpers.utils'
 import Events from '../db/models/event.model'
 
@@ -22,8 +24,8 @@ router.put(
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
   EventValidator.validateEventEditionData(),
-  UsersMiddleware.checkOwnership(Events, 'eventId'),
   Helper.validationResult,
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
   EventController.editEvent
 )
 
@@ -54,6 +56,15 @@ router.delete(
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
   EventController.deleteEvents
+)
+
+router.post(
+  '/:eventId/reviews',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventReviewValidator.validateEventReviewData(),
+  Helper.validationResult,
+  EventReviewController.addReview
 )
 
 export default router
