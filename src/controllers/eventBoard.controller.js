@@ -25,13 +25,29 @@ export default class EventBoardController {
       const { type, name } = req.body
       const { eventBoardId } = req.params
 
-      const eventBoard = await EventBoard.findByIdAndUpdate(eventBoardId, {
-        type,
-        name
-      })
+      const eventBoard = await EventBoard.findByIdAndUpdate(
+        eventBoardId,
+        {
+          type,
+          name
+        },
+        { returnOriginal: false }
+      )
       Response.Success(res, { eventBoard })
     } catch (err) {
       Response.InternalServerError(res, 'Error editing event board')
+    }
+  }
+
+  static async fetchBoards (req, res) {
+    try {
+      const { eventId } = req.params
+
+      const eventBoards = await EventBoard.find({ eventId })
+
+      Response.Success(res, { eventBoards })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error fetching event boards')
     }
   }
 }

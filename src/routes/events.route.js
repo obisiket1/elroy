@@ -105,7 +105,11 @@ router.put(
   EventBoardValidator.validateEventBoardData(),
   Helper.validationResult,
   UsersMiddleware.checkOwnership(EventBoard, 'eventBoardId'),
-  EventBoardController.addBoard
+  EventBoardController.editBoard
+)
+
+router.get('/:eventId/boards',
+  EventBoardController.fetchBoards
 )
 
 export default router
