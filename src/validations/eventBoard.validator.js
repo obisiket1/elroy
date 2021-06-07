@@ -44,4 +44,19 @@ export default class EventBoardValidator {
         })
     ]
   }
+  static validateEventBoardsDeletionData () {
+    return [
+      //   check('content')
+      //     .exists()
+      //     .withMessage('Board content is required'),
+      check('eventBoardIds')
+        .exists()
+        .withMessage('Board ids is required')
+        .not()
+        .isString()
+        .withMessage('Board ids must be a nonstring array')
+        .isArray({ min: 1 })
+        .withMessage('Board ids must be an unempty array')
+    ]
+  }
 }

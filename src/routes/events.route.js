@@ -108,8 +108,23 @@ router.put(
   EventBoardController.editBoard
 )
 
-router.get('/:eventId/boards',
-  EventBoardController.fetchBoards
+router.get('/:eventId/boards', EventBoardController.fetchBoards)
+
+router.delete(
+  '/:eventId/boards/:eventBoardId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  UsersMiddleware.checkOwnership(EventBoard, 'eventBoardId'),
+  EventBoardController.deleteBoard
+)
+
+router.delete(
+  '/:eventId/boards',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventBoardValidator.validateEventBoardsDeletionData(),
+  Helper.validationResult,
+  EventBoardController.deleteBoards
 )
 
 export default router
