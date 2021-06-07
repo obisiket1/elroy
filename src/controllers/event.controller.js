@@ -96,7 +96,7 @@ export default class EventController {
       Response.Success(res, {
         message: `${count} event(s) deleted successfully.${
           diff !== 0
-            ? ` ${diff} event(s) could not be deleted likely because you're not the creatorId`
+            ? ` ${diff} event(s) could not be deleted likely because you're not the creator`
             : ''
         }`
       })

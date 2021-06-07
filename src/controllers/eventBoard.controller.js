@@ -50,4 +50,41 @@ export default class EventBoardController {
       Response.InternalServerError(res, 'Error fetching event boards')
     }
   }
+
+  static async deleteBoard (req, res) {
+    try {
+      const { eventBoardId } = req.params
+
+      const deletedEventBoard = await EventBoard.findByIdAndDelete(eventBoardId)
+
+      Response.Success(res, { deletedEventBoard })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error deleting event board')
+    }
+  }
+
+  static async deleteBoards (req, res) {
+    try {
+      const { eventBoardIds } = req.body
+      const { eventId } = req.params
+      const { id: creatorId } = req.data
+
+      const deletedEventBoards = await EventBoard.deleteMany({
+        creatorId,
+        _id: { $in: eventBoardIds }
+      })
+      const { deletedCount: count } = deletedEventBoards
+      const diff = eventBoardIds.length - count
+
+      Response.Success(res, {
+        message: `${count} event board(s) deleted successfully.${
+          diff !== 0
+            ? ` ${diff} event board(s) could not be deleted likely because you're not the creator`
+            : ''
+        }`
+      })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error deleting event boards')
+    }
+  }
 }
