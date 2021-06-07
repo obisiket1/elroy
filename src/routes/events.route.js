@@ -3,8 +3,10 @@ import AuthMiddleware from '../middlewares/auth.middleware'
 import UsersMiddleware from '../middlewares/user.middleware'
 import EventValidator from '../validations/event.validator'
 import EventReviewValidator from '../validations/eventReview.validator'
+import EventLiveCommentValidator from '../validations/eventLiveComment.validator'
 import EventController from '../controllers/event.controller'
 import EventReviewController from '../controllers/eventReview.controller'
+import EventLiveCommentController from '../controllers/eventLiveComment.controller'
 import Helper from '../utils/helpers.utils'
 import Events from '../db/models/event.model'
 
@@ -72,6 +74,15 @@ router.get(
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
   EventReviewController.fetchReviews
+)
+
+router.post(
+  '/:eventId/live-comments',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventLiveCommentValidator.validateEventLiveCommentData(),
+  Helper.validationResult,
+  EventLiveCommentController.addComment
 )
 
 export default router

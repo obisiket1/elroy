@@ -15,11 +15,13 @@ const eventReviewSchema = new mongoose.Schema(
     },
     eventId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
+      ref: "event"
     },
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
+      ref: "user"
     }
   },
   {
