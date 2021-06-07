@@ -4,9 +4,11 @@ import UsersMiddleware from '../middlewares/user.middleware'
 import EventValidator from '../validations/event.validator'
 import EventReviewValidator from '../validations/eventReview.validator'
 import EventLiveCommentValidator from '../validations/eventLiveComment.validator'
+import EventBoardValidator from '../validations/eventBoard.validator'
 import EventController from '../controllers/event.controller'
 import EventReviewController from '../controllers/eventReview.controller'
 import EventLiveCommentController from '../controllers/eventLiveComment.controller'
+import EventBoardController from '../controllers/eventBoard.controller'
 import Helper from '../utils/helpers.utils'
 import Events from '../db/models/event.model'
 
@@ -83,6 +85,15 @@ router.post(
   EventLiveCommentValidator.validateEventLiveCommentData(),
   Helper.validationResult,
   EventLiveCommentController.addComment
+)
+
+router.post(
+  '/:eventId/boards',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventBoardValidator.validateEventBoardData(),
+  Helper.validationResult,
+  EventBoardController.addBoard
 )
 
 export default router
