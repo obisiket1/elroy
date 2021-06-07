@@ -19,4 +19,19 @@ export default class EventBoardController {
       Response.InternalServerError(res, 'Error adding event board')
     }
   }
+
+  static async editBoard (req, res) {
+    try {
+      const { type, name } = req.body
+      const { eventBoardId } = req.params
+
+      const eventBoard = await EventBoard.findByIdAndUpdate(eventBoardId, {
+        type,
+        name
+      })
+      Response.Success(res, { eventBoard })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing event board')
+    }
+  }
 }
