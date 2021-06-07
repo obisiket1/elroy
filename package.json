@@ -34,9 +34,12 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-validator": "^6.10.1",
+    "googleapis": "^75.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.6.1",
     "winston": "^3.3.3"
   },
   "devDependencies": {

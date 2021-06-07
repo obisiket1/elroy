@@ -49,30 +49,29 @@ const UserSchema = new mongoose.Schema(
       type: String
     },
     interests: [{ type: 'ObjectId' }],
-    isActivated: {
+    emailVerified: {
       type: Boolean,
       default: false
     }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 )
-
 
 UserSchema.virtual('followers', {
   ref: 'follow',
   localField: '_id',
   foreignField: 'followedUser',
-  justOne: false,
-});
+  justOne: false
+})
 
 UserSchema.virtual('following', {
   ref: 'follow',
   localField: '_id',
   foreignField: 'followingUser',
-  justOne: false,
-});
+  justOne: false
+})
 
 const User = mongoose.model('user', UserSchema)
 

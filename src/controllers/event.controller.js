@@ -29,12 +29,13 @@ export default class EventController {
           password: await encryptPassword(req.body.password)
         }
       }
-      const event = await Event.findByIdAndUpdate(req.body._id, data, {
+      const event = await Event.findByIdAndUpdate(req.params.eventId, data, {
         returnOriginal: false
       })
 
       return Response.Success(res, { event })
     } catch (err) {
+      console.log(err)
       Response.InternalServerError(res, 'Error editing event')
     }
   }
@@ -78,6 +79,32 @@ export default class EventController {
       })
     } catch (err) {
       Response.InternalServerError(res, 'Error deleting event')
+    }
+  }
+
+  static async deleteEvents (req, res) {
+    try {
+      const { eventIds } = req.body
+      const { id: creatorId } = req.data
+
+      //Delete events that are provided in the body array whose creatorId is the requesting user
+      const returnValue = await Event.deleteMany({
+        _id: { $in: eventIds },
+        creatorId
+      })
+      const { deletedCount: count } = returnValue
+      const diff = eventIds.length - count
+
+      Response.Success(res, {
+        message: `${count} event(s) deleted successfully.${
+          diff !== 0
+            ? ` ${diff} event(s) could not be deleted likely because you're not the creator`
+            : ''
+        }`
+      })
+    } catch (err) {
+      console.log(err)
+      Response.InternalServerError(res, 'Error deleting events')
     }
   }
 }

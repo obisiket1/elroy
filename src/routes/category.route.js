@@ -31,8 +31,6 @@ router.put(
 
 router.get(
   '/',
-  AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
   CategoriesController.fetchCategories
 )
 

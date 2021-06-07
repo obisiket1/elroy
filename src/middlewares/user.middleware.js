@@ -75,18 +75,20 @@ export default class UsersMiddleware {
     return next()
   }
 
-  static checkOwnership (Collection, prop, field = 'params') {
+  static checkOwnership (Collection, prop, field = 'params', document = '') {
     return async (req, res, next) => {
       try {
         const doc = await Collection.findById(req[field][prop])
 
-        if (doc.creator.toHexString() === req.data.id || !doc) {
+        if (doc.creatorId.toHexString() === req.data.id || !doc) {
           req.dbDoc = doc
           return next()
         }
         return Response.UnauthorizedError(
           res,
-          'Only the creator is allowed to perform this action'
+          `Only the ${
+            document ? document + ' ' : ''
+          }creator is allowed to perform this action`
         )
       } catch (err) {
         return Response.InternalServerError(res, 'Error checking ownership')

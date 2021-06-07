@@ -5,8 +5,8 @@ export default class CategoriesController {
   static async createCategory (req, res) {
     try {
       const { name } = req.body
-      const { id: creator } = req.data
-      const category = await Categories.create({ name, creator })
+      const { id: creatorId } = req.data
+      const category = await Categories.create({ name, creatorId })
 
       Response.Success(res, { category })
     } catch (err) {
