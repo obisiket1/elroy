@@ -11,6 +11,7 @@ import EventLiveCommentController from '../controllers/eventLiveComment.controll
 import EventBoardController from '../controllers/eventBoard.controller'
 import Helper from '../utils/helpers.utils'
 import Events from '../db/models/event.model'
+import EventBoard from '../db/models/eventBoard.model'
 
 const router = Router()
 
@@ -93,6 +94,17 @@ router.post(
   AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardData(),
   Helper.validationResult,
+  UsersMiddleware.checkOwnership(Events, 'eventId', undefined, 'event'),
+  EventBoardController.addBoard
+)
+
+router.put(
+  '/:eventId/boards/:eventBoardId',
+  AuthMiddleware.validateToken,
+  AuthMiddleware.grantAccess(),
+  EventBoardValidator.validateEventBoardData(),
+  Helper.validationResult,
+  UsersMiddleware.checkOwnership(EventBoard, 'eventBoardId'),
   EventBoardController.addBoard
 )
 
