@@ -57,7 +57,9 @@ export default class EventController {
     try {
       const { eventId } = req.params
 
-      const event = await Event.findById(eventId)
+      const event = await Event.findById(eventId).populate(
+        'boards liveComments reviews'
+      )
 
       Response.Success(res, { event })
     } catch (err) {
