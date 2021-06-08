@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import geoSchema from '../schemas/geoLocation.schema'
 
 const eventSchema = new mongoose.Schema(
   {
@@ -11,7 +12,6 @@ const eventSchema = new mongoose.Schema(
       ref: 'user'
     },
     description: String,
-    location: Object,
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'category'
@@ -23,6 +23,9 @@ const eventSchema = new mongoose.Schema(
     password: String,
     requireAuthentication: Boolean,
     backgroundImage: String,
+    location: geoSchema,
+    attendanceLimit: Number,
+    requirePassword: Boolean
   },
   {
     timestamps: true,
@@ -49,6 +52,7 @@ eventSchema.virtual('liveComments', {
   foreignField: 'eventId',
   justOne: false
 })
+eventSchema.index({ location: '2dsphere' })
 
 const Event = mongoose.model('event', eventSchema)
 export default Event
