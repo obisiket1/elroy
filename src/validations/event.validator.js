@@ -23,10 +23,6 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage('Event title cannot be empty'),
-      check('creator')
-        .exists()
-        .withMessage('Event creator is required')
-        .custom(Helper.validateMongooseId('Event host')),
       check('description')
         .exists()
         .withMessage('Event description is required')
@@ -35,7 +31,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage('Event description cannot be empty')
-        .isLength({ min: 100 })
+        .isLength({ min: 5 })
         .withMessage(
           'Event description should be at least 100 characters long'
         ),
@@ -172,6 +168,29 @@ export default class EventsValidator {
         .withMessage('Event ids should be a nonstring array')
         .isArray({ min: 1 })
         .withMessage('Event ids should be an unempty array')
+    ]
+  }
+
+  static validateEventsFetchData () {
+    return [
+      check('lat').custom(lat => {
+        if (!isNaN(parseFloat(lat))) return true
+        else {
+          throw new Error('Latitude should be a number')
+        }
+      }),
+      check('lng').custom(lng => {
+        if (!isNaN(parseFloat(lng))) return true
+        else {
+          throw new Error('Longitude should be a number')
+        }
+      }),
+      check('rad').custom(rad => {
+        if (!isNaN(parseFloat(rad))) return true
+        else {
+          throw new Error('Radius should be a number')
+        }
+      })
     ]
   }
 

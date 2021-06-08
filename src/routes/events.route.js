@@ -29,6 +29,8 @@ router.get(
   '/',
   AuthMiddleware.validateToken,
   AuthMiddleware.grantAccess(),
+  EventValidator.validateEventsFetchData(),
+  Helper.validationResult,
   EventController.fetchEvents
 )
 

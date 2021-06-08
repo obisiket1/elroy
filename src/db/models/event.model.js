@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import geoSchema from '../schemas/geoLocation.schema'
 
 const eventSchema = new mongoose.Schema({
   title: {
@@ -10,7 +11,7 @@ const eventSchema = new mongoose.Schema({
     ref: 'user'
   },
   description: String,
-  location: Object,
+  location: geoSchema,
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'category'
@@ -21,8 +22,9 @@ const eventSchema = new mongoose.Schema({
   requirePassword: Boolean,
   password: String,
   requireAuthentication: Boolean,
-  backgroundImage: String,
+  backgroundImage: String
 })
+eventSchema.index({ location: '2dsphere' })
 
 const Event = mongoose.model('event', eventSchema)
 export default Event
