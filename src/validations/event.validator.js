@@ -31,7 +31,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage('Event description cannot be empty')
-        .isLength({ min: 5 })
+        .isLength({ min: 100 })
         .withMessage(
           'Event description should be at least 100 characters long'
         ),
@@ -83,11 +83,11 @@ export default class EventsValidator {
 
   static validateEventEditionData () {
     return [
-      check('creator')
+      check('creatorId')
         .not()
         .exists()
-        .withMessage('Event creator cannot be changed'),
-      check('_id')
+        .withMessage('Event creatorId cannot be changed'),
+      check('eventId')
         .exists()
         .withMessage('Event id is required')
         .custom(Helper.validateMongooseId('Event id')),
@@ -107,7 +107,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage('Event description cannot be empty')
-        .isLength({ min: 5 })
+        .isLength({ min: 100 })
         .withMessage(
           'Event description should be at least 100 characters long'
         ),
@@ -139,7 +139,6 @@ export default class EventsValidator {
         .isNumeric()
         .withMessage('Attendance limit should be a number'),
       body().custom(body => {
-        console.log(body)
         if ((body.requirePassword && body.password) || !body.requirePassword) {
           return true
         } else {
