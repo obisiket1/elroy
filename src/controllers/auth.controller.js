@@ -21,7 +21,7 @@ export default class AuthController {
    */
   static async signup (req, res) {
     try {
-      const { firstName, lastName, password, email, role } = req.body
+      const { firstName, lastName, password, email } = req.body
 
       const encryptedPassword = await Helper.encryptPassword(password)
 
@@ -29,8 +29,7 @@ export default class AuthController {
         firstName,
         lastName,
         password: encryptedPassword,
-        email,
-        role
+        email
       }
 
       const result = await Users.create({ ...user })
@@ -43,7 +42,7 @@ export default class AuthController {
         code
       })
 
-      const token = Helper.generateToken(user._id, user.role, user.fullName)
+      const token = Helper.generateToken(user._id, user.fullName)
       Helper.setCookie(res, token)
 
       const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
@@ -104,7 +103,7 @@ export default class AuthController {
         user.password
       )
       if (!passwordsMatch) return Response.UnauthorizedError(res, signinError)
-      const token = Helper.generateToken(user._id, user.role, user.firstName)
+      const token = Helper.generateToken(user._id, user.firstName)
       Helper.setCookie(res, token)
       user.password = undefined
       const data = { token, user }
@@ -142,7 +141,6 @@ export default class AuthController {
 
         const userToken = await Helper.generateToken(
           myUser._id,
-          myUser.role,
           myUser.fullName
         )
 

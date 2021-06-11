@@ -52,6 +52,13 @@ describe('No Matching Endpoint', () => {
   })
 })
 
-describe('SIGNUP', () => {
+let user = {
+  firstName: 'First',
+  lastName: 'Last',
   
+}
+describe('SIGNUP', () => {
+  describe('SUCCESSFUL SIGNUP', () => {
+
+  })
 })

@@ -25,7 +25,7 @@ router.post(
 router.patch(
   '/change_password',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   UserValidator.validateChangePasswordData(),
   UserValidator.changePasswordValidationResult,
   UserMiddleware.checkUserExistence,

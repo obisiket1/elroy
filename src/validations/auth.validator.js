@@ -96,8 +96,7 @@ class Auth {
         .isLength({ min: 8 })
         .withMessage('Password length must be at least 8 characters')
         .trim()
-        .escape(),
-      check('role').custom(HelperUtils.validateMongooseId('Role')),
+        .escape()
     ];
   }
 
