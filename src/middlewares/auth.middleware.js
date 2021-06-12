@@ -41,15 +41,15 @@ class AuthMiddleware {
    * @returns {JSON} passes control to the next function
    */
   static grantAccess (role = '608ebc0a8673c637b45fbc42') {
-    const roles = ['608ebc0a8673c637b45fbc42', '608ebc218673c637b45fbc43']
-    const roleIndex = roles.findIndex(val => val === role)
-    return (req, res, next) => {
-      if (
-        roleIndex < 0 ||
-        roles.findIndex(val => val === req.data.role) < roleIndex
-      ) {
-        return Response.UnauthorizedError(res, 'Not authorized to access data')
-      }
+    // const roles = ['608ebc0a8673c637b45fbc42', '608ebc218673c637b45fbc43']
+    // const roleIndex = roles.findIndex(val => val === role)
+    return (_, __, next) => {
+      // if (
+      //   roleIndex < 0 ||
+      //   roles.findIndex(val => val === req.data.role) < roleIndex
+      // ) {
+      //   return Response.UnauthorizedError(res, 'Not authorized to access data')
+      // }
       return next()
     }
   }

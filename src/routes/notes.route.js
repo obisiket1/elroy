@@ -10,7 +10,7 @@ const router = Router()
 router.post(
   '/',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   NoteValidator.validateNoteData(),
   NoteValidator.noteValidationResult,
   NoteController.createNote
@@ -19,7 +19,7 @@ router.post(
 router.put(
   '/:noteId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   NoteValidator.validateNoteData(),
   NoteValidator.noteValidationResult,
   UsersMiddleware.checkOwnership(Notes, 'noteId'),
@@ -29,7 +29,7 @@ router.put(
 router.get(
   '/:noteId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   UsersMiddleware.checkOwnership(Notes, 'noteId'),
   NoteController.fetchNote
 )
@@ -37,14 +37,14 @@ router.get(
 router.get(
   '/',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   NoteController.fetchNotes
 )
 
 router.delete(
   '/:noteId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   UsersMiddleware.checkOwnership(Notes, 'noteId'),
   NoteController.deleteNote
 )
@@ -52,7 +52,7 @@ router.delete(
 router.delete(
   '/',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   NoteValidator.validateNotesDeletionData(),
   NoteValidator.noteValidationResult,
   NoteController.deleteNotes

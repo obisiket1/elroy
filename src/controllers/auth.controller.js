@@ -21,7 +21,7 @@ export default class AuthController {
    */
   static async signup (req, res) {
     try {
-      const { firstName, lastName, password, email, role } = req.body
+      const { firstName, lastName, password, email } = req.body
 
       const encryptedPassword = await Helper.encryptPassword(password)
 
@@ -29,57 +29,55 @@ export default class AuthController {
         firstName,
         lastName,
         password: encryptedPassword,
-        email,
-        role
+        email
       }
 
       const result = await Users.create({ ...user })
       result.password = undefined
 
-      const code = await Helper.encryptPassword(email)
+      // const code = await Helper.encryptPassword(email)
 
-      await EmailVerification.create({
-        email,
-        code
-      })
+      // await EmailVerification.create({
+      //   email,
+      //   code
+      // })
 
-      const token = Helper.generateToken(user._id, user.role, user.fullName)
+      const token = Helper.generateToken(user._id, user.fullName)
       Helper.setCookie(res, token)
 
-      const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-      const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
-      const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI
-      const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN
+      // const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+      // const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+      // const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI
+      // const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN
 
-      const oAuth2Client = new google.auth.OAuth2(
-        CLIENT_ID,
-        CLIENT_SECRET,
-        REDIRECT_URI
-      )
-      oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
-      const accessToken = await oAuth2Client.getAccessToken()
+      // const oAuth2Client = new google.auth.OAuth2(
+      //   CLIENT_ID,
+      //   CLIENT_SECRET,
+      //   REDIRECT_URI
+      // )
+      // oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
+      // const accessToken = await oAuth2Client.getAccessToken()
 
-      // create reusable transporter object using the default SMTP transport
-      let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          type: 'OAuth2',
-          user: 'victoronwukwe25@gmail.com',
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-          refreshToken: REFRESH_TOKEN,
-          accessToken
-        }
-      })
+      // let transporter = nodemailer.createTransport({
+      //   service: 'gmail',
+      //   auth: {
+      //     type: 'OAuth2',
+      //     user: 'victoronwukwe25@gmail.com',
+      //     clientId: CLIENT_ID,
+      //     clientSecret: CLIENT_SECRET,
+      //     refreshToken: REFRESH_TOKEN,
+      //     accessToken
+      //   }
+      // })
 
-      await transporter.sendMail({
-        from: 'Victor Onwukwe <victoronwukwe25@gmail.com>', // sender address
-        to: `${email}`, // list of receivers
-        subject: 'Elroi email verification', // Subject line
-        html: `<div>
-          Hello. Please follow this <a href='http://localhost:5000/api/v1/auth/verify-email?tkn=${code}&email=${email}'>link</a> to verify your email
-        </div>` // plain text body
-      })
+      // await transporter.sendMail({
+      //   from: 'Victor Onwukwe <victoronwukwe25@gmail.com>', // sender address
+      //   to: `${email}`, // list of receivers
+      //   subject: 'Elroi email verification', // Subject line
+      //   html: `<div>
+      //     Hello. Please follow this <a href='http://localhost:5000/api/v1/auth/verify-email?tkn=${code}&email=${email}'>link</a> to verify your email
+      //   </div>` // plain text body
+      // })
 
       return Response.Success(res, { user: result, token }, 201)
     } catch (err) {
@@ -104,7 +102,7 @@ export default class AuthController {
         user.password
       )
       if (!passwordsMatch) return Response.UnauthorizedError(res, signinError)
-      const token = Helper.generateToken(user._id, user.role, user.firstName)
+      const token = Helper.generateToken(user._id, user.firstName)
       Helper.setCookie(res, token)
       user.password = undefined
       const data = { token, user }
@@ -142,7 +140,6 @@ export default class AuthController {
 
         const userToken = await Helper.generateToken(
           myUser._id,
-          myUser.role,
           myUser.fullName
         )
 

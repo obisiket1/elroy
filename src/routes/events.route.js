@@ -18,7 +18,7 @@ const router = Router()
 router.post(
   '/',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventValidator.validateEventCreationData(),
   Helper.validationResult,
   EventController.createEvent
@@ -27,7 +27,7 @@ router.post(
 router.put(
   '/:eventId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventValidator.validateEventEditionData(),
   Helper.validationResult,
   UsersMiddleware.checkOwnership(Events, 'eventId'),
@@ -53,7 +53,7 @@ router.get(
 router.delete(
   '/:eventId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   UsersMiddleware.checkOwnership(Events, 'eventId'),
   EventController.deleteEvent
 )
@@ -61,14 +61,14 @@ router.delete(
 router.delete(
   '/',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventController.deleteEvents
 )
 
 router.post(
   '/:eventId/reviews',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventReviewValidator.validateEventReviewData(),
   Helper.validationResult,
   EventReviewController.addReview
@@ -77,14 +77,14 @@ router.post(
 router.get(
   '/:eventId/reviews',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventReviewController.fetchReviews
 )
 
 router.post(
   '/:eventId/live-comments',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventLiveCommentValidator.validateEventLiveCommentData(),
   Helper.validationResult,
   EventLiveCommentController.addComment
@@ -93,7 +93,7 @@ router.post(
 router.post(
   '/:eventId/boards',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardData(),
   Helper.validationResult,
   UsersMiddleware.checkOwnership(Events, 'eventId', undefined, 'event'),
@@ -103,7 +103,7 @@ router.post(
 router.put(
   '/:eventId/boards/:eventBoardId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardData(),
   Helper.validationResult,
   UsersMiddleware.checkOwnership(EventBoard, 'eventBoardId'),
@@ -115,7 +115,7 @@ router.get('/:eventId/boards', EventBoardController.fetchBoards)
 router.delete(
   '/:eventId/boards/:eventBoardId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   UsersMiddleware.checkOwnership(EventBoard, 'eventBoardId'),
   EventBoardController.deleteBoard
 )
@@ -123,7 +123,7 @@ router.delete(
 router.delete(
   '/:eventId/boards',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardsDeletionData(),
   Helper.validationResult,
   EventBoardController.deleteBoards

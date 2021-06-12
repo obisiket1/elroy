@@ -17,7 +17,7 @@ router.get(
 router.delete(
   '/:userId',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   ParamsValidator.validateMongooseId('userId'),
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkUserExistence,
@@ -27,7 +27,7 @@ router.delete(
 router.post(
   '/:userId/follow',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   ParamsValidator.validateMongooseId('userId'),
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkFollowershipInexistence,
@@ -53,7 +53,7 @@ router.get(
 router.delete(
   '/:userId/unfollow',
   AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.grantAccess(),
   ParamsValidator.validateMongooseId('userId'),
   ParamsValidator.mongooseIdValidationResult,
   UsersController.unfollowUser
