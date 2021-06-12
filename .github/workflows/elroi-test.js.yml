@@ -3,6 +3,11 @@
 
 name: Node.js CI
 
+env:
+  NODE_ENV: test
+  PORT: 6000
+  ATLAS_URL: mongodb+srv://elp01A33_2:PLz4xhovTN7iTxbk@cluster0.7tjdj.mongodb.net/elroi-unit-test
+  SECRET: elroihashsecretcode
 on:
   push:
     branches: [ develop ]
