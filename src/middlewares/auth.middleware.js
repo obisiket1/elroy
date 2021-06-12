@@ -43,7 +43,7 @@ class AuthMiddleware {
   static grantAccess (role = '608ebc0a8673c637b45fbc42') {
     // const roles = ['608ebc0a8673c637b45fbc42', '608ebc218673c637b45fbc43']
     // const roleIndex = roles.findIndex(val => val === role)
-    return (_, _, next) => {
+    return (_, __, next) => {
       // if (
       //   roleIndex < 0 ||
       //   roles.findIndex(val => val === req.data.role) < roleIndex

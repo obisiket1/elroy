@@ -9,8 +9,8 @@ export default class {
    * @param {number} code
    * @returns {Object} response
    */
-  static UnauthorizedError(res, error, code) {
-    return res.status(code || 401).json({
+  static UnauthorizedError(res, error, code = 401) {
+    return res.status(code).json({
       status: 'error',
       error,
     });

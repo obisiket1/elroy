@@ -23,14 +23,20 @@ class Auth {
         .not()
         .isEmpty()
         .withMessage('Email cannot be empty')
+        .isString()
+        .withMessage('Email should be a string')
         .isEmail()
-        .withMessage('Email should be a valid email address'),
+        .withMessage('Email is not a valid email address'),
       check('password')
         .exists()
         .withMessage('Password is required')
+        .isString()
+        .withMessage('Password should be a string')
         .not()
         .isEmpty()
         .withMessage('Password cannot be empty')
+        .isLength({ min: 8 })
+        .withMessage('Password length should be at least 8 characters')
         .trim()
         .escape(),
     ];
@@ -48,11 +54,7 @@ class Auth {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({ msg }) => msg);
-      return res.status(400).json({
-        status: '400 Invalid Request',
-        error: 'Your request contains invalid parameters',
-        errors: errArr,
-      });
+      return Response.InvalidRequestParamsError(res, errArr);
     }
     return next();
   }
@@ -63,7 +65,7 @@ class Auth {
         .exists()
         .withMessage('First name is required')
         .isString()
-        .withMessage('First name must be a string')
+        .withMessage('First name should be a string')
         .not()
         .isEmpty()
         .withMessage('First name cannot be empty'),
@@ -71,7 +73,7 @@ class Auth {
         .exists()
         .withMessage('Last name is required')
         .isString()
-        .withMessage('Last name must be a string')
+        .withMessage('Last name should be a string')
         .not()
         .isEmpty()
         .withMessage('Last name cannot be empty'),
@@ -79,22 +81,22 @@ class Auth {
         .exists()
         .withMessage('Email is required')
         .isString()
-        .withMessage('Email must be a string')
+        .withMessage('Email should be a string')
         .not()
         .isEmpty()
         .withMessage('Email cannot be empty')
         .isEmail()
-        .withMessage('Invalid email address'),
+        .withMessage('Email is not a valid email address'),
       check('password')
         .exists()
         .withMessage('Password is required')
         .isString()
-        .withMessage('Password must be a string')
+        .withMessage('Password should be a string')
         .not()
         .isEmpty()
         .withMessage('Password cannot be empty')
         .isLength({ min: 8 })
-        .withMessage('Password length must be at least 8 characters')
+        .withMessage('Password length should be at least 8 characters')
         .trim()
         .escape()
     ];

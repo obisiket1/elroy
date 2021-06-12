@@ -4,6 +4,7 @@ import chaiHttp from 'chai-http'
 import Sinonchai from 'sinon-chai'
 import Users from '../../db/models/user.model'
 import userUtils from '../../utils/user.utils'
+import mongoose from 'mongoose'
 
 import app from '../../index'
 
@@ -26,27 +27,42 @@ describe('No Matching Endpoint', () => {
 })
 
 const unhashedPassword = '12345678'
-let user = {
+let validUser = {
+  _id: new mongoose.mongo.ObjectId(),
   firstName: 'John',
   lastName: 'Doe',
   email: 'johndoe@mail.com',
   password: unhashedPassword
 }
+let user = { ...validUser }
+const token = userUtils.generateToken(user._id, user.firstName)
+let hashedPassword
+;(async () => {
+  hashedPassword = await userUtils.encryptPassword(unhashedPassword)
+})()
+const invalidToken = 'invalid.jwt.token'
 
-const baseUrl = '/api/v1/auth/signup'
+const baseUrl = '/api/v1/auth/login'
 
-describe('SIGNUP', () => {
-  describe('SUCCESSFUL SIGNUP', () => {
+describe('LOGIN', () => {
+  describe('SUCCESSFUL LOGIN', () => {
+    beforeEach(async () => {
+      await Users.create({
+        ...user,
+        password: hashedPassword
+      })
+    })
     afterEach(async () => {
       await Users.deleteOne({ email: user.email })
     })
-    it('should signup user successfully', done => {
+    it('should login user successfully', done => {
       chai
         .request(app)
         .post(baseUrl)
         .send(user)
         .end((err, res) => {
-          res.should.have.status(201)
+          res.should.have.status(200)
+          res.body.data.should.have.property('token')
           res.body.data.should.have.property('user')
           res.body.data.user.should.have.property('firstName').to.equals('John')
           res.body.data.user.should.have.property('lastName').to.equals('Doe')
@@ -59,82 +75,17 @@ describe('SIGNUP', () => {
     })
   })
 
-  describe('UNSUCCESSFUL SIGNUP', () => {
+  describe('UNSUCCESSFUL LOGIN', () => {
     describe('Invalid Request Params', () => {
       let request
 
       beforeEach(() => {
         request = chai.request(app).post(baseUrl)
-      })
-      it('should signup return error if first name is not provided', done => {
-        user.firstName = undefined
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('First name is required')
-          done()
-        })
-      })
-      it('should signup return error if first name is empty string', done => {
-        user.firstName = ''
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('First name cannot be empty')
-          done()
-        })
-      })
-      it('should signup return error if first name is not a string', done => {
-        user.firstName = 5
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('First name should be a string')
-          done()
-        })
+        // user = { ...validUser }
+        // done()
       })
 
-      it('should signup return error if last name is not provided', done => {
-        user.lastName = undefined
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('Last name is required')
-          done()
-        })
-      })
-      it('should signup return error if last name is empty string', done => {
-        user.lastName = ''
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('Last name cannot be empty')
-          done()
-        })
-      })
-      it('should signup return error if last name is not a string', done => {
-        user.lastName = 5
-        request.send(user).end((err, res) => {
-          res.should.have.status(400)
-          res.body.should.have.property('status').to.equals('error')
-          res.body.should.have
-            .property('errors')
-            .to.include('Last name should be a string')
-          done()
-        })
-      })
-
-      it('should signup return error if email is not provided', done => {
+      it('should login return error if email is not provided', done => {
         user.email = undefined
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -145,7 +96,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if email is empty string', done => {
+      it('should login return error if email is empty string', done => {
         user.email = ''
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -156,7 +107,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if email is not a string', done => {
+      it('should login return error if email is not a string', done => {
         user.email = 5
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -167,7 +118,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if email is not a string', done => {
+      it('should login return error if email is not a string', done => {
         user.email = 'john@'
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -179,7 +130,7 @@ describe('SIGNUP', () => {
         })
       })
 
-      it('should signup return error if password is not provided', done => {
+      it('should login return error if password is not provided', done => {
         user.password = undefined
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -190,7 +141,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if password is empty string', done => {
+      it('should login return error if password is empty string', done => {
         user.password = ''
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -201,7 +152,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if password is not a string', done => {
+      it('should login return error if password is not a string', done => {
         user.password = 5
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -212,7 +163,7 @@ describe('SIGNUP', () => {
           done()
         })
       })
-      it('should signup return error if password length is less than 8 characters', done => {
+      it('should login return error if password is less than 8 digits', done => {
         user.password = '1234'
         request.send(user).end((err, res) => {
           res.should.have.status(400)
@@ -222,6 +173,26 @@ describe('SIGNUP', () => {
             .to.include('Password length should be at least 8 characters')
           done()
         })
+      })
+    })
+
+    describe('INCORRECT CREDENTIALS', () => {
+      beforeEach(() => {
+        user = { ...validUser }
+      })
+      it('should return 404 error if user is not signed up', done => {
+        chai
+          .request(app)
+          .post(baseUrl)
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(401)
+            res.body.should.have.property('status').to.equals('error')
+            res.body.should.have
+              .property('error')
+              .to.include('Incorrect email or password')
+            done()
+          })
       })
     })
   })

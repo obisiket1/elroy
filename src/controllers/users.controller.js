@@ -40,7 +40,7 @@ export default class UserController {
 
       const encryptpassword = await UsersUtils.encryptPassword(password)
 
-      await Users.findByIdAndUpdate(req.data._id, {
+      await Users.findByIdAndUpdate(req.data.id, {
         password: encryptpassword
       })
 
