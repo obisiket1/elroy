@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node -r esm src/",
     "dev": "nodemon -r esm src/",
-    "test": "env-cmd -f ./test.env nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
+    "test": "env-cmd -f ./test.env nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm  --timeout 90000  --recursive --exit --silent",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
