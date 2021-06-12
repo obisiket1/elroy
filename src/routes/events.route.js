@@ -37,7 +37,9 @@ router.put(
 router.get(
   '/',
   AuthMiddleware.validateToken,
-  // AuthMiddleware.grantAccess(),
+  AuthMiddleware.grantAccess(),
+  EventValidator.validateEventsFetchData(),
+  Helper.validationResult,
   EventController.fetchEvents
 )
 

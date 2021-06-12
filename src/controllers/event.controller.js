@@ -42,9 +42,24 @@ export default class EventController {
 
   static async fetchEvents (req, res) {
     try {
-      const { limit, sort, ...query } = req.query
+      const { limit, sort, lat, lng, rad, ...query } = req.query
 
-      const events = await Event.find(query)
+      let params = { ...query }
+      if (lat && lng) {
+        params = {
+          ...params,
+          location: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [parseFloat(lng), parseFloat(lat)]
+              },
+              $maxDistance: rad ? parseFloat(rad) : 100000
+            }
+          }
+        }
+      }
+      const events = await Event.find(params)
         .sort(sort)
         .limit(parseInt(limit))
 
