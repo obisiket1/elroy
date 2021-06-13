@@ -56,6 +56,7 @@ router.delete(
   // AuthMiddleware.grantAccess(),
   ParamsValidator.validateMongooseId('userId'),
   ParamsValidator.mongooseIdValidationResult,
+  UserMiddleware.checkFollowershipExistence,
   UsersController.unfollowUser
 )
 
