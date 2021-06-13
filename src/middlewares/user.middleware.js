@@ -101,7 +101,18 @@ export default class UsersMiddleware {
       res,
       next,
       Follows,
-      { followedUser: req.params.userId, followingUser: req.data.id },
+      { followedUserId: req.params.userId, followingUserId: req.data.id },
+      'This followership'
+    )
+  }
+
+  static checkFollowershipExistence (req, res, next) {
+    GeneralServices.checkDocExistence(
+      req,
+      res,
+      next,
+      Follows,
+      { followedUserId: req.params.userId, followingUserId: req.data.id },
       'This followership'
     )
   }

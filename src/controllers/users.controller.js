@@ -52,20 +52,20 @@ export default class UserController {
 
   static async followUser (req, res) {
     try {
-      const { id: followingUser } = req.data
-      const { userId: followedUser } = req.params
+      const { id: followingUserId } = req.data
+      const { userId: followedUserId } = req.params
 
-      if (followedUser === followingUser)
+      if (followedUserId === followingUserId)
         return Response.BadRequestError(
           res,
           'Users cannot follow their own account'
         )
-      await Follows.create({
-        followedUser,
-        followingUser
+      const followership = await Follows.create({
+        followedUserId,
+        followingUserId
       })
 
-      return Response.Success(res, { message: 'User followed successfully' })
+      return Response.Success(res, { followership })
     } catch (err) {
       return Response.InternalServerError(res, 'Error following user')
     }
@@ -73,10 +73,9 @@ export default class UserController {
 
   static async fetchFollowers (req, res) {
     try {
-      const { userId: followedUser } = req.params
-      const followers = await Follows.find({ followedUser }).populate(
-        'followingUser',
-        'fullName'
+      const { userId: followedUserId } = req.params
+      const followers = await Follows.find({ followedUserId }).populate(
+        'followingUserId'
       )
 
       return Response.Success(res, { followers })
@@ -87,10 +86,9 @@ export default class UserController {
 
   static async fetchFollowing (req, res) {
     try {
-      const { userId: followingUser } = req.params
-      const following = await Follows.find({ followingUser }).populate(
-        'followedUser',
-        'fullName'
+      const { userId: followingUserId } = req.params
+      const following = await Follows.find({ followingUserId }).populate(
+        'followedUserId',
       )
 
       return Response.Success(res, { following })
@@ -101,12 +99,12 @@ export default class UserController {
 
   static async unfollowUser (req, res) {
     try {
-      const { id: followingUser } = req.data
-      const { userId: followedUser } = req.params
+      const { id: followingUserId } = req.data
+      const { userId: followedUserId } = req.params
 
       await Follows.findOneAndDelete({
-        followedUser,
-        followingUser
+        followedUserId,
+        followingUserId
       })
 
       return Response.Success(res, { message: 'User unfollowed successfully' })
