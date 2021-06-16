@@ -1,4 +1,4 @@
-import { check } from 'express-validator'
+import { check, body } from 'express-validator'
 import Helpers from '../utils/helpers.utils'
 
 const boardTypes = ['note', 'document', 'image', 'video', 'audio']
@@ -41,7 +41,14 @@ export default class EventBoardValidator {
           throw new Error(
             "Board type must be 'note', 'audio', 'video', 'document', or 'image'"
           )
-        })
+        }),
+      body().custom(body => {
+        if (body.type === 'note' && !body.content) {
+          throw new Error('No note provided')
+        } else {
+          return true
+        }
+      })
     ]
   }
   static validateEventBoardsDeletionData () {

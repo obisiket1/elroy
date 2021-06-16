@@ -81,7 +81,6 @@ export default class AuthController {
 
       return Response.Success(res, { user: result, token }, 201)
     } catch (err) {
-      console.log(err)
       return Response.InternalServerError(res, 'Error signing up user')
     }
   }

@@ -12,11 +12,17 @@ import EventBoardController from '../controllers/eventBoard.controller'
 import Helper from '../utils/helpers.utils'
 import Events from '../db/models/event.model'
 import EventBoard from '../db/models/eventBoard.model'
+import multer from 'multer'
 
 const router = Router()
 
+const upload = multer({ dest: 'temp/' })
+let Upload
+
+Upload = upload.fields([{ name: 'displayImage', maxCount: 1 }])
 router.post(
   '/',
+  Upload,
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventValidator.validateEventCreationData(),
@@ -26,6 +32,7 @@ router.post(
 
 router.put(
   '/:eventId',
+  Upload,
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventValidator.validateEventEditionData(),
@@ -90,8 +97,15 @@ router.post(
   EventLiveCommentController.addComment
 )
 
+Upload = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 },
+  { name: 'audio', maxCount: 1 },
+  { name: 'document', maxCount: 1 }
+])
 router.post(
   '/:eventId/boards',
+  Upload,
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardData(),

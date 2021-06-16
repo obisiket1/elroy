@@ -1,5 +1,6 @@
 import EventBoard from '../db/models/eventBoard.model'
 import Response from '../utils/response.utils'
+import StorageUtils from '../utils/storage.utils'
 
 export default class EventBoardController {
   static async addBoard (req, res) {
@@ -8,11 +9,22 @@ export default class EventBoardController {
       const { eventId } = req.params
       const { id: creatorId } = req.data
 
+      let content
+
+      if (type !== 'note') {
+        let file = await StorageUtils.uploadFile(
+          req.files[type][0],
+          `events/${eventId}/boards/${type}s`
+        )
+        content = file.Location
+      }
+
       const eventBoard = await EventBoard.create({
         type,
         name,
         eventId,
-        creatorId
+        creatorId,
+        content
       })
       Response.Success(res, { eventBoard })
     } catch (err) {
