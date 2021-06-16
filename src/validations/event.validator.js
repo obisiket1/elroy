@@ -35,7 +35,7 @@ export default class EventsValidator {
         .withMessage(
           'Event description should be at least 100 characters long'
         ),
-      check('category')
+      check('categoryId')
         .exists()
         .withMessage('Event category is required')
         .custom(Helper.validateMongooseId('Event category')),
@@ -111,7 +111,7 @@ export default class EventsValidator {
         .withMessage(
           'Event description should be at least 100 characters long'
         ),
-      check('category')
+      check('categoryId')
         .exists()
         .withMessage('Event category is required')
         .custom(Helper.validateMongooseId('Event category')),

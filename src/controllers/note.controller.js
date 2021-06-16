@@ -78,7 +78,6 @@ export default class NotesController {
 
       Response.Success(res, { message: 'Notes deleted successfully' })
     } catch (err) {
-      console.log(err)
       Response.InternalServerError(res, 'Error deleting notes')
     }
   }

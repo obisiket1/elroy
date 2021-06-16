@@ -5,7 +5,7 @@ import morgan from 'morgan'
 import logger from './config'
 import v1Router from './routes'
 import './db'
-import Response from './utils/response.utils'
+import postResponse from './utils/postResponse.utils'
 
 config()
 
@@ -22,6 +22,7 @@ app.get('/api/v1', (req, res) =>
     .status(200)
     .json({ status: 'success', message: 'Welcome to ElRoi API' })
 )
+app.use(postResponse)
 app.use('/api/v1', v1Router)
 
 app.use((req, res, next) => {

@@ -11,7 +11,8 @@ const eventBoardSchema = mongoose.Schema(
       required: true
     },
     content: {
-      type: String
+      type: String,
+      required: true
     },
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +24,7 @@ const eventBoardSchema = mongoose.Schema(
     },
   },
   {
-    timestamp: true
+    timestamps: true
   }
 )
 

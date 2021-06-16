@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema(
       ref: 'user'
     },
     description: String,
-    category: {
+    categoryId: {
       type: mongoose.Schema.ObjectId,
       ref: 'category'
     },
@@ -25,7 +25,8 @@ const eventSchema = new mongoose.Schema(
     backgroundImage: String,
     location: geoSchema,
     attendanceLimit: Number,
-    requirePassword: Boolean
+    requirePassword: Boolean,
+    displayImage: String
   },
   {
     timestamps: true,
