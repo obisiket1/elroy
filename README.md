@@ -72,9 +72,3 @@ Victor Onwukwe (victoronwukwe25@gmail.com)
 
 This is licensed for your use, modification and distribution under the [MIT license.](https://opensource.org/licenses/MIT)
 
-## My Env Variables
-NODE_ENV
-PORT
-ATLAS_URL
-SECRET
-
