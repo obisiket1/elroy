@@ -1,4 +1,4 @@
-# afrilearn-cms-backend
+# Elroi Backend
 ElRoi documentation
 
 <!-- [![](https://img.shields.io/badge/Protected_by-Hound-a873d1.svg)](https://houndci.com)  [![Build Status](https://travis-ci.com/Afrilearn/afrilearn-cms-backend.svg?branch=develop)](https://travis-ci.com/Afrilearn/afrilearn-cms-backend)  [![Coverage Status](https://coveralls.io/repos/github/Afrilearn/afrilearn-cms-backend/badge.svg?branch=develop)](https://coveralls.io/github/Afrilearn/afrilearn-cms-backend?branch=develop) -->
