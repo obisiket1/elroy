@@ -66,7 +66,7 @@ The API documentation is at [https://docs.google.com/document/d/1cyMnXPn_WKO_saA
 
 ## Author
 
-Victor Onwukwe (victoronwukwe25@gmail.com@gmail.com)
+Victor Onwukwe (victoronwukwe25@gmail.com)
 
 ## License
 
