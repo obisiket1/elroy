@@ -5,6 +5,7 @@ import notesRouter from './notes.route'
 import categoryRouter from './category.route'
 import roleRouter from './role.route'
 import eventRouter from './events.route'
+import interestRouter from './interests.route'
 
 const router = Router()
 
@@ -14,5 +15,6 @@ router.use('/notes', notesRouter)
 router.use('/categories', categoryRouter)
 router.use('/roles', roleRouter)
 router.use('/events', eventRouter)
+router.use('/interests', interestRouter)
 
 export default router
