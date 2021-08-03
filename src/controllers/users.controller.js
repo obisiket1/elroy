@@ -117,13 +117,13 @@ export default class UserController {
     try {
       const { id } = req.data
       const { interestIds } = req.body
-      console.log(id)
+      console.log('id: ', id)
 
       const user = await Users.findByIdAndUpdate(id, {
         interestIds
       })
 
-      return Response.Success(res, { message: 'User unfollowed successfully' })
+      return Response.Success(res, { message: 'Interests added successfully' })
     } catch (err) {
       console.log(err)
       return Response.InternalServerError(res, 'Error adding interests')
