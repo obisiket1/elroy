@@ -35,8 +35,8 @@ class Auth {
         .not()
         .isEmpty()
         .withMessage('Password cannot be empty')
-        // .isLength({ min: 8 })
-        // .withMessage('Password length should be at least 8 characters')
+        .isLength({ min: 8 })
+        .withMessage('Password length should be at least 8 characters')
         .trim()
         .escape(),
     ];

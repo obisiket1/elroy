@@ -111,6 +111,20 @@ export default class AuthController {
     }
   }
 
+  static async reloadUser(req,res) {
+    try {
+      const {id} = req.data
+      const user = await Users.findById(id)
+      const token = Helper.generateToken(user._id, user.firstName)
+      Helper.setCookie(res, token)
+      user.password = undefined
+      const data = { token, user }
+      return Response.Success(res, data)
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error Logging in User')
+    }
+  }
+
   static async facebookLogin (req, res) {
     try {
       const { token } = req.body

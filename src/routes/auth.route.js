@@ -33,6 +33,12 @@ router.patch(
   UserController.changePassword
 )
 
+router.get(
+  '/reload-user',
+  AuthMiddleware.validateToken,
+  AuthController.reloadUser
+)
+
 router.get('/verify-email', AuthController.verifyEmail)
 
 export default router
