@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import UsersController from '../controllers/users.controller'
 import UserMiddleware from '../middlewares/user.middleware'
+import UsersValidator from '../validations/user.validator'
 import ParamsValidator from '../validations/params.validator'
 import AuthMiddleware from '../middlewares/auth.middleware'
 
@@ -58,6 +59,14 @@ router.delete(
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkFollowershipExistence,
   UsersController.unfollowUser
+)
+
+router.post(
+  '/add-interests',
+  AuthMiddleware.validateToken,
+  UsersValidator.validateInterestsData(),
+  ParamsValidator.mongooseIdValidationResult,
+  UsersController.addInterests
 )
 
 export default router

@@ -88,7 +88,7 @@ export default class UserController {
     try {
       const { userId: followingUserId } = req.params
       const following = await Follows.find({ followingUserId }).populate(
-        'followedUserId',
+        'followedUserId'
       )
 
       return Response.Success(res, { following })
@@ -110,6 +110,23 @@ export default class UserController {
       return Response.Success(res, { message: 'User unfollowed successfully' })
     } catch (err) {
       return Response.InternalServerError(res, 'Error unfollowing user')
+    }
+  }
+
+  static async addInterests (req, res) {
+    try {
+      const { id } = req.data
+      const { interestIds } = req.body
+      console.log(id)
+
+      const user = await Users.findByIdAndUpdate(id, {
+        interestIds
+      })
+
+      return Response.Success(res, { message: 'User unfollowed successfully' })
+    } catch (err) {
+      console.log(err)
+      return Response.InternalServerError(res, 'Error adding interests')
     }
   }
 }
