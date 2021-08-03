@@ -42,7 +42,7 @@ export default class AuthController {
       //   code
       // })
 
-      const token = Helper.generateToken(user._id, user.fullName)
+      const token = Helper.generateToken(user._id, user.firstName)
       Helper.setCookie(res, token)
 
       // const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
@@ -101,6 +101,20 @@ export default class AuthController {
         user.password
       )
       if (!passwordsMatch) return Response.UnauthorizedError(res, signinError)
+      const token = Helper.generateToken(user._id, user.firstName)
+      Helper.setCookie(res, token)
+      user.password = undefined
+      const data = { token, user }
+      return Response.Success(res, data)
+    } catch (err) {
+      return Response.InternalServerError(res, 'Error Logging in User')
+    }
+  }
+
+  static async reloadUser(req,res) {
+    try {
+      const {id} = req.data
+      const user = await Users.findById(id)
       const token = Helper.generateToken(user._id, user.firstName)
       Helper.setCookie(res, token)
       user.password = undefined

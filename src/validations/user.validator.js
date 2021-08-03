@@ -1,6 +1,6 @@
-import { check, validationResult } from 'express-validator';
-import Response from '../utils/response.utils';
-import HelperUtils from '../utils/helpers.utils';
+import { check, validationResult } from 'express-validator'
+import Response from '../utils/response.utils'
+import HelperUtils from '../utils/helpers.utils'
 
 /**
  * Contains User Validators
@@ -11,7 +11,7 @@ export default class UserValidators {
   /**
    * @returns {Object} error object with errors arrays if user data is invalid
    */
-  static validateEditUserData() {
+  static validateEditUserData () {
     return [
       check('firstName')
         .optional()
@@ -27,7 +27,10 @@ export default class UserValidators {
         .not()
         .isEmpty()
         .withMessage('Last name cannot be empty'),
-      check('email').optional().isEmail().withMessage('Invalid email address'),
+      check('email')
+        .optional()
+        .isEmail()
+        .withMessage('Invalid email address'),
       check('password')
         .not()
         .exists()
@@ -39,8 +42,8 @@ export default class UserValidators {
         .not()
         .isEmpty()
         .withMessage('Role cannot be empty')
-        .custom(HelperUtils.validateMongooseId('Role')),
-    ];
+        .custom(HelperUtils.validateMongooseId('Role'))
+    ]
   }
 
   /**
@@ -50,19 +53,19 @@ export default class UserValidators {
    * @param {*} res - Response object
    * @param {*} next - Passes control to next function
    */
-  static editUserValidationResult(req, res, next) {
-    const errors = validationResult(req);
+  static editUserValidationResult (req, res, next) {
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      const errArr = errors.array().map(({ msg }) => msg);
-      return Response.InvalidRequestParamsError(res, errArr);
+      const errArr = errors.array().map(({ msg }) => msg)
+      return Response.InvalidRequestParamsError(res, errArr)
     }
-    return next();
+    return next()
   }
 
   /**
    * @returns {Object} error object with errors arrays if password change data is invalid
    */
-  static validateChangePasswordData() {
+  static validateChangePasswordData () {
     return [
       check('password')
         .exists()
@@ -72,8 +75,22 @@ export default class UserValidators {
         .isLength({ min: 8 })
         .withMessage('Password length must be at least 8 characters')
         .trim()
-        .escape(),
-    ];
+        .escape()
+    ]
+  }
+
+  static validateInterestsData () {
+    return [
+      check('interestIds')
+        .exists()
+        .withMessage('Interest ids are required')
+        .isArray()
+        .withMessage('Interest ids must be an array')
+        .custom(val => {
+          if (val.length > 0) return true
+          throw new Error('Interest ids must be a non-empty array')
+        })
+    ]
   }
 
   /**
@@ -83,12 +100,12 @@ export default class UserValidators {
    * @param {*} res - Response object
    * @param {*} next - Passes control to next function
    */
-  static changePasswordValidationResult(req, res, next) {
-    const errors = validationResult(req);
+  static changePasswordValidationResult (req, res, next) {
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      const errArr = errors.array().map(({ msg }) => msg);
-      return Response.InvalidRequestParamsError(res, errArr);
+      const errArr = errors.array().map(({ msg }) => msg)
+      return Response.InvalidRequestParamsError(res, errArr)
     }
-    return next();
+    return next()
   }
 }

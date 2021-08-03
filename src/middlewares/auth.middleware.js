@@ -30,6 +30,7 @@ class AuthMiddleware {
         return Response.UnauthorizedError(res, 'Not authorized to access data')
       }
       req.data = result.data
+      console.log(result.data)
       return next()
     })
   }
