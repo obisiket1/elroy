@@ -16,6 +16,22 @@ export default class UserController {
       return Response.InternalServerError(res, 'Error fetching user')
     }
   }
+  static async updateProfile (req, res) {
+    try {
+      const update = req.body
+
+      const user = await Users.findByIdAndUpdate(
+        req.data.id,
+        update,
+        { returnOriginal: false }
+      )
+
+      Response.Success(res, { user })
+    } catch (err) {
+      console.log(err)
+      return Response.InternalServerError(res, 'Error editing profile')
+    }
+  }
   static async deleteUser (req, res) {
     try {
       const { userId } = req.params

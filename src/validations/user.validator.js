@@ -28,9 +28,9 @@ export default class UserValidators {
         .isEmpty()
         .withMessage('Last name cannot be empty'),
       check('email')
-        .optional()
-        .isEmail()
-        .withMessage('Invalid email address'),
+        .not()
+        .exists()
+        .withMessage('Email cannot be changed directly'),
       check('password')
         .not()
         .exists()
