@@ -172,24 +172,36 @@ export default class EventsValidator {
 
   static validateEventsFetchData () {
     return [
-      check('lat').custom(lat => {
-        if (!isNaN(parseFloat(lat))) return true
-        else {
-          throw new Error('Latitude should be a number')
-        }
-      }),
-      check('lng').custom(lng => {
-        if (!isNaN(parseFloat(lng))) return true
-        else {
-          throw new Error('Longitude should be a number')
-        }
-      }),
-      check('rad').custom(rad => {
-        if (!isNaN(parseFloat(rad))) return true
-        else {
-          throw new Error('Radius should be a number')
-        }
-      })
+      check('lat')
+        .optional()
+        .custom(lat => {
+          if (!isNaN(parseFloat(lat))) return true
+          else {
+            throw new Error('Latitude should be a number')
+          }
+        }),
+      check('lng')
+        .optional()
+        .custom(lng => {
+          if (!isNaN(parseFloat(lng))) return true
+          else {
+            throw new Error('Longitude should be a number')
+          }
+        }),
+      check('rad')
+        .optional()
+        .custom(rad => {
+          if (!isNaN(parseFloat(rad))) return true
+          else {
+            throw new Error('Radius should be a number')
+          }
+        }),
+      check('categoryIds')
+        .optional()
+        .isArray({ min: 1 })
+        .withMessage(
+          'Category ids must be an array with at least one category id'
+        )
     ]
   }
 
