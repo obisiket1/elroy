@@ -8,6 +8,13 @@ import Helper from '../utils/helpers.utils'
 
 const router = Router()
 
+
+router.get(
+  '/fetchProfile',
+  AuthMiddleware.validateToken,
+  UsersController.fetchProfile
+)
+
 router.get(
   '/:userId',
   ParamsValidator.validateMongooseId('userId'),

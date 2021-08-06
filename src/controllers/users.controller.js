@@ -1,4 +1,5 @@
 import Users from '../db/models/user.model'
+import Events from '../db/models/event.model'
 import Follows from '../db/models/follow.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
@@ -7,12 +8,47 @@ export default class UserController {
   static async fetchUser (req, res) {
     try {
       const { userId } = req.params
+      const { full } = req.query
 
       const user = await Users.findById(userId)
       user.password = undefined
 
-      Response.Success(res, { user })
+      let data = { user }
+
+      if (full) {
+        const eventsCount = await Events.count({ creatorId: userId })
+        const followersCount = await Events.count({ followedUserId: userId })
+        const followingCount = await Events.count({ followedUserId: userId })
+
+        data = { ...data, eventsCount, followersCount, followingCount }
+      }
+
+      Response.Success(res, data)
     } catch (err) {
+      return Response.InternalServerError(res, 'Error fetching user')
+    }
+  }
+  static async fetchProfile (req, res) {
+    try {
+      const { id: userId } = req.data
+      const { full } = req.query
+
+      const user = await Users.findById(userId)
+      user.password = undefined
+
+      let data = { user }
+
+      if (full) {
+        const eventsCount = await Events.count({ creatorId: userId })
+        const followersCount = await Events.count({ followedUserId: userId })
+        const followingCount = await Events.count({ followedUserId: userId })
+
+        data = { ...data, eventsCount, followersCount, followingCount }
+      }
+
+      Response.Success(res, data)
+    } catch (err) {
+      console.log(err)
       return Response.InternalServerError(res, 'Error fetching user')
     }
   }
@@ -20,11 +56,9 @@ export default class UserController {
     try {
       const update = req.body
 
-      const user = await Users.findByIdAndUpdate(
-        req.data.id,
-        update,
-        { returnOriginal: false }
-      )
+      const user = await Users.findByIdAndUpdate(req.data.id, update, {
+        returnOriginal: false
+      })
 
       Response.Success(res, { user })
     } catch (err) {
