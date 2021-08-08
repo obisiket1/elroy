@@ -10,7 +10,7 @@ const router = Router()
 
 
 router.get(
-  '/fetchProfile',
+  '/fetch-profile',
   AuthMiddleware.validateToken,
   UsersController.fetchProfile
 )
@@ -24,7 +24,7 @@ router.get(
 )
 
 router.patch(
-  '/updateProfile',
+  '/update-profile',
   AuthMiddleware.validateToken,
   UserMiddleware.checkUserExistence,
   UsersValidator.validateEditUserData(),

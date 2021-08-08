@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator'
+import { check, validationResult, body } from 'express-validator'
 import Response from '../utils/response.utils'
 import HelperUtils from '../utils/helpers.utils'
 
@@ -67,15 +67,26 @@ export default class UserValidators {
    */
   static validateChangePasswordData () {
     return [
-      check('password')
+      check('oldPassword')
         .exists()
-        .withMessage('Password is required')
+        .withMessage('Old password is required')
         .isString()
-        .withMessage('Password must be a string')
+        .withMessage('Old password must be a string')
         .isLength({ min: 8 })
-        .withMessage('Password length must be at least 8 characters')
-        .trim()
-        .escape()
+        .withMessage('Old password length must be at least 8 characters')
+        .trim(),
+      check('newPassword')
+        .exists()
+        .withMessage('New password is required')
+        .isString()
+        .withMessage('New password must be a string')
+        .isLength({ min: 8 })
+        .withMessage('New password length must be at least 8 characters')
+        .trim(),
+      body().custom(b => {
+        if (b.oldPassword !== b.newPassword) return true
+        throw new Error('New password cannot be the same as old password')
+      })
     ]
   }
 
