@@ -26,7 +26,8 @@ const eventSchema = new mongoose.Schema(
     location: geoSchema,
     attendanceLimit: Number,
     requirePassword: Boolean,
-    displayImage: String
+    displayImage: String,
+    isLive: Boolean,
   },
   {
     timestamps: true,

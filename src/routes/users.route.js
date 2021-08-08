@@ -4,8 +4,16 @@ import UserMiddleware from '../middlewares/user.middleware'
 import UsersValidator from '../validations/user.validator'
 import ParamsValidator from '../validations/params.validator'
 import AuthMiddleware from '../middlewares/auth.middleware'
+import Helper from '../utils/helpers.utils'
 
 const router = Router()
+
+
+router.get(
+  '/fetch-profile',
+  AuthMiddleware.validateToken,
+  UsersController.fetchProfile
+)
 
 router.get(
   '/:userId',
@@ -13,6 +21,15 @@ router.get(
   ParamsValidator.mongooseIdValidationResult,
   UserMiddleware.checkUserExistence,
   UsersController.fetchUser
+)
+
+router.patch(
+  '/update-profile',
+  AuthMiddleware.validateToken,
+  UserMiddleware.checkUserExistence,
+  UsersValidator.validateEditUserData(),
+  Helper.validationResult,
+  UsersController.updateProfile
 )
 
 router.delete(

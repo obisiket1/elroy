@@ -29,7 +29,6 @@ router.patch(
   UserValidator.validateChangePasswordData(),
   UserValidator.changePasswordValidationResult,
   UserMiddleware.checkUserExistence,
-  UserMiddleware.checkPasswordsInequality,
   UserController.changePassword
 )
 
