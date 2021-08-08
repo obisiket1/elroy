@@ -75,7 +75,17 @@ export default class EventController {
 
   static async fetchEvents (req, res) {
     try {
-      const { limit, sort, lat, lng, rad, categoryIds, ...query } = req.query
+      const {
+        limit,
+        offset,
+        sort,
+        lat,
+        lng,
+        rad,
+        searchKeyword,
+        categoryIds,
+        ...query
+      } = req.query
 
       let params = { ...query }
       if (lat && lng) {
@@ -92,15 +102,21 @@ export default class EventController {
           }
         }
       }
+      if (searchKeyword) {
+        const search = new RegExp(`.*${searchKeyword}.*`, 'i')
+        params = { ...params, title: search }
+      }
       if (categoryIds) {
         params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } }
       }
       const events = await Event.find(params)
         .sort(sort)
+        .skip(parseInt(offset))
         .limit(parseInt(limit))
 
       Response.Success(res, { events })
     } catch (err) {
+      console.log(err)
       Response.InternalServerError(res, 'Error fetching events')
     }
   }
