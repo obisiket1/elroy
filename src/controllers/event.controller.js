@@ -1,4 +1,5 @@
 import Event from '../db/models/event.model'
+import EventAttenders from '../db/models/eventAttender.model'
 import Response from '../utils/response.utils'
 import { encryptPassword } from '../utils/event.utils'
 import StorageUtils from '../utils/storage.utils'
@@ -75,7 +76,17 @@ export default class EventController {
 
   static async fetchEvents (req, res) {
     try {
-      const { limit, sort, lat, lng, rad, categoryIds, ...query } = req.query
+      const {
+        limit,
+        offset,
+        sort,
+        lat,
+        lng,
+        rad,
+        searchKeyword,
+        categoryIds,
+        ...query
+      } = req.query
 
       let params = { ...query }
       if (lat && lng) {
@@ -92,15 +103,21 @@ export default class EventController {
           }
         }
       }
+      if (searchKeyword) {
+        const search = new RegExp(`.*${searchKeyword}.*`, 'i')
+        params = { ...params, title: search }
+      }
       if (categoryIds) {
         params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } }
       }
       const events = await Event.find(params)
         .sort(sort)
+        .skip(parseInt(offset))
         .limit(parseInt(limit))
 
       Response.Success(res, { events })
     } catch (err) {
+      console.log(err)
       Response.InternalServerError(res, 'Error fetching events')
     }
   }
@@ -155,6 +172,32 @@ export default class EventController {
       })
     } catch (err) {
       Response.InternalServerError(res, 'Error deleting events')
+    }
+  }
+
+  static async addAttender (req, res) {
+    try {
+      const { id: userId } = req.data
+      const { eventId } = req.params
+
+      await EventAttenders.create({ userId, eventId })
+      Response.Success(res, {
+        message: `Event attender added successfully`
+      })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error adding attender')
+    }
+  }
+
+  static async fetchAttenders (req, res) {
+    try {
+      const { eventId } = req.params
+
+      const events = await EventAttenders.find({ eventId })
+
+      Response.Success(res, { events })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error adding attender')
     }
   }
 }

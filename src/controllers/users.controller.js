@@ -1,6 +1,6 @@
 import Users from '../db/models/user.model'
 import Events from '../db/models/event.model'
-import EventAttenders from '../db/models/eventAttenders.model'
+import EventAttenders from '../db/models/eventAttender.model'
 import Follows from '../db/models/follow.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
@@ -196,7 +196,7 @@ export default class UserController {
       const { id } = req.params || req.data
 
       const events = await EventAttenders.find({
-        creatorId: userId || id
+        userId: id
       }).populate('eventId', 'title description startDate endDate')
 
       Response.Success(res, { events })
