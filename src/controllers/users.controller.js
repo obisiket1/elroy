@@ -1,6 +1,6 @@
 import Users from '../db/models/user.model'
 import Events from '../db/models/event.model'
-import EventAttenders from '../db/models/eventAttenders.model'
+import EventAttenders from '../db/models/eventAttender.model'
 import Follows from '../db/models/follow.model'
 import UsersUtils from '../utils/user.utils'
 import Response from '../utils/response.utils'
