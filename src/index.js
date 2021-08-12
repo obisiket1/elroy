@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { config } from 'dotenv'
+const { io } = require('socket.io')()
 import morgan from 'morgan'
 import logger from './config'
 import v1Router from './routes'
@@ -18,9 +19,7 @@ app.use(morgan('combined', { stream: logger.stream }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.get('/api/v1', (req, res) =>
-  res
-    .status(200)
-    .json({ status: 'success', message: 'Welcome to ElRoi API' })
+  res.status(200).json({ status: 'success', message: 'Welcome to ElRoi API' })
 )
 app.use(postResponse)
 app.use('/api/v1', v1Router)

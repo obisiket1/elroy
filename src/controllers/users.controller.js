@@ -196,7 +196,7 @@ export default class UserController {
       const { id } = req.params || req.data
 
       const events = await EventAttenders.find({
-        creatorId: userId || id
+        userId: id
       }).populate('eventId', 'title description startDate endDate')
 
       Response.Success(res, { events })

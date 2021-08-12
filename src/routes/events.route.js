@@ -143,4 +143,17 @@ router.delete(
   EventBoardController.deleteBoards
 )
 
+router.post(
+  '/:eventId/attenders',
+  AuthMiddleware.validateToken,
+  EventController.addAttender
+)
+
+router.get(
+  '/:eventId/attenders',
+  AuthMiddleware.validateToken,
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
+  EventController.fetchAttenders
+)
+
 export default router

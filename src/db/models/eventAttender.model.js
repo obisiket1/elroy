@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 
-const eventLiveCommentSchema = new mongoose.Schema(
+const eventAttenderSchema = new mongoose.Schema(
   {
-    creatorId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
       required: true
@@ -23,6 +23,6 @@ const eventLiveCommentSchema = new mongoose.Schema(
   }
 )
 
-const EventLiveComment = mongoose.model('eventAttender', eventLiveCommentSchema)
+const EventAttender = mongoose.model('eventAttender', eventAttenderSchema)
 
-export default EventLiveComment
+export default EventAttender

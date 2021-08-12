@@ -1,4 +1,5 @@
 import Event from '../db/models/event.model'
+import EventAttenders from '../db/models/eventAttender.model'
 import Response from '../utils/response.utils'
 import { encryptPassword } from '../utils/event.utils'
 import StorageUtils from '../utils/storage.utils'
@@ -171,6 +172,32 @@ export default class EventController {
       })
     } catch (err) {
       Response.InternalServerError(res, 'Error deleting events')
+    }
+  }
+
+  static async addAttender (req, res) {
+    try {
+      const { id: userId } = req.data
+      const { eventId } = req.params
+
+      await EventAttenders.create({ userId, eventId })
+      Response.Success(res, {
+        message: `Event attender added successfully`
+      })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error adding attender')
+    }
+  }
+
+  static async fetchAttenders (req, res) {
+    try {
+      const { eventId } = req.params
+
+      const events = await EventAttenders.find({ eventId })
+
+      Response.Success(res, { events })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error adding attender')
     }
   }
 }
