@@ -92,14 +92,14 @@ export default class UserValidators {
 
   static validateInterestsData () {
     return [
-      check('interestIds')
+      check('categoryIds')
         .exists()
-        .withMessage('Interest ids are required')
+        .withMessage('Category ids are required')
         .isArray()
-        .withMessage('Interest ids must be an array')
+        .withMessage('Category ids must be an array')
         .custom(val => {
           if (val.length > 0) return true
-          throw new Error('Interest ids must be a non-empty array')
+          throw new Error('Category ids must be a non-empty array')
         })
     ]
   }

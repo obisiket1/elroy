@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema(
     profilePhotoUrl: {
       type: String
     },
-    interestIds: [{ type: 'ObjectId', ref: 'category' }],
+    categoryIds: [{ type: 'ObjectId', ref: 'category' }],
     emailVerified: {
       type: Boolean,
       default: false
