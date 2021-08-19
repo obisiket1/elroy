@@ -7,7 +7,7 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    creatorId: {
+    userId: {
       type: mongoose.Schema.ObjectId,
       ref: 'user'
     },
@@ -28,6 +28,9 @@ const eventSchema = new mongoose.Schema(
     requirePassword: Boolean,
     displayImage: String,
     isLive: Boolean,
+    likesCount: { type: Number, default: 0 },
+    viewsCount: { type: Number, default: 0 },
+    reviewsCount: { type: Number, default: 0 }
   },
   {
     timestamps: true,

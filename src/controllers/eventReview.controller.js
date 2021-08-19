@@ -6,11 +6,11 @@ export default class EventReviewContoller {
   static async addReview (req, res) {
     try {
       const { eventId } = req.params
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
       const eventReview = await EventReviews.create({
         ...req.body,
         eventId,
-        creatorId
+        userId
       })
 
       return Response.Success(res, { eventReview })
@@ -24,7 +24,7 @@ export default class EventReviewContoller {
       const { sort, limit } = req.query
 
       const event = await Events.findById(eventId)
-      if (event.creatorId.toHexString() !== req.data.id) {
+      if (event.userId.toHexString() !== req.data.id) {
         return Response.UnauthorizedError(
           res,
           'Only the event owner can access the reviews'

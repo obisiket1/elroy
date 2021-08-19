@@ -10,6 +10,12 @@ const router = Router()
 
 
 router.get(
+  '/attended-events',
+  AuthMiddleware.validateToken,
+  UsersController.fetchAttendedEvents
+)
+
+router.get(
   '/fetch-profile',
   AuthMiddleware.validateToken,
   UsersController.fetchProfile

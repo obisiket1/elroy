@@ -17,7 +17,7 @@ export default class UserController {
       let data = { user }
 
       if (full) {
-        const eventsCount = await Events.count({ creatorId: userId })
+        const eventsCount = await Events.count({ userId: userId })
         const followersCount = await Events.count({ followedUserId: userId })
         const followingCount = await Events.count({ followedUserId: userId })
 
@@ -40,7 +40,7 @@ export default class UserController {
       let data = { user }
 
       if (full) {
-        const eventsCount = await Events.count({ creatorId: userId })
+        const eventsCount = await Events.count({ userId: userId })
         const followersCount = await Events.count({ followedUserId: userId })
         const followingCount = await Events.count({ followedUserId: userId })
 

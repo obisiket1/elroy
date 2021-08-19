@@ -1,5 +1,6 @@
 import Event from '../db/models/event.model'
 import EventAttenders from '../db/models/eventAttender.model'
+import EventLikers from '../db/models/eventLiker.model'
 import Response from '../utils/response.utils'
 import { encryptPassword } from '../utils/event.utils'
 import StorageUtils from '../utils/storage.utils'
@@ -9,7 +10,7 @@ export default class EventController {
   static async createEvent (req, res, next) {
     try {
       let data = { ...req.body }
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
       const _id = new mongoose.mongo.ObjectId()
       let displayImage, location
       if (req.files && req.files.displayImage) {
@@ -33,7 +34,7 @@ export default class EventController {
         _id,
         displayImage,
         location,
-        creatorId
+        userId
       })
 
       return Response.Success(res, { event })
@@ -153,12 +154,12 @@ export default class EventController {
   static async deleteEvents (req, res) {
     try {
       const { eventIds } = req.body
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
 
-      //Delete events that are provided in the body array whose creatorId is the requesting user
+      //Delete events that are provided in the body array whose userId is the requesting user
       const returnValue = await Event.deleteMany({
         _id: { $in: eventIds },
-        creatorId
+        userId
       })
       const { deletedCount: count } = returnValue
       const diff = eventIds.length - count
@@ -198,6 +199,46 @@ export default class EventController {
       Response.Success(res, { events })
     } catch (err) {
       Response.InternalServerError(res, 'Error adding attender')
+    }
+  }
+
+  static async likeEvent (req, res) {
+    try {
+      const { id } = req.data
+      const { eventId } = req.params
+
+      const exists = await EventLikers.findOne({ userId: id, eventId })
+      if (exists) {
+        return Response.UnauthorizedError(
+          res,
+          'You have already liked this event'
+        )
+      }
+      await EventLikers.create({ userId: id, eventId })
+      await Event.findByIdAndUpdate(eventId, { $inc: { likesCount: 1 } })
+
+      Response.Success(res, { message: 'Event liked successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error liking event')
+    }
+  }
+
+  static async unlikeEvent (req, res) {
+    try {
+      const { id } = req.data
+      const { eventId } = req.params
+
+      const like = await EventLikers.findOneAndDelete({
+        userId: id,
+        eventId
+      })
+      if (like) {
+        await Event.findByIdAndUpdate(eventId, { $inc: { likesCount: -1 } })
+      }
+
+      Response.Success(res, { message: 'Event unliked successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error unliking event')
     }
   }
 }

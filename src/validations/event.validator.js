@@ -60,6 +60,7 @@ export default class EventsValidator {
           else return true
         }),
       check('attendanceLimit')
+        .optional()
         .isNumeric()
         .withMessage('Attendance limit should be a number'),
       body().custom(body => {
@@ -83,10 +84,10 @@ export default class EventsValidator {
 
   static validateEventEditionData () {
     return [
-      check('creatorId')
+      check('userId')
         .not()
         .exists()
-        .withMessage('Event creatorId cannot be changed'),
+        .withMessage('Event userId cannot be changed'),
       check('eventId')
         .exists()
         .withMessage('Event id is required')

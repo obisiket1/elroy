@@ -6,7 +6,7 @@ const eventLiveCommentSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    creatorId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
       required: true
