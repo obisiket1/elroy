@@ -156,4 +156,18 @@ router.get(
   EventController.fetchAttenders
 )
 
+router.post(
+  '/:eventId/likers',
+  AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventController.likeEvent
+)
+
+router.delete(
+  '/:eventId/likers',
+  AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventController.unlikeEvent
+)
+
 export default router

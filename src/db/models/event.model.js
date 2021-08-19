@@ -61,36 +61,3 @@ eventSchema.index({ location: '2dsphere' })
 
 const Event = mongoose.model('event', eventSchema)
 export default Event
-
-import mongoose from 'mongoose'
-
-const eventSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  userId: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'user'
-  },
-  description: String,
-  location: Object,
-  category: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'category'
-  },
-  startDate: Date,
-  endDate: Date,
-  attendanceLimit: Number,
-  requirePassword: Boolean,
-  password: String,
-  requireAuthentication: Boolean,
-  backgroundImage: String,
-  likesCount: { type: Number, default: 0 },
-  viewsCount: { type: Number, default: 0 },
-  reviewsCount: { type: Number, default: 0 }
-})
-
-const Event = mongoose.model('event', eventSchema)
-export default Event
-

@@ -1,5 +1,6 @@
 import Event from '../db/models/event.model'
 import EventAttenders from '../db/models/eventAttender.model'
+import EventLikers from '../db/models/eventLiker.model'
 import Response from '../utils/response.utils'
 import { encryptPassword } from '../utils/event.utils'
 import StorageUtils from '../utils/storage.utils'
@@ -198,6 +199,46 @@ export default class EventController {
       Response.Success(res, { events })
     } catch (err) {
       Response.InternalServerError(res, 'Error adding attender')
+    }
+  }
+
+  static async likeEvent (req, res) {
+    try {
+      const { id } = req.data
+      const { eventId } = req.params
+
+      const exists = await EventLikers.findOne({ userId: id, eventId })
+      if (exists) {
+        return Response.UnauthorizedError(
+          res,
+          'You have already liked this event'
+        )
+      }
+      await EventLikers.create({ userId: id, eventId })
+      await Event.findByIdAndUpdate(eventId, { $inc: { likesCount: 1 } })
+
+      Response.Success(res, { message: 'Event liked successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error liking event')
+    }
+  }
+
+  static async unlikeEvent (req, res) {
+    try {
+      const { id } = req.data
+      const { eventId } = req.params
+
+      const like = await EventLikers.findOneAndDelete({
+        userId: id,
+        eventId
+      })
+      if (like) {
+        await Event.findByIdAndUpdate(eventId, { $inc: { likesCount: -1 } })
+      }
+
+      Response.Success(res, { message: 'Event unliked successfully' })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error unliking event')
     }
   }
 }

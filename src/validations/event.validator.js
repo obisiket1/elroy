@@ -60,6 +60,7 @@ export default class EventsValidator {
           else return true
         }),
       check('attendanceLimit')
+        .optional()
         .isNumeric()
         .withMessage('Attendance limit should be a number'),
       body().custom(body => {
