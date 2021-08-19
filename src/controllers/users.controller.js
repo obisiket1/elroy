@@ -177,11 +177,10 @@ export default class UserController {
   static async addInterests (req, res) {
     try {
       const { id } = req.data
-      const { interestIds } = req.body
-      console.log('id: ', id)
+      const { categoryIds } = req.body
 
       const user = await Users.findByIdAndUpdate(id, {
-        interestIds
+        categoryIds
       })
 
       return Response.Success(res, { message: 'Interests added successfully' })

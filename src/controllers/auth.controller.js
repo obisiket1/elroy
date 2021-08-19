@@ -42,7 +42,7 @@ export default class AuthController {
       //   code
       // })
 
-      const token = Helper.generateToken(user._id, user.firstName)
+      const token = Helper.generateToken(result._id, user.firstName)
       Helper.setCookie(res, token)
 
       // const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
