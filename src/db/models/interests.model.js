@@ -5,7 +5,7 @@ const interestSchema = new mongoose.Schema(
     name: {
       type: String
     },
-    creatorId: {
+    userId: {
       type: mongoose.Schema.ObjectId,
       ref: 'user'
     }

@@ -18,7 +18,7 @@ const eventReviewSchema = new mongoose.Schema(
       required: true,
       ref: "event"
     },
-    creatorId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "user"

@@ -5,8 +5,8 @@ export default class NotesController {
   static async createNote (req, res) {
     try {
       const { title, content } = req.body
-      const { id: creatorId } = req.data
-      const note = await Notes.create({ title, content, creatorId })
+      const { id: userId } = req.data
+      const note = await Notes.create({ title, content, userId })
 
       Response.Success(res, { note })
     } catch (err) {
@@ -40,8 +40,8 @@ export default class NotesController {
 
   static async fetchNotes (req, res) {
     try {
-      const { id: creatorId } = req.data
-      const notes = await Notes.find({ creatorId })
+      const { id: userId } = req.data
+      const notes = await Notes.find({ userId })
 
       Response.Success(res, { notes })
     } catch (err) {
@@ -68,9 +68,9 @@ export default class NotesController {
   static async deleteNotes (req, res) {
     try {
       const { noteIds } = req.body
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
 
-      const notes = await Notes.deleteMany({ creatorId, _id: { $in: noteIds } })
+      const notes = await Notes.deleteMany({ userId, _id: { $in: noteIds } })
 
       if (!notes) {
         return Response.UnauthorizedError(res, 'Notes could not be deleted')

@@ -9,7 +9,7 @@ export default class EventController {
   static async createEvent (req, res, next) {
     try {
       let data = { ...req.body }
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
       const _id = new mongoose.mongo.ObjectId()
       let displayImage, location
       if (req.files && req.files.displayImage) {
@@ -33,7 +33,7 @@ export default class EventController {
         _id,
         displayImage,
         location,
-        creatorId
+        userId
       })
 
       return Response.Success(res, { event })
@@ -153,12 +153,12 @@ export default class EventController {
   static async deleteEvents (req, res) {
     try {
       const { eventIds } = req.body
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
 
-      //Delete events that are provided in the body array whose creatorId is the requesting user
+      //Delete events that are provided in the body array whose userId is the requesting user
       const returnValue = await Event.deleteMany({
         _id: { $in: eventIds },
-        creatorId
+        userId
       })
       const { deletedCount: count } = returnValue
       const diff = eventIds.length - count

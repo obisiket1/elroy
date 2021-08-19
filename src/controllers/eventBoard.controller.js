@@ -7,7 +7,7 @@ export default class EventBoardController {
     try {
       const { type, name } = req.body
       const { eventId } = req.params
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
 
       let content
 
@@ -23,7 +23,7 @@ export default class EventBoardController {
         type,
         name,
         eventId,
-        creatorId,
+        userId,
         content
       })
       Response.Success(res, { eventBoard })
@@ -79,10 +79,10 @@ export default class EventBoardController {
     try {
       const { eventBoardIds } = req.body
       const { eventId } = req.params
-      const { id: creatorId } = req.data
+      const { id: userId } = req.data
 
       const deletedEventBoards = await EventBoard.deleteMany({
-        creatorId,
+        userId,
         _id: { $in: eventBoardIds }
       })
       const { deletedCount: count } = deletedEventBoards

@@ -14,7 +14,7 @@ const eventBoardSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    creatorId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user'
     },
