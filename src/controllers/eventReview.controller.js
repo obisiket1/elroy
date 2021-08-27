@@ -12,6 +12,7 @@ export default class EventReviewContoller {
         eventId,
         userId
       })
+      await Events.findByIdAndUpdate(eventId, { $inc: { reviewsCount: 1 } })
 
       return Response.Success(res, { eventReview })
     } catch (err) {
