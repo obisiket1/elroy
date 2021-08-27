@@ -24,10 +24,8 @@ const eventSchema = new mongoose.Schema(
     requireAuthentication: Boolean,
     backgroundImage: String,
     location: geoSchema,
-    attendanceLimit: Number,
-    requirePassword: Boolean,
     displayImage: String,
-    isLive: Boolean,
+    isLive: { type: Boolean, default: false },
     likesCount: { type: Number, default: 0 },
     viewsCount: { type: Number, default: 0 },
     reviewsCount: { type: Number, default: 0 }

@@ -75,6 +75,37 @@ export default class EventController {
     }
   }
 
+  static async updateEventData (req, res) {
+    try {
+      let data = { ...req.body }
+      const { eventId } = req.params
+      if (req.body.password) {
+        data = {
+          ...req.body,
+          password: await encryptPassword(req.body.password)
+        }
+      }
+      if (req.files.displayImage) {
+        let file = await StorageUtils.uploadFile(
+          req.files.displayImage[0],
+          `events/${eventId}/display-image`
+        )
+        data = { ...data, displayImage: file.Location }
+      }
+      if (req.body.location) {
+        data = { ...data, location: JSON.parse(req.body.location) }
+      }
+
+      const event = await Event.findByIdAndUpdate(req.params.eventId, data, {
+        returnOriginal: false
+      })
+
+      return Response.Success(res, { event })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing event')
+    }
+  }
+
   static async fetchEvents (req, res) {
     try {
       const {
@@ -86,6 +117,7 @@ export default class EventController {
         rad,
         searchKeyword,
         categoryIds,
+        timeStatus,
         ...query
       } = req.query
 
@@ -102,6 +134,19 @@ export default class EventController {
               $maxDistance: rad ? parseFloat(rad) : 100000
             }
           }
+        }
+      }
+      if (timeStatus) {
+        switch (timeStatus) {
+          case 'past':
+            params.endDate = { $lt: new Date() }
+            break
+          case 'future':
+            params.startDate = { $gt: new Date() }
+            break
+          case 'live':
+            params.isLive = true
+          default:
         }
       }
       if (searchKeyword) {

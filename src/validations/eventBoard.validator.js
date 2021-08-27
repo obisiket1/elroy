@@ -42,6 +42,13 @@ export default class EventBoardValidator {
             "Board type must be 'note', 'audio', 'video', 'document', or 'image'"
           )
         }),
+      check('content')
+        .optional()
+        .isString()
+        .withMessage('Board content must be a string')
+        .not()
+        .isEmpty()
+        .withMessage('Board content cannot be empty'),
       body().custom(body => {
         if (body.type === 'note' && !body.content) {
           throw new Error('No note provided')

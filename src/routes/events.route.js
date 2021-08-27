@@ -41,6 +41,16 @@ router.put(
   EventController.editEvent
 )
 
+router.patch(
+  '/:eventId',
+  Upload,
+  AuthMiddleware.validateToken,
+  EventValidator.validateEventUpdateData(),
+  Helper.validationResult,
+  UsersMiddleware.checkOwnership(Events, 'eventId'),
+  EventController.updateEventData,
+)
+
 router.get(
   '/',
   AuthMiddleware.validateToken,
@@ -116,6 +126,7 @@ router.post(
 
 router.put(
   '/:eventId/boards/:eventBoardId',
+  Upload,
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventBoardValidator.validateEventBoardData(),

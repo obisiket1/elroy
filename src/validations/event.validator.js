@@ -59,6 +59,10 @@ export default class EventsValidator {
             throw new Error('End end date should be a future date')
           else return true
         }),
+      check('location')
+        .optional()
+        .isObject()
+        .withMessage('Location should be an object'),
       check('attendanceLimit')
         .optional()
         .isNumeric()
@@ -137,6 +141,7 @@ export default class EventsValidator {
           else return true
         }),
       check('attendanceLimit')
+        .optional()
         .isNumeric()
         .withMessage('Attendance limit should be a number'),
       body().custom(body => {
@@ -154,6 +159,81 @@ export default class EventsValidator {
         } else {
           throw new Error('Event start date should be before end date')
         }
+      })
+    ]
+  }
+
+  static validateEventUpdateData () {
+    return [
+      check('userId')
+        .not()
+        .exists()
+        .withMessage('Event userId cannot be changed'),
+      check('eventId')
+        .optional()
+        .custom(Helper.validateMongooseId('Event id')),
+      check('title')
+        .optional()
+        .isString()
+        .withMessage('Event title should be a string')
+        .not()
+        .isEmpty()
+        .withMessage('Event title cannot be empty'),
+      check('description')
+        .optional()
+        .isString()
+        .withMessage('Event description should be a string')
+        .not()
+        .isEmpty()
+        .withMessage('Event description cannot be empty')
+        .isLength({ min: 100 })
+        .withMessage(
+          'Event description should be at least 100 characters long'
+        ),
+      check('categoryId')
+        .optional()
+        .custom(Helper.validateMongooseId('Event category')),
+      check('startDate')
+        .optional()
+        .isDate()
+        .withMessage('Event start date should be a date')
+        .custom(date => {
+          if (new Date(date) <= new Date())
+            throw new Error('Event start date should be a future date')
+          else return true
+        }),
+      check('endDate')
+        .optional()
+        .isDate()
+        .withMessage('Event end date should be a date')
+        .custom(date => {
+          if (new Date(date) <= new Date())
+            throw new Error('End end date should be a future date')
+          else return true
+        }),
+      check('attendanceLimit')
+        .optional()
+        .isNumeric()
+        .withMessage('Attendance limit should be a number'),
+      body().custom(body => {
+        if ((body.requirePassword && body.password) || !body.requirePassword) {
+          return true
+        } else {
+          throw new Error(
+            'Password should be provided for a password protected event'
+          )
+        }
+      }),
+      body().custom(body => {
+        if (body.startDate < body.endDate) {
+          return true
+        } else {
+          throw new Error('Event start date should be before end date')
+        }
+      }),
+      body().custom(body => {
+        const keys = Object.keys(body)
+        if (!keys.length) throw new Error('No payload provided for update')
       })
     ]
   }
