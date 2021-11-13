@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import geoSchema from "../schemas/geoLocation.schema";
 
+const dateSchema = new mongoose.Schema({
+  startDate: Date,
+  endDate: Date,
+});
 const eventSchema = new mongoose.Schema(
   {
     title: {
@@ -18,6 +22,7 @@ const eventSchema = new mongoose.Schema(
     },
     startDate: Date,
     endDate: Date,
+    dates: [dateSchema],
     attendanceLimit: Number,
     requirePassword: Boolean,
     password: String,
