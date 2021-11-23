@@ -22,7 +22,7 @@ export default class EventController {
         displayImage = file.Location;
       }
       if (req.body.location) {
-        location = JSON.parse(req.body.location);
+        location = req.body.location;
       }
       if (req.body.password) {
         data = {
@@ -55,7 +55,7 @@ export default class EventController {
           password: await encryptPassword(req.body.password),
         };
       }
-      if (req.files.displayImage) {
+      if (req.files && files.displayImage) {
         let file = await StorageUtils.uploadFile(
           req.files.displayImage[0],
           `events/${eventId}/display-image`
@@ -63,7 +63,7 @@ export default class EventController {
         data = { ...data, displayImage: file.Location };
       }
       if (req.body.location) {
-        data = { ...data, location: JSON.parse(req.body.location) };
+        data = { ...data, location: req.body.location };
       }
 
       const event = await Event.findByIdAndUpdate(req.params.eventId, data, {
@@ -86,7 +86,7 @@ export default class EventController {
           password: await encryptPassword(req.body.password),
         };
       }
-      if (req.files.displayImage) {
+      if (req.files && req.files.displayImage) {
         let file = await StorageUtils.uploadFile(
           req.files.displayImage[0],
           `events/${eventId}/display-image`
@@ -103,6 +103,7 @@ export default class EventController {
 
       return Response.Success(res, { event });
     } catch (err) {
+      console.log(err)
       Response.InternalServerError(res, "Error editing event");
     }
   }

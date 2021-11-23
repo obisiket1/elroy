@@ -225,7 +225,7 @@ export default class EventsValidator {
         }
       }),
       body().custom(body => {
-        if (body.startDate < body.endDate) {
+        if (!body.startDate || body.startDate < body.endDate) {
           return true
         } else {
           throw new Error('Event start date should be before end date')
@@ -233,7 +233,8 @@ export default class EventsValidator {
       }),
       body().custom(body => {
         const keys = Object.keys(body)
-        if (!keys.length) throw new Error('No payload provided for update')
+        if(keys.length) return true
+        throw new Error('No payload provided for update')
       })
     ]
   }
