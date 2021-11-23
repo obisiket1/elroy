@@ -135,6 +135,7 @@ router.put(
   EventBoardController.editBoard
 );
 
+router.get("/:eventId/boards/:eventBoardId", EventBoardController.fetchBoard);
 router.get("/:eventId/boards", EventBoardController.fetchBoards);
 
 router.delete(
