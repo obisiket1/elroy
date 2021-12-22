@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import geoSchema from "../schemas/geoLocation.schema";
+import { v4 as uuid } from "uuid";
 
 const dateSchema = new mongoose.Schema({
   startDate: Date,
@@ -34,6 +35,7 @@ const eventSchema = new mongoose.Schema(
     likesCount: { type: Number, default: 0 },
     viewsCount: { type: Number, default: 0 },
     reviewsCount: { type: Number, default: 0 },
+    eventId: { type: String, default: uuid() },
   },
   {
     timestamps: true,

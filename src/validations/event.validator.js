@@ -1,6 +1,6 @@
-import { check, body, validationResult } from 'express-validator'
-import Response from '../utils/response.utils'
-import Helper from '../utils/helpers.utils'
+import { check, body, validationResult } from "express-validator";
+import Response from "../utils/response.utils";
+import Helper from "../utils/helpers.utils";
 
 /**
  * Contains Params Validations
@@ -13,278 +13,284 @@ export default class EventsValidator {
    * @returns {EmptyArray} Empty array if mongooseID is valid
    * @param {*} param Name of expected mongoose id parameter
    */
-  static validateEventCreationData () {
+  static validateEventCreationData() {
     return [
-      check('title')
+      check("title")
         .exists()
-        .withMessage('Event title is required')
+        .withMessage("Event title is required")
         .isString()
-        .withMessage('Event title should be a string')
+        .withMessage("Event title should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event title cannot be empty'),
-      check('description')
+        .withMessage("Event title cannot be empty"),
+      check("description")
         .exists()
-        .withMessage('Event description is required')
+        .withMessage("Event description is required")
         .isString()
-        .withMessage('Event description should be a string')
+        .withMessage("Event description should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event description cannot be empty')
+        .withMessage("Event description cannot be empty")
         .isLength({ min: 100 })
         .withMessage(
-          'Event description should be at least 100 characters long'
+          "Event description should be at least 100 characters long"
         ),
-      check('categoryId')
+      check("categoryId")
         .exists()
-        .withMessage('Event category is required')
-        .custom(Helper.validateMongooseId('Event category')),
-      check('startDate')
+        .withMessage("Event category is required")
+        .custom(Helper.validateMongooseId("Event category")),
+      check("startDate")
         .exists()
-        .withMessage('Event start date is required')
+        .withMessage("Event start date is required")
         .isDate()
-        .withMessage('Event start date should be a date')
-        .custom(date => {
+        .withMessage("Event start date should be a date")
+        .custom((date) => {
           if (new Date(date) <= new Date())
-            throw new Error('Event start date should be a future date')
-          else return true
+            throw new Error("Event start date should be a future date");
+          else return true;
         }),
-      check('endDate')
+      check("endDate")
         .exists()
-        .withMessage('Event end date is required')
+        .withMessage("Event end date is required")
         .isDate()
-        .withMessage('Event end date should be a date')
-        .custom(date => {
+        .withMessage("Event end date should be a date")
+        .custom((date) => {
           if (new Date(date) <= new Date())
-            throw new Error('End end date should be a future date')
-          else return true
+            throw new Error("End end date should be a future date");
+          else return true;
         }),
-      check('location')
+      check("location")
         .optional()
         .isObject()
-        .withMessage('Location should be an object'),
-      check('attendanceLimit')
+        .withMessage("Location should be an object"),
+      check("attendanceLimit")
         .optional()
         .isNumeric()
-        .withMessage('Attendance limit should be a number'),
-      body().custom(body => {
+        .withMessage("Attendance limit should be a number"),
+      body().custom((body) => {
         if ((body.requirePassword && body.password) || !body.requirePassword) {
-          return true
+          return true;
         } else {
           throw new Error(
-            'Password should be provided for a password protected event'
-          )
+            "Password should be provided for a password protected event"
+          );
         }
       }),
-      body().custom(body => {
+      body().custom((body) => {
         if (body.startDate < body.endDate) {
-          return true
+          return true;
         } else {
-          throw new Error('Event start date should be before end date')
+          throw new Error("Event start date should be before end date");
         }
-      })
-    ]
+      }),
+    ];
   }
 
-  static validateEventEditionData () {
+  static validateEventEditionData() {
     return [
-      check('userId')
+      check("userId")
         .not()
         .exists()
-        .withMessage('Event userId cannot be changed'),
-      check('eventId')
+        .withMessage("Event userId cannot be changed"),
+      check("eventId")
         .exists()
-        .withMessage('Event id is required')
-        .custom(Helper.validateMongooseId('Event id')),
-      check('title')
+        .withMessage("Event id is required")
+        .custom(Helper.validateMongooseId("Event id")),
+      check("title")
         .exists()
-        .withMessage('Event title is required')
+        .withMessage("Event title is required")
         .isString()
-        .withMessage('Event title should be a string')
+        .withMessage("Event title should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event title cannot be empty'),
-      check('description')
+        .withMessage("Event title cannot be empty"),
+      check("description")
         .exists()
-        .withMessage('Event description is required')
+        .withMessage("Event description is required")
         .isString()
-        .withMessage('Event description should be a string')
+        .withMessage("Event description should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event description cannot be empty')
+        .withMessage("Event description cannot be empty")
         .isLength({ min: 100 })
         .withMessage(
-          'Event description should be at least 100 characters long'
+          "Event description should be at least 100 characters long"
         ),
-      check('categoryId')
+      check("categoryId")
         .exists()
-        .withMessage('Event category is required')
-        .custom(Helper.validateMongooseId('Event category')),
-      check('startDate')
+        .withMessage("Event category is required")
+        .custom(Helper.validateMongooseId("Event category")),
+      check("startDate")
         .exists()
-        .withMessage('Event start date is required')
+        .withMessage("Event start date is required")
         .isDate()
-        .withMessage('Event start date should be a date')
-        .custom(date => {
+        .withMessage("Event start date should be a date")
+        .custom((date) => {
           if (new Date(date) <= new Date())
-            throw new Error('Event start date should be a future date')
-          else return true
+            throw new Error("Event start date should be a future date");
+          else return true;
         }),
-      check('endDate')
+      check("endDate")
         .exists()
-        .withMessage('Event end date is required')
+        .withMessage("Event end date is required")
         .isDate()
-        .withMessage('Event end date should be a date')
-        .custom(date => {
+        .withMessage("Event end date should be a date")
+        .custom((date) => {
           if (new Date(date) <= new Date())
-            throw new Error('End end date should be a future date')
-          else return true
+            throw new Error("End end date should be a future date");
+          else return true;
         }),
-      check('attendanceLimit')
+      check("attendanceLimit")
         .optional()
         .isNumeric()
-        .withMessage('Attendance limit should be a number'),
-      body().custom(body => {
+        .withMessage("Attendance limit should be a number"),
+      check("usePersonalId")
+        .optional()
+        .isBoolean()
+        .withMessage("Use personal id should be boolean"),
+      body().custom((body) => {
         if ((body.requirePassword && body.password) || !body.requirePassword) {
-          return true
+          return true;
         } else {
           throw new Error(
-            'Password should be provided for a password protected event'
-          )
+            "Password should be provided for a password protected event"
+          );
         }
       }),
-      body().custom(body => {
+      body().custom((body) => {
         if (body.startDate < body.endDate) {
-          return true
+          return true;
         } else {
-          throw new Error('Event start date should be before end date')
+          throw new Error("Event start date should be before end date");
         }
-      })
-    ]
+      }),
+    ];
   }
 
-  static validateEventUpdateData () {
+  static validateEventUpdateData() {
     return [
-      check('userId')
+      check("userId")
         .not()
         .exists()
-        .withMessage('Event userId cannot be changed'),
-      check('eventId')
-        .optional()
-        .custom(Helper.validateMongooseId('Event id')),
-      check('title')
+        .withMessage("Event userId cannot be changed"),
+      check("eventId").optional().custom(Helper.validateMongooseId("Event id")),
+      check("title")
         .optional()
         .isString()
-        .withMessage('Event title should be a string')
+        .withMessage("Event title should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event title cannot be empty'),
-      check('description')
+        .withMessage("Event title cannot be empty"),
+      check("description")
         .optional()
         .isString()
-        .withMessage('Event description should be a string')
+        .withMessage("Event description should be a string")
         .not()
         .isEmpty()
-        .withMessage('Event description cannot be empty')
+        .withMessage("Event description cannot be empty")
         .isLength({ min: 100 })
         .withMessage(
-          'Event description should be at least 100 characters long'
+          "Event description should be at least 100 characters long"
         ),
-      check('categoryId')
+      check("categoryId")
         .optional()
-        .custom(Helper.validateMongooseId('Event category')),
-      check('startDate')
-        .optional()
-        .isDate()
-        .withMessage('Event start date should be a date')
-        .custom(date => {
-          if (new Date(date) <= new Date())
-            throw new Error('Event start date should be a future date')
-          else return true
-        }),
-      check('endDate')
+        .custom(Helper.validateMongooseId("Event category")),
+      check("startDate")
         .optional()
         .isDate()
-        .withMessage('Event end date should be a date')
-        .custom(date => {
+        .withMessage("Event start date should be a date")
+        .custom((date) => {
           if (new Date(date) <= new Date())
-            throw new Error('End end date should be a future date')
-          else return true
+            throw new Error("Event start date should be a future date");
+          else return true;
         }),
-      check('attendanceLimit')
+      check("endDate")
+        .optional()
+        .isDate()
+        .withMessage("Event end date should be a date")
+        .custom((date) => {
+          if (new Date(date) <= new Date())
+            throw new Error("End end date should be a future date");
+          else return true;
+        }),
+      check("attendanceLimit")
         .optional()
         .isNumeric()
-        .withMessage('Attendance limit should be a number'),
-      body().custom(body => {
+        .withMessage("Attendance limit should be a number"),
+      check("usePersonalId")
+        .optional()
+        .isBoolean()
+        .withMessage("Use personal id should be boolean"),
+      body().custom((body) => {
         if ((body.requirePassword && body.password) || !body.requirePassword) {
-          return true
+          return true;
         } else {
           throw new Error(
-            'Password should be provided for a password protected event'
-          )
+            "Password should be provided for a password protected event"
+          );
         }
       }),
-      body().custom(body => {
+      body().custom((body) => {
         if (!body.startDate || body.startDate < body.endDate) {
-          return true
+          return true;
         } else {
-          throw new Error('Event start date should be before end date')
+          throw new Error("Event start date should be before end date");
         }
       }),
-      body().custom(body => {
-        const keys = Object.keys(body)
-        if(keys.length) return true
-        throw new Error('No payload provided for update')
-      })
-    ]
+      body().custom((body) => {
+        const keys = Object.keys(body);
+        if (keys.length) return true;
+        throw new Error("No payload provided for update");
+      }),
+    ];
   }
 
-  static validateEventsDeletionData () {
+  static validateEventsDeletionData() {
     return [
-      check('EventIds')
+      check("EventIds")
         .exists()
-        .withMessage('Event ids is required')
+        .withMessage("Event ids is required")
         .not()
         .isString()
-        .withMessage('Event ids should be a nonstring array')
+        .withMessage("Event ids should be a nonstring array")
         .isArray({ min: 1 })
-        .withMessage('Event ids should be an unempty array')
-    ]
+        .withMessage("Event ids should be an unempty array"),
+    ];
   }
 
-  static validateEventsFetchData () {
+  static validateEventsFetchData() {
     return [
-      check('lat')
+      check("lat")
         .optional()
-        .custom(lat => {
-          if (!isNaN(parseFloat(lat))) return true
+        .custom((lat) => {
+          if (!isNaN(parseFloat(lat))) return true;
           else {
-            throw new Error('Latitude should be a number')
+            throw new Error("Latitude should be a number");
           }
         }),
-      check('lng')
+      check("lng")
         .optional()
-        .custom(lng => {
-          if (!isNaN(parseFloat(lng))) return true
+        .custom((lng) => {
+          if (!isNaN(parseFloat(lng))) return true;
           else {
-            throw new Error('Longitude should be a number')
+            throw new Error("Longitude should be a number");
           }
         }),
-      check('rad')
+      check("rad")
         .optional()
-        .custom(rad => {
-          if (!isNaN(parseFloat(rad))) return true
+        .custom((rad) => {
+          if (!isNaN(parseFloat(rad))) return true;
           else {
-            throw new Error('Radius should be a number')
+            throw new Error("Radius should be a number");
           }
         }),
-      check('categoryIds')
+      check("categoryIds")
         .optional()
         .isArray({ min: 1 })
         .withMessage(
-          'Category ids must be an array with at least one category id'
-        )
-    ]
+          "Category ids must be an array with at least one category id"
+        ),
+    ];
   }
 
   /**
@@ -294,12 +300,12 @@ export default class EventsValidator {
    * @param {*} res - Response object
    * @param {*} next - Passes control to next function
    */
-  static EventValidationResult (req, res, next) {
-    const errors = validationResult(req)
+  static EventValidationResult(req, res, next) {
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const errArr = errors.array().map(({ msg }) => msg)
-      return Response.InvalidRequestParamsError(res, errArr)
+      const errArr = errors.array().map(({ msg }) => msg);
+      return Response.InvalidRequestParamsError(res, errArr);
     }
-    return next()
+    return next();
   }
 }

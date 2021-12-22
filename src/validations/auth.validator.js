@@ -1,6 +1,6 @@
-import { check, validationResult } from 'express-validator';
-import HelperUtils from '../utils/helpers.utils'
-import Response from '../utils/response.utils'
+import { check, validationResult } from "express-validator";
+import HelperUtils from "../utils/helpers.utils";
+import Response from "../utils/response.utils";
 
 /**
  *Contains Login Validator
@@ -11,32 +11,32 @@ import Response from '../utils/response.utils'
  */
 class Auth {
   /**
-     * validate user data.
-     * @memberof Login
-     * @returns {null} - No response.
-     */
+   * validate user data.
+   * @memberof Login
+   * @returns {null} - No response.
+   */
   static validateLoginData() {
     return [
-      check('email')
+      check("email")
         .exists()
-        .withMessage('Email is required')
+        .withMessage("Email is required")
         .not()
         .isEmpty()
-        .withMessage('Email cannot be empty')
+        .withMessage("Email cannot be empty")
         .isString()
-        .withMessage('Email should be a string')
+        .withMessage("Email should be a string")
         .isEmail()
-        .withMessage('Email is not a valid email address'),
-      check('password')
+        .withMessage("Email is not a valid email address"),
+      check("password")
         .exists()
-        .withMessage('Password is required')
+        .withMessage("Password is required")
         .isString()
-        .withMessage('Password should be a string')
+        .withMessage("Password should be a string")
         .not()
         .isEmpty()
-        .withMessage('Password cannot be empty')
+        .withMessage("Password cannot be empty")
         .isLength({ min: 8 })
-        .withMessage('Password length should be at least 8 characters')
+        .withMessage("Password length should be at least 8 characters")
         .trim()
         .escape(),
     ];
@@ -61,44 +61,45 @@ class Auth {
 
   static validateSignupData() {
     return [
-      check('firstName')
+      check("firstName")
         .exists()
-        .withMessage('First name is required')
+        .withMessage("First name is required")
         .isString()
-        .withMessage('First name should be a string')
+        .withMessage("First name should be a string")
         .not()
         .isEmpty()
-        .withMessage('First name cannot be empty'),
-      check('lastName')
+        .withMessage("First name cannot be empty"),
+      check("lastName")
         .exists()
-        .withMessage('Last name is required')
+        .withMessage("Last name is required")
         .isString()
-        .withMessage('Last name should be a string')
+        .withMessage("Last name should be a string")
         .not()
         .isEmpty()
-        .withMessage('Last name cannot be empty'),
-      check('email')
+        .withMessage("Last name cannot be empty"),
+      check("email")
         .exists()
-        .withMessage('Email is required')
+        .withMessage("Email is required")
         .isString()
-        .withMessage('Email should be a string')
+        .withMessage("Email should be a string")
         .not()
         .isEmpty()
-        .withMessage('Email cannot be empty')
+        .withMessage("Email cannot be empty")
         .isEmail()
-        .withMessage('Email is not a valid email address'),
-      check('password')
+        .withMessage("Email is not a valid email address"),
+      check("password")
         .exists()
-        .withMessage('Password is required')
+        .withMessage("Password is required")
         .isString()
-        .withMessage('Password should be a string')
+        .withMessage("Password should be a string")
         .not()
         .isEmpty()
-        .withMessage('Password cannot be empty')
+        .withMessage("Password cannot be empty")
         .isLength({ min: 8 })
-        .withMessage('Password length should be at least 8 characters')
+        .withMessage("Password length should be at least 8 characters")
         .trim()
-        .escape()
+        .escape(),
+      check("phoneNumber").isString().withMessage("Phone should be a string"),
     ];
   }
 

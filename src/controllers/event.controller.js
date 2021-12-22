@@ -1,4 +1,5 @@
 import Event from "../db/models/event.model";
+import User from "../db/models/user.model";
 import EventAttenders from "../db/models/eventAttender.model";
 import EventLikers from "../db/models/eventLiker.model";
 import EventReport from "../db/models/eventReport.model";
@@ -10,8 +11,19 @@ import mongoose from "mongoose";
 export default class EventController {
   static async createEvent(req, res, next) {
     try {
-      let data = { ...req.body };
       const { id: userId } = req.data;
+      const events = await Event.find({
+        startDate: { $gte: new Date(req.body.startDate) },
+        endDate: { $lte: new Date(req.body.endDate) },
+        userId,
+      });
+      if (events.length) {
+        return Response.BadRequestError(
+          res,
+          "An event occuring within the selected period already exists"
+        );
+      }
+      let data = { ...req.body };
       const _id = new mongoose.mongo.ObjectId();
       let displayImage, location;
       if (req.files && req.files.displayImage) {
@@ -30,6 +42,10 @@ export default class EventController {
           password: await encryptPassword(req.body.password),
         };
       }
+      if (req.body.usePersonalId) {
+        const user = await User.findById(userId);
+        data = { ...data, eventId: user.personalEventId };
+      }
       const event = await Event.create({
         ...data,
         _id,
@@ -47,6 +63,18 @@ export default class EventController {
 
   static async editEvent(req, res) {
     try {
+      const { id: userId } = req.data;
+      const events = await Event.find({
+        startDate: { $gte: new Date(req.body.startDate) },
+        endDate: { $lte: new Date(req.body.endDate) },
+        userId,
+      });
+      if (events.length) {
+        return Response.BadRequestError(
+          res,
+          "An event occuring within the selected period already exists"
+        );
+      }
       let data = { ...req.body };
       const { eventId } = req.params;
       if (req.body.password) {
@@ -64,6 +92,10 @@ export default class EventController {
       }
       if (req.body.location) {
         data = { ...data, location: req.body.location };
+      }
+      if (req.body.usePersonalId) {
+        const user = await User.findById(userId);
+        data = { ...data, eventId: user.personalEventId };
       }
 
       const event = await Event.findByIdAndUpdate(req.params.eventId, data, {
@@ -103,7 +135,7 @@ export default class EventController {
 
       return Response.Success(res, { event });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       Response.InternalServerError(res, "Error editing event");
     }
   }

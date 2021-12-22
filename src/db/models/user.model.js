@@ -1,78 +1,80 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
+import { v4 as uuid } from "uuid";
 
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: true
+      required: true,
     },
     lastName: {
       type: String,
-      required: true
+      required: true,
     },
     password: {
-      type: String
+      type: String,
     },
     email: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     phoneNumber: {
       type: String,
-      trim: true
+      trim: true,
     },
     dateOfBirth: {
-      type: String
+      type: String,
     },
     state: {
       type: String,
-      trim: true
+      trim: true,
     },
     gender: {
       type: String,
-      trim: true
+      trim: true,
     },
     role: {
       type: mongoose.Schema.ObjectId,
-      ref: 'role'
+      ref: "role",
     },
     googleUserId: {
       type: String,
-      trim: true
+      trim: true,
     },
     facebookUserId: {
       type: String,
-      trim: true
+      trim: true,
     },
     profilePhotoUrl: {
-      type: String
+      type: String,
     },
-    categoryIds: [{ type: 'ObjectId', ref: 'category' }],
+    categoryIds: [{ type: "ObjectId", ref: "category" }],
     emailVerified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    personalEventId: { type: String, default: uuid() },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
-)
+);
 
-UserSchema.virtual('followers', {
-  ref: 'follow',
-  localField: '_id',
-  foreignField: 'followedUser',
-  justOne: false
-})
+UserSchema.virtual("followers", {
+  ref: "follow",
+  localField: "_id",
+  foreignField: "followedUser",
+  justOne: false,
+});
 
-UserSchema.virtual('following', {
-  ref: 'follow',
-  localField: '_id',
-  foreignField: 'followingUser',
-  justOne: false
-})
+UserSchema.virtual("following", {
+  ref: "follow",
+  localField: "_id",
+  foreignField: "followingUser",
+  justOne: false,
+});
 
-const User = mongoose.model('user', UserSchema)
+const User = mongoose.model("user", UserSchema);
 
-export default User
+export default User;
