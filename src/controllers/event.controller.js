@@ -103,7 +103,7 @@ export default class EventController {
 
       return Response.Success(res, { event });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       Response.InternalServerError(res, "Error editing event");
     }
   }

@@ -13,16 +13,9 @@ const { google } = require("googleapis");
  * @class AuthController
  */
 export default class AuthController {
-  /**
-   *
-   * @param {*} req - Payload
-   * @param {*} res - Response object
-   * @returns {Response.Success} if no error occurs
-   * @returns {Response.InternalServerError} if error occurs
-   */
   static async signup(req, res) {
     try {
-      const { firstName, lastName, password, email } = req.body;
+      const { firstName, lastName, password, email, phoneNumber } = req.body;
 
       const encryptedPassword = await Helper.encryptPassword(password);
 
@@ -31,6 +24,7 @@ export default class AuthController {
         lastName,
         password: encryptedPassword,
         email,
+        phoneNumber,
       };
 
       const result = await Users.create({ ...user });
@@ -94,7 +88,7 @@ export default class AuthController {
 
       return Response.Success(res, { user: result, token }, 201);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return Response.InternalServerError(res, "Error signing up user");
     }
   }
