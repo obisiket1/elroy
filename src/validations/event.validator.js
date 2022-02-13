@@ -31,7 +31,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage("Event description cannot be empty")
-        .isLength({ min: 100 })
+        .isLength({ max: 3000 })
         .withMessage(
           "Event description should be at least 100 characters long"
         ),
@@ -112,7 +112,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage("Event description cannot be empty")
-        .isLength({ min: 100 })
+        .isLength({ max: 3000 })
         .withMessage(
           "Event description should be at least 100 characters long"
         ),
@@ -188,7 +188,7 @@ export default class EventsValidator {
         .not()
         .isEmpty()
         .withMessage("Event description cannot be empty")
-        .isLength({ min: 100 })
+        .isLength({ max: 3000 })
         .withMessage(
           "Event description should be at least 100 characters long"
         ),
