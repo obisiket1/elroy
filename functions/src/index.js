@@ -1,8 +1,8 @@
+/* eslint-disable object-curly-spacing */
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 // const { io } = require('socket.io')()
-import morgan from "morgan";
 // import logger from "./config/index.js";
 import v1Router from "./routes/index.js";
 import "./db/index.js";
