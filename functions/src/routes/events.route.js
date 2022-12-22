@@ -204,6 +204,8 @@ router.get(
 
 router.post(
   "/:eventId/live-stream",
+  AuthMiddleware.validateToken,
+  UsersMiddleware.checkOwnership(Events, "eventId"),
   // AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventLiveStreamController.addLiveStream

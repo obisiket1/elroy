@@ -1,4 +1,5 @@
 import { chai, app, validUser, Users } from '../general/initializers.js'
+import userUtils from '../../utils/user.utils.js'
 
 let hashedPassword = (async () => {
   hashedPassword = await userUtils.encryptPassword('12345678')

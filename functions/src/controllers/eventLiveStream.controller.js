@@ -42,22 +42,25 @@ export default class EventLiveStreamController {
         return Response.InternalServerError(res, "live stream could not be created")
       }
 
+      console.log(lstream);
+
       const eventLiveStream = await EventLiveStream.create({
-        playbackIds: lstream.data.playback_ids.map((e) => e.id),
-        streamKey: lstream.data.stream_key,
-        status: lstream.data.status,
-        streamId: lstream.data.id,
+        playbackIds: lstream.playback_ids.map((e) => e.id),
+        streamKey: lstream.stream_key,
+        status: lstream.status,
         title: req.body.title,
+        streamId: lstream.id,
         eventId,
         userId
       });
 
       return Response.Success(res, {
         eventLiveStream, 
-        streamRMTPs: `rtmps://global-live.mux.com:443/app/${lstream.data.stream_key}` 
+        streamRMTPs: `rtmps://global-live.mux.com:443/app/${lstream.stream_key}` 
       });
 
     } catch (err) {
+      console.log(err );
       Response.InternalServerError(res, 'Error adding stream')
     }
   }

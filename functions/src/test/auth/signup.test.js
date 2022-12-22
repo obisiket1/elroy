@@ -30,7 +30,8 @@ let user = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'johndoe@mail.com',
-  password: unhashedPassword
+  password: unhashedPassword,
+  phoneNumber: "2349025615232"
 }
 
 const baseUrl = '/api/v1/auth/signup'

@@ -14,7 +14,7 @@ const eventLiveStreamSchema = new mongoose.Schema(
       },
       state: {
         type: String,
-        default: "idle"
+        default: "idle",
       },
       streamId: {
         type: String,
@@ -23,6 +23,7 @@ const eventLiveStreamSchema = new mongoose.Schema(
       streamKey: {
         type: String,
         required: true,
+        select: false,
       },
       title: {
         type: String,
