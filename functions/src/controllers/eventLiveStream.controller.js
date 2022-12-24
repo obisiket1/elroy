@@ -30,8 +30,16 @@ export default class EventLiveStreamController {
 
   static async addLiveStream (req, res) {
     try {
-      const { eventId } = req.params
-      const { id: userId } = req.data
+      const { eventId } = req.params;
+      const { id: userId } = req.data;
+
+      const liveStream = await EventLiveStream.findOne({
+        eventId: eventId,
+      });
+
+      if (liveStream) {
+        return Response.BadRequestError(res, "live stream already existing")
+      }
 
       const lstream = await Video.LiveStreams.create({
         new_asset_settings: { playback_policy: 'public' },
@@ -41,8 +49,6 @@ export default class EventLiveStreamController {
       if (!lstream) {
         return Response.InternalServerError(res, "live stream could not be created")
       }
-
-      console.log(lstream);
 
       const eventLiveStream = await EventLiveStream.create({
         playbackIds: lstream.playback_ids.map((e) => e.id),
@@ -56,7 +62,10 @@ export default class EventLiveStreamController {
 
       return Response.Success(res, {
         eventLiveStream, 
-        streamRMTPs: `rtmps://global-live.mux.com:443/app/${lstream.stream_key}` 
+        streamRMTPs: [
+          `rtmps://global-live.mux.com:443/app/${lstream.stream_key}`,
+          `rtmps://global-live.mux.com/app/${lstream.stream_key}`
+        ] 
       });
 
     } catch (err) {
