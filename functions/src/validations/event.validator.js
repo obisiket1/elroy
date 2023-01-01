@@ -67,13 +67,17 @@ export default class EventsValidator {
           .optional()
           .isNumeric()
           .withMessage("Attendance limit should be a number"),
+      check("isPublished")
+          .optional()
+          .isBoolean()
+          .withMessage("IsPublished should be a boolean"),
       body().custom((body) => {
-        if ((body.requirePassword && body.password) || !body.requirePassword) {
-          return true;
-        } else {
+        if (body.requirePassword && !body.password) {
           throw new Error(
               "Password should be provided for a password protected event"
           );
+        } else {
+          return true;
         }
       }),
       body().custom((body) => {
@@ -86,6 +90,7 @@ export default class EventsValidator {
     ];
   }
 
+  // eslint-disable-next-line require-jsdoc
   static validateEventEditionData() {
     return [
       check("userId")
@@ -167,6 +172,7 @@ export default class EventsValidator {
     ];
   }
 
+  // eslint-disable-next-line require-jsdoc
   static validateEventUpdateData() {
     return [
       check("userId")
@@ -245,6 +251,7 @@ export default class EventsValidator {
     ];
   }
 
+  // eslint-disable-next-line require-jsdoc
   static validateEventsDeletionData() {
     return [
       check("EventIds")
@@ -258,6 +265,7 @@ export default class EventsValidator {
     ];
   }
 
+  // eslint-disable-next-line require-jsdoc
   static validateEventsFetchData() {
     return [
       check("lat")
@@ -304,6 +312,7 @@ export default class EventsValidator {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({msg}) => msg);
+      // eslint-disable-next-line new-cap
       return Response.InvalidRequestParamsError(res, errArr);
     }
     return next();

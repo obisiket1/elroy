@@ -32,6 +32,7 @@ const eventSchema = new mongoose.Schema(
       location: geoSchema,
       country: String,
       state: String,
+      isPublished: Boolean,
       city: String,
       displayImage: String,
       isLive: {type: Boolean, default: false},

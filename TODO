@@ -1,11 +1,11 @@
 <!-- 1. We can’t create multiple board, not captured in the database -->
 
-2. Profile image upload not working
-  - add file upload to update profile (use the one in event)
+<!-- 2. Profile image upload not working
+  - add file upload to update profile (use the one in event) -->
 
-  Second web correction documents
+  <!-- Second web correction documents
 3. You cannot search for events if u are not logged in
- - make endpoint public
+ - make endpoint public -->
 
 4. This has not been properly discussed or covered in any of the apis
 (Pause) Add location, country, state, city

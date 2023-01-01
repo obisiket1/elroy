@@ -5,9 +5,14 @@ import UsersValidator from "../validations/user.validator.js";
 import ParamsValidator from "../validations/params.validator.js";
 import AuthMiddleware from "../middlewares/auth.middleware.js";
 import Helper from "../utils/helpers.utils.js";
+import multer from "multer-firebase";
 
+// eslint-disable-next-line new-cap
 const router = Router();
 
+const upload = multer({dest: "/tmp"});
+
+const UploadHandler = upload.fields([{name: "profileImage", maxCount: 1}]);
 
 router.get(
     "/attended-events",
@@ -40,6 +45,7 @@ router.patch(
 
 router.patch(
     "/update-profile-image",
+    UploadHandler,
     AuthMiddleware.validateToken,
     UserMiddleware.checkUserExistence,
     UsersController.updateProfileImage
