@@ -4,6 +4,7 @@ import EventAttenders from '../db/models/eventAttender.model.js'
 import Follows from '../db/models/follow.model.js'
 import UsersUtils from '../utils/user.utils.js'
 import Response from '../utils/response.utils.js'
+import StorageUtils from "../utils/storage.utils.js";
 
 export default class UserController {
   static async fetchUser (req, res) {
@@ -53,9 +54,36 @@ export default class UserController {
       return Response.InternalServerError(res, 'Error fetching user')
     }
   }
+
+  static async updateProfileImage (req, res) {
+    try {
+      let profilePhotoUrl;
+      if (req.files && req.files.profileImage) {
+        let file = await StorageUtils.uploadFile(
+          req.files.profileImage[0],
+          `user/profile-images`
+        );
+
+        profilePhotoUrl = file.Location
+      }
+
+      await Users.findByIdAndUpdate(req.data.id, {
+        profilePhotoUrl
+      }, {
+        returnOriginal: false
+      })
+
+    } catch (err) {
+      console.error(err)
+      return Response.InternalServerError(res, 'Error updating profile image')
+    }
+  }
+
   static async updateProfile (req, res) {
     try {
       const update = req.body
+
+      
 
       const user = await Users.findByIdAndUpdate(req.data.id, update, {
         returnOriginal: false

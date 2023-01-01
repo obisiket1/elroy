@@ -38,6 +38,13 @@ router.patch(
     UsersController.updateProfile
 );
 
+router.patch(
+    "/update-profile-image",
+    AuthMiddleware.validateToken,
+    UserMiddleware.checkUserExistence,
+    UsersController.updateProfileImage
+);
+
 router.delete(
     "/:userId",
     AuthMiddleware.validateToken,
