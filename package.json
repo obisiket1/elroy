@@ -8,7 +8,7 @@
     "stop": "pm2 stop 0",
     "dev": "nodemon -r esm src/",
     "test": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
-    "test_": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js",
+    "test_": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
