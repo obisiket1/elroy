@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env);
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
 const { Webhooks } = Mux;
 
