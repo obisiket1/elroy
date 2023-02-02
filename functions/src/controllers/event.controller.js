@@ -51,7 +51,7 @@ export default class EventController {
         _id,
         displayImage,
         location,
-        userId,
+        userId
       });
 
       return Response.Success(res, { event });

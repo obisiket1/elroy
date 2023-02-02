@@ -1,0 +1,33 @@
+<!-- 1. We can’t create multiple board, not captured in the database -->
+
+<!-- 2. Profile image upload not working
+  - add file upload to update profile (use the one in event) -->
+
+  <!-- Second web correction documents
+3. You cannot search for events if u are not logged in
+ - make endpoint public -->
+
+4. This has not been properly discussed or covered in any of the apis
+(Pause) Add location, country, state, city
+
+5. We have discussed this, I. Told you its a must now becos the backend rejects any event with out password. Private and public event is not covered.
+- check create event to password not required when ispasswordRequired is false
+
+6. This not working is from the backend too
+- add save event
+
+10. This is not captured on the backend
+(pause) fixed image size check
+
+11. When request = cartegoryIds[] for the search, get
+
+12. Attendance limit (check if it can be empty)
+
+13. Fetch data (authenticated)
+- upcoming events
+- live events
+- previously attended events (by the user)
+- registered events
+
+14. When an event is not live or active
+- create a register to get notified for the even

@@ -7,7 +7,8 @@
     "start": "pm2 start src/ --node-args=\"-r esm\"",
     "stop": "pm2 stop 0",
     "dev": "nodemon -r esm src/",
-    "test": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
+    "test_": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
+    "test": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -25,8 +26,12 @@
   },
   "homepage": "https://github.com/team-elroi/elroi-api#readme",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
+    "env-cmd": "^10.1.0",
+    "esm": "^3.2.25",
+    "faker": "^6.6.6",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
@@ -44,5 +49,6 @@
   },
   "engines": {
     "node": "16"
-  }
+  },
+  "dependencies": {}
 }

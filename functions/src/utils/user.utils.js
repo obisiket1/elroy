@@ -5,11 +5,12 @@ import jwt from 'jsonwebtoken';
  * Defines helper functions for the user model
  */
 export default class UserUtils {
+
   /**
-     * Encrypts plain text password
-     * @param {*} password
-     * @returns {string} hashed password
-     */
+   * Encrypts plain text password
+   * @param {*} password
+   * @returns {string} hashed password
+   */
   static async encryptPassword(password) {
     const pass = await bcrypt.hash(password, 8);
     return pass;

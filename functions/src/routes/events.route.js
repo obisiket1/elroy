@@ -1,3 +1,7 @@
+/* eslint-disable new-cap */
+/* eslint-disable object-curly-spacing */
+/* eslint-disable indent */
+/* eslint-disable max-len */
 import { Router } from "express";
 import AuthMiddleware from "../middlewares/auth.middleware.js";
 import UsersMiddleware from "../middlewares/user.middleware.js";
@@ -8,6 +12,7 @@ import EventBoardValidator from "../validations/eventBoard.validator.js";
 import EventController from "../controllers/event.controller.js";
 import EventReviewController from "../controllers/eventReview.controller.js";
 import EventLiveCommentController from "../controllers/eventLiveComment.controller.js";
+import EventLiveStreamController from "../controllers/eventLiveStream.controller.js";
 import EventBoardController from "../controllers/eventBoard.controller.js";
 import Helper from "../utils/helpers.utils.js";
 import Events from "../db/models/event.model.js";
@@ -54,8 +59,8 @@ router.patch(
 
 router.get(
   "/",
-  AuthMiddleware.validateToken,
-  AuthMiddleware.grantAccess(),
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
   EventValidator.validateEventsFetchData(),
   Helper.validationResult,
   EventController.fetchEvents
@@ -195,6 +200,15 @@ router.get(
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventController.fetchEventReports
+);
+
+router.post(
+  "/:eventId/live-stream",
+  AuthMiddleware.validateToken,
+  UsersMiddleware.checkOwnership(Events, "eventId"),
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventLiveStreamController.addLiveStream
 );
 
 export default router;

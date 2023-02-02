@@ -30,6 +30,10 @@ const eventSchema = new mongoose.Schema(
       requireAuthentication: Boolean,
       backgroundImage: String,
       location: geoSchema,
+      country: String,
+      state: String,
+      isPublished: Boolean,
+      city: String,
       displayImage: String,
       isLive: {type: Boolean, default: false},
       likesCount: {type: Number, default: 0},
@@ -62,6 +66,14 @@ eventSchema.virtual("liveComments", {
   foreignField: "eventId",
   justOne: false,
 });
+
+eventSchema.virtual("liveStream", {
+  ref: "eventLiveStream",
+  localField: "_id",
+  foreignField: "eventId",
+  justOne: false,
+});
+
 eventSchema.index({location: "2dsphere"});
 
 const Event = mongoose.model("event", eventSchema);
