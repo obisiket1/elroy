@@ -1,9 +1,12 @@
-<!-- 1. We can’t create multiple board, not captured in the database -->
+<!-- 
+1. We can’t create multiple board, not captured in the database 
+-->
 
-<!-- 2. Profile image upload not working
+<!-- 
+2. Profile image upload not working
   - add file upload to update profile (use the one in event) -->
 
-  <!-- Second web correction documents
+<!-- Second web correction documents
 3. You cannot search for events if u are not logged in
  - make endpoint public -->
 
@@ -11,6 +14,7 @@
 (Pause) Add location, country, state, city
 
 5. We have discussed this, I. Told you its a must now becos the backend rejects any event with out password. Private and public event is not covered.
+
 - check create event to password not required when ispasswordRequired is false
 
 6. This not working is from the backend too

@@ -71,8 +71,8 @@ describe('EVENTS', () => {
           title: faker.random.word(),
           description: faker.random.words(),
           categoryId: categoryIds[faker.mersenne.rand(categoryIds.length, 0)],
-          "startDate": "2022-12-25",
-          "endDate": "2022-12-30",
+          "startDate": "2023-12-25",
+          "endDate": "2023-12-30",
         })
         .end((err, res) => {
           if (res.error) console.log(">>", res.error)
@@ -102,6 +102,23 @@ describe('EVENTS', () => {
 
           res.should.have.status(200)
           res.body.data.should.have.property('eventLiveStream')
+          done()
+        })
+    })
+  })
+
+  describe('GET EVENT DATA', () => {
+    it('should return the event data', (done) => {
+      chai
+        .request(app)
+        .get(`${baseUrl}/events/${barrel.eventId}`)
+        .set("x-access-token", barrel.userToken)
+        .end((err, res) => {
+          if (res.error) console.log(">>", res.error)
+          else console.log(res.body);
+
+          res.should.have.status(200)
+          // res.body.data.should.have.property('eventLiveStream')
           done()
         })
     })
