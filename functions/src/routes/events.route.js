@@ -26,6 +26,7 @@ const upload = multer({ dest: "/tmp" });
 let Upload;
 
 Upload = upload.fields([{ name: "displayImage", maxCount: 1 }]);
+
 router.post(
   "/",
   Upload,

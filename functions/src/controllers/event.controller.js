@@ -56,7 +56,6 @@ export default class EventController {
 
       return Response.Success(res, { event });
     } catch (err) {
-      console.log(err);
       Response.InternalServerError(res, "Error creating event");
     }
   }
@@ -207,7 +206,7 @@ export default class EventController {
       const { eventId } = req.params;
 
       const event = await Event.findById(eventId).populate(
-        "boards liveComments reviews"
+        "boards liveComments reviews liveStream"
       );
 
       Response.Success(res, { event });
