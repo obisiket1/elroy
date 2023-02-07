@@ -19,7 +19,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/api/v1", (req, res) =>
-  res.status(200).json({ status: "success", message: "Welcome to ElRoi API" })
+  res.status(200).json({
+    status: "success", 
+    message: "Welcome to ElRoi API", 
+    data: process.env 
+  })
 );
 app.use(postResponse);
 app.use("/api/v1", v1Router);
