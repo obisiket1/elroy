@@ -3,7 +3,8 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 // const { io } = require('socket.io')()
-// import logger from "./config/index.js";
+import morgan from "morgan";
+import logger from "./config/index.js";
 import v1Router from "./routes/index.js";
 import "./db/index.js";
 import postResponse from "./utils/postResponse.utils.js";
@@ -14,15 +15,15 @@ const app = express();
 const port = process.env.PORT_ || 5000;
 // global.logger = logger;
 app.use(cors());
-// app.use(morgan("combined", { stream: logger.stream }));
+app.use(morgan("combined", { stream: logger.stream }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/api/v1", (req, res) =>
   res.status(200).json({
-    status: "success", 
-    message: "Welcome to ElRoi API", 
-    data: process.env 
+    status: "success",
+    message: "Welcome to ElRoi API",
+    data: process.env,
   })
 );
 app.use(postResponse);
