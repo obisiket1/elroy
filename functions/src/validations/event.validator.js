@@ -91,6 +91,38 @@ export default class EventsValidator {
   }
 
   // eslint-disable-next-line require-jsdoc
+  static validateEventRegisterData() {
+    return [
+      check("firstName")
+          .exists()
+          .withMessage("First Name is required")
+          .isString()
+          .withMessage("First Name should be a string")
+          .not()
+          .isEmpty()
+          .withMessage("First Name cannot be empty"),
+      check("lastName")
+          .exists()
+          .withMessage("Last Name is required")
+          .isString()
+          .withMessage("Last Name should be a string")
+          .not()
+          .isEmpty()
+          .withMessage("Last Name cannot be empty"),
+      check("email")
+          .exists()
+          .withMessage("Email is required")
+          .isString()
+          .withMessage("Email should be a string")
+          .not()
+          .isEmpty()
+          .withMessage("Email cannot be empty")
+          .isEmail()
+          .withMessage("Email is not a valid email address"),
+    ];
+  }
+
+  // eslint-disable-next-line require-jsdoc
   static validateEventEditionData() {
     return [
       check("userId")

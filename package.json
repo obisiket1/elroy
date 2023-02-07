@@ -52,6 +52,7 @@
     "node": "16"
   },
   "dependencies": {
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "winston": "^3.8.2"
   }
 }

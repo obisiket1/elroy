@@ -123,4 +123,27 @@ describe('EVENTS', () => {
         })
     })
   })
+
+  describe('REGISTER FOR EVENT', () => {
+    it('should register an event', done => {
+      chai
+        .request(app)
+        .post(`${baseUrl}/events/${barrel.eventId}/register`)
+        .set("x-access-token", barrel.userToken)
+        .send({
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
+          email: faker.internet.email(),
+        })
+        .end((err, res) => {
+          if (res.error) console.log(">>", res.error)
+          else console.log(res.body);
+
+          res.should.have.status(200)
+          res.body.data.should.have.property('attender')
+          done()
+        })
+    })
+  })
+
 })

@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import {Router} from "express";
 import authRouter from "./auth.route.js";
 import usersRouter from "./users.route.js";

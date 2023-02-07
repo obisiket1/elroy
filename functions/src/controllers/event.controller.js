@@ -7,6 +7,7 @@ import Response from "../utils/response.utils.js";
 import { encryptPassword } from "../utils/event.utils.js";
 import StorageUtils from "../utils/storage.utils.js";
 import mongoose from "mongoose";
+import EventRegister from "../db/models/eventRegister.model.js";
 
 export default class EventController {
   static async createEvent(req, res, next) {
@@ -341,6 +342,42 @@ export default class EventController {
       const eventReports = await EventReport.find({ eventId });
 
       Response.Success(res, { eventReports });
+    } catch (err) {
+      Response.InternalServerError(res, "Error reporting event");
+    }
+  }
+
+  static async registerForEvent(req, res) {
+    try {
+      const { eventId } = req.params;
+      const { firstName, lastName, email } = req.body;
+      const event = await Event.findById(eventId);
+  
+      // TODO: Handle already existing emails
+
+      if (!event) {
+        return Response.NotFoundError(
+          res,
+          "event with the ID not found"
+        );
+      }
+
+      if (new Date(event.startDate) < new Date(Date.now()) ) {
+        return Response.BadRequestError(
+          res,
+          "registration has ended due to event has already happened"
+        );
+      }
+
+      const attender = await EventRegister.create({
+        eventId: event._id,
+        firstName,
+        lastName,
+        email
+      });
+
+      return Response.Success(res, { attender });
+
     } catch (err) {
       Response.InternalServerError(res, "Error reporting event");
     }

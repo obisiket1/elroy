@@ -176,6 +176,14 @@ router.get(
 );
 
 router.post(
+  "/:eventId/register",
+  AuthMiddleware.validateToken,
+  EventValidator.validateEventRegisterData(),
+  Helper.validationResult,
+  EventController.registerForEvent
+);
+
+router.post(
   "/:eventId/likers",
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
