@@ -40,7 +40,7 @@ app.use((err, req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at port ${port} on ${process.env.NODE_ENV}`);
+  console.log(`::Server running at port ${port} on ${process.env.NODE_ENV}`);
 });
 
 export default app;
