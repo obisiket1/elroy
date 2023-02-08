@@ -217,8 +217,8 @@ export default class EventController {
       const { id: userId } = req.data;
       let user;
 
-      if (id) {
-        user = await User.findById(id);
+      if (userId) {
+        user = await User.findById(userId);
       }
 
       let params = { ...query };
@@ -261,10 +261,10 @@ export default class EventController {
       //   .skip(parseInt(offset))
       //   .limit(parseInt(limit));
 
-      const events = await Event.aggregate([
+      const [events] = await Event.aggregate([
         { $match: params },
         { $sort: { createdAt: -1 } },
-        ...(id && timeStatus === "past" ? [
+        ...(userId && timeStatus === "past" ? [
           {
             $lookup: {
               from: EventAttenders.collection.collectionName,
@@ -282,7 +282,7 @@ export default class EventController {
           },
           {
             $match: {
-              "attenders.userId": id
+              "attenders.userId": userId
             }
           }
         ]: []),
@@ -310,7 +310,7 @@ export default class EventController {
 
         {
           $facet: {
-            events: [{ $skip: parseInt(offset) }, { $limit: parseInt(limit) }],
+            events: [{ $skip: parseInt(offset) || 10 }, { $limit: parseInt(limit) || 20 }],
             totalCount: [
               {
                 $count: 'count',

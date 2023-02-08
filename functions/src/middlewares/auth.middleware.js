@@ -1,3 +1,6 @@
+/* eslint-disable new-cap */
+/* eslint-disable max-len */
+/* eslint-disable require-jsdoc */
 import jwt from "jsonwebtoken";
 import Response from "../utils/response.utils.js";
 
@@ -32,6 +35,31 @@ class AuthMiddleware {
       req.data = result.data;
       return next();
     });
+  }
+
+  static extractLoginData() {
+    return (req, res, next) => {
+      try {
+        req.data = {};
+        const {token: headerToken = null} = req.headers;
+        const {token: queryToken = null} = req.query;
+
+        const token = queryToken || headerToken || req.headers["x-access-token"];
+
+        if (!token) {
+          return next();
+        }
+        jwt.verify(token, process.env.SECRET, (error, result) => {
+          if (error) {
+            return next();
+          }
+          req.data = result.data;
+          return next();
+        });
+      } catch (err) {
+        Response.InternalServerError(res, err);
+      }
+    };
   }
 
   /**

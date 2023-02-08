@@ -62,6 +62,7 @@ router.get(
   "/",
   // AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
+  AuthMiddleware.extractLoginData(),
   EventValidator.validateEventsFetchData(),
   Helper.validationResult,
   EventController.fetchEvents
@@ -112,6 +113,15 @@ router.post(
   EventLiveCommentValidator.validateEventLiveCommentData(),
   Helper.validationResult,
   EventLiveCommentController.addComment
+);
+
+router.post(
+  "/:eventId/live-stream",
+  AuthMiddleware.validateToken,
+  UsersMiddleware.checkOwnership(Events, "eventId"),
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventLiveStreamController.addLiveStream
 );
 
 Upload = upload.fields([
@@ -209,15 +219,6 @@ router.get(
   AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventController.fetchEventReports
-);
-
-router.post(
-  "/:eventId/live-stream",
-  AuthMiddleware.validateToken,
-  UsersMiddleware.checkOwnership(Events, "eventId"),
-  // AuthMiddleware.validateToken,
-  // AuthMiddleware.grantAccess(),
-  EventLiveStreamController.addLiveStream
 );
 
 export default router;

@@ -1,4 +1,5 @@
 import EventLiveStream from '../db/models/eventLiveStream.model.js'
+import Event from "../db/models/event.model.js";
 import Response from '../utils/response.utils.js'
 import Mux from '@mux/mux-node';
 import dotenv from "dotenv";
@@ -36,6 +37,8 @@ export default class EventLiveStreamController {
         eventId: eventId,
       });
 
+      const event = await Event.findById(eventId);
+
       if (liveStream) {
         return Response.BadRequestError(res, "live stream already existing")
       }
@@ -53,7 +56,7 @@ export default class EventLiveStreamController {
         playbackIds: lstream.playback_ids.map((e) => e.id),
         streamKey: lstream.stream_key,
         status: lstream.status,
-        title: req.body.title,
+        title: req.body.title || `${event.title} - LiveStream`,
         streamId: lstream.id,
         eventId,
         userId
