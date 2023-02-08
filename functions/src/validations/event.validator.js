@@ -55,7 +55,7 @@ export default class EventsValidator {
           .isDate()
           .withMessage("Event end date should be a date")
           .custom((date) => {
-            if (new Date(date) <= new Date()) {
+            if (new Date(date) < new Date()) {
               throw new Error("End end date should be a future date");
             } else return true;
           }),

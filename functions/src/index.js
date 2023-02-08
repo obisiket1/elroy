@@ -30,7 +30,7 @@ app.use(postResponse);
 app.use("/api/v1", v1Router);
 
 app.use((req, res, next) => {
-  const err = new Error("No endpoint found");
+  const err = new Error(`${req.originalUrl}: No endpoint found`);
   err.status = 404;
   next(err);
 });
