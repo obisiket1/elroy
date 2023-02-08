@@ -140,6 +140,65 @@ export default class EventController {
     }
   }
 
+  // static async getEvents(req, res) {
+  //   const {
+  //     limit,
+  //     offset,
+  //     sort,
+  //     lat,
+  //     lng,
+  //     rad,
+  //     searchKeyword,
+  //     categoryIds,
+  //     timeStatus,
+  //     ...query
+  //   } = req.query;
+  //   const { id: userId } = req.data;
+  //   let user;
+
+  //   if (id) {
+  //     user = await User.findById(id);
+  //   }
+
+  //   let params = { ...query };
+  //     if (lat && lng) {
+  //       params = {
+  //         ...params,
+  //         location: {
+  //           $near: {
+  //             $geometry: {
+  //               type: "Point",
+  //               coordinates: [parseFloat(lng), parseFloat(lat)],
+  //             },
+  //             $maxDistance: rad ? parseFloat(rad) : 100000,
+  //           },
+  //         },
+  //       };
+  //     }
+  //     if (timeStatus) {
+  //       switch (timeStatus) {
+  //         case "past":
+  //           params.endDate = { $lt: new Date() };
+  //           break;
+  //         case "future":
+  //           params.startDate = { $gt: new Date() };
+  //           break;
+  //         case "live":
+  //           params.isLive = true;
+  //         default:
+  //       }
+  //     }
+  //     if (searchKeyword) {
+  //       const search = new RegExp(`.*${searchKeyword}.*`, "i");
+  //       params = { ...params, title: search };
+  //     }
+  //     if (categoryIds) {
+  //       params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } };
+  //     }
+
+
+  // }
+
   static async fetchEvents(req, res) {
     try {
       const {
@@ -152,8 +211,15 @@ export default class EventController {
         searchKeyword,
         categoryIds,
         timeStatus,
+        registered,
         ...query
       } = req.query;
+      const { id: userId } = req.data;
+      let user;
+
+      if (id) {
+        user = await User.findById(id);
+      }
 
       let params = { ...query };
       if (lat && lng) {
@@ -190,12 +256,84 @@ export default class EventController {
       if (categoryIds) {
         params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } };
       }
-      const events = await Event.find(params)
-        .sort(sort)
-        .skip(parseInt(offset))
-        .limit(parseInt(limit));
+      // const events = await Event.find(params)
+      //   .sort(sort)
+      //   .skip(parseInt(offset))
+      //   .limit(parseInt(limit));
 
-      Response.Success(res, { events });
+      const events = await Event.aggregate([
+        { $match: params },
+        { $sort: { createdAt: -1 } },
+        ...(id && timeStatus === "past" ? [
+          {
+            $lookup: {
+              from: EventAttenders.collection.collectionName,
+              localField: '_id',
+              foreignField: 'eventId',
+              as: 'attenders',
+              pipeline: [
+                {
+                  $project: {
+                    userId: 1
+                  }
+                }
+              ]
+            },
+          },
+          {
+            $match: {
+              "attenders.userId": id
+            }
+          }
+        ]: []),
+
+        ...(user && registered ? [
+          {
+            $lookup: {
+              from: EventRegister.collection.collectionName,
+              localField: '_id',
+              foreignField: 'eventId',
+              as: "registered",
+            }
+          },
+          {
+            $match: {
+              "registered.email": user.email
+            }
+          },
+          {
+            $project: {
+              "registered": 0
+            }
+          }
+        ]: []),
+
+        {
+          $facet: {
+            events: [{ $skip: parseInt(offset) }, { $limit: parseInt(limit) }],
+            totalCount: [
+              {
+                $count: 'count',
+              },
+            ],
+          },
+        },
+        { $unwind: '$totalCount' },
+        {
+          $addFields: {
+            count: '$totalCount.count',
+          },
+        },
+        {
+          $project: {
+            totalCount: 0,
+          },
+        },
+      ])
+
+      const result = events ? { events: events.events, total: events.count } : { events: [], total: 0 }
+
+      Response.Success(res, { ...result });
     } catch (err) {
       console.log(err);
       Response.InternalServerError(res, "Error fetching events");
@@ -359,6 +497,17 @@ export default class EventController {
         return Response.NotFoundError(
           res,
           "event with the ID not found"
+        );
+      }
+
+      const hasRegistered = await EventRegister.find({
+        email
+      });
+
+      if (hasRegistered) {
+        return Response.BadRequestError(
+          res,
+          "user has already been registered"
         );
       }
 
