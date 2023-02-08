@@ -16,7 +16,6 @@ export default class EventLiveStreamController {
   static async getStreamDetails (req, res) {
     try {
       const { eventId } = req.params;
-
       const eventLiveStream = await EventLiveStream.findOne({ eventId });
 
       return Response.Success(res, {

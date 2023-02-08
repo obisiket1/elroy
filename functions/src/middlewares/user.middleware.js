@@ -91,6 +91,7 @@ export default class UsersMiddleware {
           }creator is allowed to perform this action`
         )
       } catch (err) {
+        console.log(err);
         return Response.InternalServerError(res, 'Error checking ownership')
       }
     }
