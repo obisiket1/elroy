@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "elroi-ng-e2b68"
-  }
+    "default": "elroi-ng-e2b68",
+    "staging": "elroi-ng-e2b68"
+  },
+  "targets": {},
+  "etags": {}
 }

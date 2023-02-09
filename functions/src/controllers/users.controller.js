@@ -57,6 +57,7 @@ export default class UserController {
 
   static async updateProfileImage (req, res) {
     try {
+    
       let profilePhotoUrl;
       if (req.files && req.files.profileImage) {
         let file = await StorageUtils.uploadFile(
@@ -67,11 +68,14 @@ export default class UserController {
         profilePhotoUrl = file.Location
       }
 
+
       await Users.findByIdAndUpdate(req.data.id, {
         profilePhotoUrl
       }, {
         returnOriginal: false
       })
+
+      return Response.Success(res, 'success');
 
     } catch (err) {
       console.error(err)

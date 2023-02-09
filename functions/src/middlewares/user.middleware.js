@@ -79,8 +79,9 @@ export default class UsersMiddleware {
     return async (req, res, next) => {
       try {
         const doc = await Collection.findById(req[field][prop])
+        console.log(req, doc);
 
-        if (doc.userId.toString() === req.data.id || !doc) {
+        if (doc?.userId?.toString() === req.data.id || !doc) {
           req.dbDoc = doc
           return next()
         }

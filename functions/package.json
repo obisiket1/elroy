@@ -6,7 +6,7 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase deploy --only functions --token 4/0AWtgzh7-RIg-nawG8Jg_8o32Ag5OV79lswaeKLh645g6qYohPvX5oi2cC_elwYmC7ZFKEA",
     "logs": "firebase functions:log"
   },
   "engines": {
@@ -17,7 +17,6 @@
   "dependencies": {
     "@google-cloud/storage": "^6.2.0",
     "@mux/mux-node": "^7.0.0",
-    "winston": "^3.8.2",
     "app-root-path": "^3.0.0",
     "aws-sdk": "^2.927.0",
     "bcryptjs": "^2.4.3",
@@ -29,7 +28,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.1",
     "firebase-admin": "^11.0.0",
-    "firebase-functions": "^3.21.2",
+    "firebase-functions": "^4.2.1",
     "googleapis": "^75.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
@@ -38,7 +37,8 @@
     "nodemailer": "^6.6.1",
     "pm2": "^5.1.0",
     "socket.io": "^4.1.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "eslint": "^8.9.0",

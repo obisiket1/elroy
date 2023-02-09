@@ -124,6 +124,15 @@ router.post(
   EventLiveStreamController.addLiveStream
 );
 
+router.delete(
+  "/:eventId/live-stream",
+  AuthMiddleware.validateToken,
+  UsersMiddleware.checkOwnership(Events, "eventId"),
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventLiveStreamController.deleteLiveStream
+);
+
 Upload = upload.fields([
   { name: "image", maxCount: 1 },
   { name: "video", maxCount: 1 },

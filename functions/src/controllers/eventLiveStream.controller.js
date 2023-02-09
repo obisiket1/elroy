@@ -75,6 +75,20 @@ export default class EventLiveStreamController {
     }
   }
 
+  static async deleteLiveStream (req, res) {
+    try {
+      const { eventId } = req.params;
+
+      await EventLiveStream.deleteOne({
+        eventId: eventId,
+      });
+
+      return Response.Success(res, "livestream deleted successfully")
+    } catch (err) {
+      Response.InternalServerError(res, err)
+    }
+  }
+
   static async webhookStream (req, res) {
     try {
       const sig = req.headers['mux-signature'];

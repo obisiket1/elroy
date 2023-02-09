@@ -221,6 +221,12 @@ export default class EventController {
         user = await User.findById(userId);
       }
 
+      if (query.userId) {
+        query.userId = new mongoose.mongo.ObjectId(query.userId)
+      }
+
+      // console.log(user, query);
+
       let params = { ...query };
       if (lat && lng) {
         params = {
@@ -256,11 +262,12 @@ export default class EventController {
       if (categoryIds) {
         params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } };
       }
-      // const events = await Event.find(params)
+      // const eventst = await Event.find(params)
       //   .sort(sort)
       //   .skip(parseInt(offset))
       //   .limit(parseInt(limit));
 
+      console.log(params);
       const [events] = await Event.aggregate([
         { $match: params },
         { $sort: { createdAt: -1 } },
@@ -287,7 +294,7 @@ export default class EventController {
           }
         ]: []),
 
-        ...(user && registered ? [
+        ...(user && (registered === "true" ? true: false) ? [
           {
             $lookup: {
               from: EventRegister.collection.collectionName,
@@ -310,7 +317,7 @@ export default class EventController {
 
         {
           $facet: {
-            events: [{ $skip: parseInt(offset) || 10 }, { $limit: parseInt(limit) || 20 }],
+            events: [{ $skip: parseInt(offset) || 0 }, { $limit: parseInt(limit) || 20 }],
             totalCount: [
               {
                 $count: 'count',
