@@ -375,7 +375,9 @@ export default class EventController {
         return Response.NotFound(res, "events not found");
       }
 
-      const events = await Event.find({ userId: user._id }).populate(
+      const events = await Event.find({ userId: user._id }, null, {
+        sort: { createdAt: -1 },
+      }).populate(
         "boards liveComments reviews liveStream"
       );
 
