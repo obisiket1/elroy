@@ -389,9 +389,21 @@ export default class EventController {
     try {
       const { eventKey } = req.params;
 
-      const event = await Event.findOne({ key: eventKey }).populate(
+      console.log(eventKey);
+
+      let event = await Event.findOne({ key: eventKey }).populate(
         "boards liveComments reviews liveStream"
       );
+
+      if (!event) {
+        event = await Event.findOne({ eventId: eventKey });
+
+        if (event) {
+          event.key = eventKey;
+          await event.save();
+
+        }
+      }
 
       Response.Success(res, { event });
     } catch (err) {
