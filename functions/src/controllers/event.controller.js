@@ -259,8 +259,10 @@ export default class EventController {
         const search = new RegExp(`.*${searchKeyword}.*`, "i");
         params = { ...params, title: search };
       }
+
+      console.log(categoryIds);
       if (categoryIds) {
-        params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } };
+        params = { ...params, categoryId: { $in: categoryIds.map(e => new mongoose.Types.ObjectId(e)) } };
       }
       // const eventst = await Event.find(params)
       //   .sort(sort)
@@ -352,6 +354,42 @@ export default class EventController {
       const { eventId } = req.params;
 
       const event = await Event.findById(eventId).populate(
+        "boards liveComments reviews liveStream"
+      );
+
+      Response.Success(res, { event });
+    } catch (err) {
+      Response.InternalServerError(res, "Error fetching event");
+    }
+  }
+
+  static async fetchEventByUserKey(req, res) {
+    try {
+      const { userKey } = req.params;
+
+      const user = await User.findOne(
+        { personalEventId: userKey }
+      );
+
+      if (!user) {
+        return Response.NotFound(res, "events not found");
+      }
+
+      const events = await Event.find({ userId: user._id }).populate(
+        "boards liveComments reviews liveStream"
+      );
+
+      Response.Success(res, { events });
+    } catch (err) {
+      Response.InternalServerError(res, "Error fetching events");
+    }
+  }
+
+  static async fetchEventByKey(req, res) {
+    try {
+      const { eventKey } = req.params;
+
+      const event = await Event.findOne({ key: eventKey }).populate(
         "boards liveComments reviews liveStream"
       );
 

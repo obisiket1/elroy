@@ -75,6 +75,17 @@ router.get(
   EventController.fetchEvent
 );
 
+router.get(
+  "/key/:eventKey",
+  EventController.fetchEventByKey
+);
+
+router.get(
+  "/user-key/:userKey",
+  EventController.fetchEventByUserKey
+);
+
+
 router.delete(
   "/:eventId",
   AuthMiddleware.validateToken,

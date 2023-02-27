@@ -39,6 +39,7 @@ const eventSchema = new mongoose.Schema(
       likesCount: {type: Number, default: 0},
       viewsCount: {type: Number, default: 0},
       reviewsCount: {type: Number, default: 0},
+      key: {type: String, default: uuid()},
       eventId: {type: String, default: uuid()},
     },
     {
