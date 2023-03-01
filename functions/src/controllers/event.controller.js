@@ -269,7 +269,6 @@ export default class EventController {
         params = { ...params, title: search };
       }
 
-      console.log(categoryIds);
       if (categoryIds) {
         params = { ...params, categoryId: { $in: categoryIds.map(e => new mongoose.Types.ObjectId(e)) } };
       }
@@ -278,7 +277,6 @@ export default class EventController {
       //   .skip(parseInt(offset))
       //   .limit(parseInt(limit));
 
-      console.log(params);
       const [events] = await Event.aggregate([
         { $match: params },
         { $sort: { createdAt: -1 } },
@@ -363,8 +361,14 @@ export default class EventController {
       const { eventId } = req.params;
 
       const event = await Event.findById(eventId).populate(
-        "boards liveComments reviews liveStream"
-      );
+        "boards reviews liveStream"
+      ).populate({
+        path: 'liveComments',
+        populate: {
+          path: 'userId',
+          select: "firstName lastName"
+        }
+      });;
 
       Response.Success(res, { event });
     } catch (err) {
@@ -387,8 +391,14 @@ export default class EventController {
       const events = await Event.find({ userId: user._id }, null, {
         sort: { createdAt: -1 },
       }).populate(
-        "boards liveComments reviews liveStream"
-      );
+        "boards reviews liveStream"
+      ).populate({
+        path: 'liveComments',
+        populate: {
+          path: 'userId',
+          select: "firstName lastName"
+        }
+      });
 
       Response.Success(res, { events });
     } catch (err) {
@@ -403,8 +413,14 @@ export default class EventController {
       console.log(eventKey);
 
       let event = await Event.findOne({ key: eventKey }).populate(
-        "boards liveComments reviews liveStream"
-      );
+        "boards reviews liveStream"
+      ).populate({
+        path: 'liveComments',
+        populate: {
+          path: 'userId',
+          select: "firstName lastName"
+        }
+      });
 
       if (!event) {
         event = await Event.findOne({ eventId: eventKey });
@@ -605,8 +621,14 @@ export default class EventController {
       const events = await Event.find({ isPublished: true }, null, {
         sort: { createdAt: -1 },
       }).populate(
-        "boards liveComments reviews liveStream"
-      );
+        "boards reviews liveStream"
+      ).populate({
+        path: 'liveComments',
+        populate: {
+          path: 'userId',
+          select: "firstName lastName"
+        }
+      });
 
       Response.Success(res, { events });
     } catch (err) {
