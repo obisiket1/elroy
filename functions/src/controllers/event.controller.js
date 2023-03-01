@@ -9,13 +9,16 @@ import StorageUtils from "../utils/storage.utils.js";
 import mongoose from "mongoose";
 import EventRegister from "../db/models/eventRegister.model.js";
 
+
+const $boolify = (str) => str.toLowerCase().trim() === "true" ? true : false;
+
 export default class EventController {
   static async createEvent(req, res, next) {
     try {
       const { id: userId } = req.data;
       const events = await Event.find({
         startDate: { $gte: new Date(req.body.startDate) },
-        endDate: { $lte: new Date(req.body.endDate) },
+        endDate: { $lte: new Date(new Date(req.body.endDate).setHours(23)) },
         userId,
       });
       if (events.length) {
@@ -57,6 +60,7 @@ export default class EventController {
 
       return Response.Success(res, { event });
     } catch (err) {
+      console.log(err);
       Response.InternalServerError(res, "Error creating event");
     }
   }
@@ -212,6 +216,7 @@ export default class EventController {
         categoryIds,
         timeStatus,
         registered,
+        isPublished,
         ...query
       } = req.query;
       const { id: userId } = req.data;
@@ -223,6 +228,10 @@ export default class EventController {
 
       if (query.userId) {
         query.userId = new mongoose.mongo.ObjectId(query.userId)
+      }
+
+      if (isPublished) {
+        query.isPublished = $boolify(isPublished);
       }
 
       // console.log(user, query);
@@ -588,6 +597,21 @@ export default class EventController {
 
     } catch (err) {
       Response.InternalServerError(res, "Error reporting event");
+    }
+  }
+
+  static async getPublishedOrNotPublishedEvents(req, res) {
+    try {
+      const events = await Event.find({ isPublished: true }, null, {
+        sort: { createdAt: -1 },
+      }).populate(
+        "boards liveComments reviews liveStream"
+      );
+
+      Response.Success(res, { events });
+    } catch (err) {
+      console.log(err);
+      Response.InternalServerError(res, "Error fetchingx event");
     }
   }
 }

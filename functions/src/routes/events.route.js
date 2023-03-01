@@ -68,12 +68,20 @@ router.get(
   EventController.fetchEvents
 );
 
+
+router.get(
+  "/published",
+  EventController.getPublishedOrNotPublishedEvents
+);
+
 router.get(
   "/:eventId",
   // AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
   EventController.fetchEvent
 );
+
+// Barister Uwori
 
 router.get(
   "/key/:eventKey",

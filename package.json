@@ -7,6 +7,7 @@
     "start": "pm2 start src/ --node-args=\"-r esm\"",
     "stop": "pm2 stop 0",
     "start_render": "node ./functions/src/index.js",
+    "dev_": "nodemon ./functions/src/index.js",
     "dev": "nodemon -r esm src/",
     "test_": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js -r esm  --timeout 90000  --recursive --exit",
     "test": "env-cmd --silent -f ./test.env nyc --reporter=html --reporter=text mocha ./functions/src/**/*.test.js --exit",

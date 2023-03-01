@@ -73,6 +73,8 @@ describe('EVENTS', () => {
           categoryId: categoryIds[faker.mersenne.rand(categoryIds.length, 0)],
           "startDate": "2023-12-25",
           "endDate": "2023-12-30",
+          "requirePassword": false,
+          password: "",
         })
         .end((err, res) => {
           if (res.error) console.log(">>", res.error)

@@ -29,6 +29,22 @@ export default class InterestsController {
     }
   }
 
+  static async editInterest (req, res) {
+    try {
+      const { name } = req.body
+      const { id } = req.params
+      const interest = await Interests.findByIdAndUpdate(
+        id,
+        { name },
+        { returnOriginal: false }
+      )
+
+      Response.Success(res, { interest })
+    } catch (err) {
+      Response.InternalServerError(res, 'Error editing interest')
+    }
+  }
+
   static async fetchInterests (req, res) {
     try {
       const interests = await Interests.find()

@@ -70,7 +70,7 @@ export default class EventLiveStreamController {
       });
 
     } catch (err) {
-      console.log(err );
+      // console.log(err );
       Response.InternalServerError(res, 'Error adding stream')
     }
   }

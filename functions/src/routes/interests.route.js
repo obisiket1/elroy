@@ -13,4 +13,9 @@ router.get(
     InterestsController.fetchInterests
 );
 
+router.patch(
+    "/:id",
+    InterestsController.editInterest
+);
+
 export default router;
