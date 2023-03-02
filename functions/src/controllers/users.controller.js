@@ -86,9 +86,6 @@ export default class UserController {
   static async updateProfile (req, res) {
     try {
       const update = req.body
-
-      
-
       const user = await Users.findByIdAndUpdate(req.data.id, update, {
         returnOriginal: false
       })

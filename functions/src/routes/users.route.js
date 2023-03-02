@@ -43,6 +43,15 @@ router.patch(
     UsersController.updateProfile
 );
 
+router.post(
+    "/update-profile",
+    AuthMiddleware.validateToken,
+    UserMiddleware.checkUserExistence,
+    UsersValidator.validateEditUserData(),
+    Helper.validationResult,
+    UsersController.updateProfile
+);
+
 router.patch(
     "/update-profile-image",
     UploadHandler,
