@@ -167,9 +167,10 @@ export default class UserController {
   static async fetchFollowers (req, res) {
     try {
       const { userId: followedUserId } = req.params
-      const followers = await Follows.find({ followedUserId }).populate(
-        'followingUserId'
-      )
+      const followers = await Follows.find({ followedUserId }).populate({
+        path: 'followingUserId',
+        select: 'firstName lastName profilePhotoUrl'
+      })
 
       return Response.Success(res, { followers })
     } catch (err) {
@@ -180,9 +181,10 @@ export default class UserController {
   static async fetchFollowing (req, res) {
     try {
       const { userId: followingUserId } = req.params
-      const following = await Follows.find({ followingUserId }).populate(
-        'followedUserId'
-      )
+      const following = await Follows.find({ followingUserId }).populate({
+        path: 'followedUserId',
+        select: 'firstName lastName profilePhotoUrl'
+      });
 
       return Response.Success(res, { following })
     } catch (err) {

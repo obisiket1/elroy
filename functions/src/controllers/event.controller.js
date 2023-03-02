@@ -268,7 +268,7 @@ export default class EventController {
         const search = new RegExp(`.*${searchKeyword}.*`, "i");
         params = { ...params, title: search };
       }
-
+ 
       if (categoryIds) {
         params = { ...params, categoryId: { $in: categoryIds.map(e => new mongoose.Types.ObjectId(e)) } };
       }
@@ -351,7 +351,7 @@ export default class EventController {
 
       Response.Success(res, { ...result });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       Response.InternalServerError(res, "Error fetching events");
     }
   }
@@ -366,7 +366,7 @@ export default class EventController {
         path: 'liveComments',
         populate: {
           path: 'userId',
-          select: "firstName lastName"
+          select: "firstName lastName profilePhotoUrl"
         }
       });;
 
@@ -396,7 +396,7 @@ export default class EventController {
         path: 'liveComments',
         populate: {
           path: 'userId',
-          select: "firstName lastName"
+          select: "firstName lastName profilePhotoUrl"
         }
       });
 
@@ -418,7 +418,7 @@ export default class EventController {
         path: 'liveComments',
         populate: {
           path: 'userId',
-          select: "firstName lastName"
+          select: "firstName lastName profilePhotoUrl"
         }
       });
 
