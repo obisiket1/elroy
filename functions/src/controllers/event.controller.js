@@ -390,7 +390,7 @@ export default class EventController {
       const attendancers = await EventAttender.find({ eventId: event._id });
 
       return Response.Success(res, { event, registered, attendancers });
-      
+
     } catch (error) {
       console.log(error);
       Response.InternalServerError(res, "Error fetching events");
@@ -605,7 +605,7 @@ export default class EventController {
         );
       }
 
-      const hasRegistered = await EventRegister.find({
+      const hasRegistered = await EventRegister.findOne({
         email
       });
 
