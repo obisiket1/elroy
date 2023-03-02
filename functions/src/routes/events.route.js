@@ -125,6 +125,13 @@ router.get(
   EventReviewController.fetchReviews
 );
 
+router.get(
+  "/:eventId/participants",
+  AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventController.fetchEventParticipants
+);
+
 router.post(
   "/:eventId/live-comments",
   AuthMiddleware.validateToken,

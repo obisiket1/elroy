@@ -8,6 +8,7 @@ import { encryptPassword } from "../utils/event.utils.js";
 import StorageUtils from "../utils/storage.utils.js";
 import mongoose from "mongoose";
 import EventRegister from "../db/models/eventRegister.model.js";
+import EventAttender from "../db/models/eventAttender.model.js";
 
 
 const $boolify = (str) => str.toLowerCase().trim() === "true" ? true : false;
@@ -373,6 +374,26 @@ export default class EventController {
       Response.Success(res, { event });
     } catch (err) {
       Response.InternalServerError(res, "Error fetching event");
+    }
+  }
+
+  static async fetchEventParticipants(req, res) {
+    try {
+      const { eventId } = req.params;
+      const event = await Event.findById(eventId);
+
+      if (!event) {
+        return Response.NotFound(res, "Event not found");
+      }
+
+      const registered = await EventRegister.find({ eventId: event._id });
+      const attendancers = await EventAttender.find({ eventId: event._id });
+
+      return Response.Success(res, { event, registered, attendancers });
+      
+    } catch (error) {
+      console.log(error);
+      Response.InternalServerError(res, "Error fetching events");
     }
   }
 
