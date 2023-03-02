@@ -606,7 +606,8 @@ export default class EventController {
       }
 
       const hasRegistered = await EventRegister.findOne({
-        email
+        email,
+        eventId: event._id
       });
 
       if (hasRegistered) {
