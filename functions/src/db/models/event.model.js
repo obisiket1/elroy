@@ -25,7 +25,6 @@ const eventSchema = new mongoose.Schema(
       startTime: String,
       endDate: Date,
       dates: [dateSchema],
-      attendanceLimit: Number,
       requirePassword: Boolean,
       password: String,
       requireAuthentication: Boolean,

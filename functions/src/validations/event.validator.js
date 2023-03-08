@@ -70,10 +70,6 @@ export default class EventsValidator {
           .optional()
           .isObject()
           .withMessage("Location should be an object"),
-      check("attendanceLimit")
-          .optional()
-          .isNumeric()
-          .withMessage("Attendance limit should be a number"),
       check("isPublished")
           .optional()
           .isBoolean()
@@ -185,10 +181,6 @@ export default class EventsValidator {
               throw new Error("End end date should be a future date");
             } else return true;
           }),
-      check("attendanceLimit")
-          .optional()
-          .isNumeric()
-          .withMessage("Attendance limit should be a number"),
       check("usePersonalId")
           .optional()
           .isBoolean()
@@ -259,10 +251,6 @@ export default class EventsValidator {
               throw new Error("End end date should be a future date");
             } else return true;
           }),
-      check("attendanceLimit")
-          .optional()
-          .isNumeric()
-          .withMessage("Attendance limit should be a number"),
       check("usePersonalId")
           .optional()
           .isBoolean()
