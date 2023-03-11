@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 import {check, body, validationResult} from "express-validator";
 import Response from "../utils/response.utils.js";
 import Helper from "../utils/helpers.utils.js";
@@ -292,6 +293,27 @@ export default class EventsValidator {
           .withMessage("Event ids should be an unempty array"),
     ];
   }
+
+  static validateEventJoin() {
+    return [
+      check("name")
+          .exists()
+          .withMessage("name is required")
+          .isString()
+          .withMessage("name must be a string")
+          .not()
+          .isEmpty()
+          .withMessage("name cannot be empty"),
+      check("password")
+          .optional()
+          .isString()
+          .withMessage("Event title should be a string")
+          .not()
+          .isEmpty()
+          .withMessage("Event title cannot be empty"),
+    ];
+  }
+
 
   // eslint-disable-next-line require-jsdoc
   static validateEventsFetchData() {

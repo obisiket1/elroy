@@ -32,6 +32,7 @@ class AuthMiddleware {
       if (error) {
         return Response.UnauthorizedError(res, "Not authorized to access data");
       }
+      console.log(result);
       req.data = result.data;
       return next();
     });

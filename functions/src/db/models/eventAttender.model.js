@@ -5,12 +5,16 @@ const eventAttenderSchema = new mongoose.Schema(
       userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
-        required: true,
       },
       eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "event",
         required: true,
+      },
+      name: String,
+      attendedEvent: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false,
       },
       createdAt: {
         type: Date,

@@ -57,6 +57,8 @@ export default class EventBoardValidator {
       }),
     ];
   }
+
+  // eslint-disable-next-line require-jsdoc
   static validateEventBoardsDeletionData() {
     return [
       //   check('content')

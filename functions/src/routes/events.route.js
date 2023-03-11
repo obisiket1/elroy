@@ -75,6 +75,13 @@ router.get(
 );
 
 router.get(
+  "/attended",
+  AuthMiddleware.validateToken,
+  // AuthMiddleware.extractLoginData(),
+  EventController.getPreviouslyAttendedEvents
+);
+
+router.get(
   "/:eventId",
   // AuthMiddleware.validateToken,
   // AuthMiddleware.grantAccess(),
@@ -211,6 +218,18 @@ router.post(
   "/:eventId/attenders",
   AuthMiddleware.validateToken,
   EventController.addAttender
+);
+
+router.post(
+  "/:eventId/attended",
+  EventController.markAttendance
+);
+
+router.post(
+  "/:eventId/attenders/anonymous-join",
+  EventValidator.validateEventJoin(),
+  Helper.validationResult,
+  EventController.anonymouslyAddAttender
 );
 
 router.get(

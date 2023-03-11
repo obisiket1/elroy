@@ -4,13 +4,13 @@ import EventAttenders from "../db/models/eventAttender.model.js";
 import EventLikers from "../db/models/eventLiker.model.js";
 import EventReport from "../db/models/eventReport.model.js";
 import Response from "../utils/response.utils.js";
-import { encryptPassword } from "../utils/event.utils.js";
+import { encryptPassword, verifyPassword } from "../utils/event.utils.js";
 import StorageUtils from "../utils/storage.utils.js";
 import mongoose from "mongoose";
 import EventRegister from "../db/models/eventRegister.model.js";
 import EventAttender from "../db/models/eventAttender.model.js";
 
-
+const $id = (d) => new mongoose.Types.ObjectId(d);
 const $boolify = (str) => str.toLowerCase().trim() === "true" ? true : false;
 
 export default class EventController {
@@ -145,64 +145,99 @@ export default class EventController {
     }
   }
 
-  // static async getEvents(req, res) {
-  //   const {
-  //     limit,
-  //     offset,
-  //     sort,
-  //     lat,
-  //     lng,
-  //     rad,
-  //     searchKeyword,
-  //     categoryIds,
-  //     timeStatus,
-  //     ...query
-  //   } = req.query;
-  //   const { id: userId } = req.data;
-  //   let user;
+  static async fetchPublicEvents(req, res) {
+    try {
+      const {
+        limit,
+        offset,
+        sort,
+        lat,
+        lng,
+        rad,
+        searchKeyword,
+        categoryIds,
+        timeStatus,
+        ...query
+      } = req.query;
 
-  //   if (id) {
-  //     user = await User.findById(id);
-  //   }
+      if (query.userId) {
+        query.userId = new mongoose.mongo.ObjectId(query.userId)
+      }
 
-  //   let params = { ...query };
-  //     if (lat && lng) {
-  //       params = {
-  //         ...params,
-  //         location: {
-  //           $near: {
-  //             $geometry: {
-  //               type: "Point",
-  //               coordinates: [parseFloat(lng), parseFloat(lat)],
-  //             },
-  //             $maxDistance: rad ? parseFloat(rad) : 100000,
-  //           },
-  //         },
-  //       };
-  //     }
-  //     if (timeStatus) {
-  //       switch (timeStatus) {
-  //         case "past":
-  //           params.endDate = { $lt: new Date() };
-  //           break;
-  //         case "future":
-  //           params.startDate = { $gt: new Date() };
-  //           break;
-  //         case "live":
-  //           params.isLive = true;
-  //         default:
-  //       }
-  //     }
-  //     if (searchKeyword) {
-  //       const search = new RegExp(`.*${searchKeyword}.*`, "i");
-  //       params = { ...params, title: search };
-  //     }
-  //     if (categoryIds) {
-  //       params = { ...params, categoryId: { $in: JSON.parse(categoryIds) } };
-  //     }
+      // console.log(user, query);
 
+      let params = { ...query, isPublished: true };
+      if (lat && lng) {
+        params = {
+          ...params,
+          location: {
+            $near: {
+              $geometry: {
+                type: "Point",
+                coordinates: [parseFloat(lng), parseFloat(lat)],
+              },
+              $maxDistance: rad ? parseFloat(rad) : 100000,
+            },
+          },
+        };
+      }
+      if (timeStatus) {
+        switch (timeStatus) {
+          case "past":
+            params.endDate = { $lt: new Date() };
+            break;
+          case "future":
+            params.startDate = { $gt: new Date() };
+            break;
+          case "live":
+            params.isLive = true;
+          default:
+        }
+      }
+      if (searchKeyword) {
+        const search = new RegExp(`.*${searchKeyword}.*`, "i");
+        params = { ...params, title: search };
+      }
+ 
+      if (categoryIds) {
+        params = { ...params, categoryId: { $in: categoryIds.map(e => new mongoose.Types.ObjectId(e)) } };
+      }
 
-  // }
+      const [events] = await Event.aggregate([
+        { $match: params },
+        { $sort: { createdAt: -1 } },
+        {
+          $facet: {
+            events: [{
+              $skip: parseInt(offset) || 0 }, { $limit: parseInt(limit) || 20 }],
+            totalCount: [
+              {
+                $count: 'count',
+              },
+            ],
+          },
+        },
+        { $unwind: '$totalCount' },
+        {
+          $addFields: {
+            count: '$totalCount.count',
+          },
+        },
+        {
+          $project: {
+            totalCount: 0,
+          },
+        },
+      ])
+
+      const result = events ? { events: events.events, total: events.count } : { events: [], total: 0 }
+
+      Response.Success(res, { ...result });
+    } catch (err) {
+      // console.log(err);
+      Response.InternalServerError(res, "Error fetching events");
+    }
+  }
 
   static async fetchEvents(req, res) {
     try {
@@ -361,7 +396,7 @@ export default class EventController {
     try {
       const { eventId } = req.params;
 
-      const event = await Event.findById(eventId).populate(
+      const event = await Event.findById(eventId, "-password").populate(
         "boards reviews liveStream"
       ).populate({
         path: 'liveComments',
@@ -409,7 +444,7 @@ export default class EventController {
         return Response.NotFound(res, "events not found");
       }
 
-      const events = await Event.find({ userId: user._id }, null, {
+      const events = await Event.find({ userId: user._id }, "-password", {
         sort: { createdAt: -1 },
       }).populate(
         "boards reviews liveStream"
@@ -431,9 +466,7 @@ export default class EventController {
     try {
       const { eventKey } = req.params;
 
-      console.log(eventKey);
-
-      let event = await Event.findOne({ key: eventKey }).populate(
+      let event = await Event.findOne({ key: eventKey }, '-password').populate(
         "boards reviews liveStream"
       ).populate({
         path: 'liveComments',
@@ -501,14 +534,67 @@ export default class EventController {
   static async addAttender(req, res) {
     try {
       const { id: userId } = req.data;
+      const { password } = req.body;
       const { eventId } = req.params;
 
-      await EventAttenders.create({ userId, eventId });
+      let event = await Event.findById(eventId);
+
+      if (!event) {
+        return Response.NotFound(res, "Event not found");
+      }
+
+      const attenders = await EventAttenders.findOne({ eventId: event._id, userId });
+
+      if (attenders) {
+        return Response.ConflictError(res, "Your are already attending this event");
+      }
+
+      if (event.requirePassword) {
+        const isPasswordCorrect = await verifyPassword(password, event.password)
+        if (!isPasswordCorrect) {
+          return Response.InvalidRequestParamsError(res, "Event Invalid password");
+        }
+      }
+
+      await EventAttenders.create({ userId, eventId: event._id });
       Response.Success(res, {
         message: `Event attender added successfully`,
       });
     } catch (err) {
       Response.InternalServerError(res, "Error adding attender");
+    }
+  }
+
+  static async anonymouslyAddAttender(req, res) { 
+    try {
+      const { eventId } = req.params;
+      const { password, name } = req.body;
+
+      let event = await Event.findById(eventId);
+
+      if (!event) {
+        return Response.NotFound(res, "Event not found");
+      }
+
+      const attenders = await EventAttenders.findOne({ eventId: event._id, name });
+      if (attenders) {
+        return Response.ConflictError(res, "Attender with this name already exists");
+      }
+
+      if (event.requirePassword) {
+        const isPasswordCorrect = await verifyPassword(password, event.password)
+        if (!isPasswordCorrect) {
+          return Response.InvalidRequestParamsError(res, "Event Invalid password");
+        }
+      }
+
+      await EventAttenders.create({ name, eventId: $id(eventId) });
+      Response.Success(res, {
+        message: `Event attender added successfully`,
+      });
+    } catch (error) {
+      console.log(error);
+      Response.InternalServerError(res, "Error joining the event");
     }
   }
 
@@ -656,6 +742,53 @@ export default class EventController {
     } catch (err) {
       console.log(err);
       Response.InternalServerError(res, "Error fetchingx event");
+    }
+  }
+
+  static async markAttendance(req, res) {
+    try {
+      const { id: userId } = req.data;
+      const { eventId } = req.params;
+
+      const event = await Event.findById(eventId);
+      if (!event) {
+        return Response.NotFoundError(res, "Event not found");
+      }
+
+      if (new Date(event.startDate) > new Date(Date.now())) {
+        return Response.BadRequestError(res, "Event is yet to happen");
+      }
+
+      await EventAttenders.findOneAndUpdate({
+        eventId: event._id, 
+        userId
+      }, {
+        $set: { attending: true } 
+      });
+
+      Response.Success(res, { message: "Event attending successfully" });
+    } catch (error) {
+      Response.InternalServerError(res, "Error marking attendance");
+    }
+  }
+
+  static async getPreviouslyAttendedEvents(req, res) {
+    try {
+      const { id: userId } = req.data;
+
+      const attendedEvents = await EventAttenders.find({
+        userId,
+        attendedEvent: true
+      })
+        .populate({
+          path: 'eventId',
+          select: "-password"
+        });
+
+      Response.Success(res, { attendedEvents });
+    } catch (error) {
+      console.log(error);
+      Response.InternalServerError(res, "Error fetching resource")
     }
   }
 }
