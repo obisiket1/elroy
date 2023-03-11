@@ -82,15 +82,6 @@ router.get(
 );
 
 router.get(
-  "/:eventId",
-  // AuthMiddleware.validateToken,
-  // AuthMiddleware.grantAccess(),
-  EventController.fetchEvent
-);
-
-// Barister Uwori
-
-router.get(
   "/key/:eventKey",
   EventController.fetchEventByKey
 );
@@ -99,6 +90,16 @@ router.get(
   "/user-key/:userKey",
   EventController.fetchEventByUserKey
 );
+
+
+router.get(
+  "/:eventId",
+  // AuthMiddleware.validateToken,
+  // AuthMiddleware.grantAccess(),
+  EventController.fetchEvent
+);
+
+// Barister Uwori
 
 
 router.delete(
