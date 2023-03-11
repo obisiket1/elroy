@@ -456,6 +456,10 @@ export default class EventController {
         }
       });
 
+      if (!event) {
+        return Response.NotFound(res, "Event not found");
+      }
+
       Response.Success(res, { events });
     } catch (err) {
       Response.InternalServerError(res, "Error fetching events");
@@ -484,6 +488,10 @@ export default class EventController {
           await event.save();
 
         }
+      }
+
+      if (!event) {
+        return Response.NotFound(res, "Event not found");
       }
 
       Response.Success(res, { event });
