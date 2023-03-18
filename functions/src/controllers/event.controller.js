@@ -558,6 +558,7 @@ export default class EventController {
       }
 
       if (event.requirePassword) {
+        if (!password) return Response.InvalidRequestParamsError(res, "No password entered");
         const isPasswordCorrect = await verifyPassword(password, event.password)
         if (!isPasswordCorrect) {
           return Response.InvalidRequestParamsError(res, "Event Invalid password");
@@ -590,6 +591,7 @@ export default class EventController {
       }
 
       if (event.requirePassword) {
+        if (!password) return Response.InvalidRequestParamsError(res, "No password entered");
         const isPasswordCorrect = await verifyPassword(password, event.password)
         if (!isPasswordCorrect) {
           return Response.InvalidRequestParamsError(res, "Event Invalid password");

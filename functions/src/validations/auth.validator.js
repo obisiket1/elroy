@@ -35,7 +35,7 @@ class Auth {
         .isEmpty()
         .withMessage("Password cannot be empty")
         .isLength({ min: 8 })
-        .withMessage("Password length should be at least 8 characters")
+        .withMessage("Password length should be at least 8 characters with a mixture of Upper and Lower case characters")
         .trim()
         .escape(),
     ];
@@ -95,7 +95,7 @@ class Auth {
         .isEmpty()
         .withMessage("Password cannot be empty")
         .isLength({ min: 8 })
-        .withMessage("Password length should be at least 8 characters")
+        .withMessage("Password length should be at least 8 characters with a mixture of Upper and Lower case characters")
         .trim()
         .escape(),
       check("phoneNumber").isString().withMessage("Phone should be a string"),
