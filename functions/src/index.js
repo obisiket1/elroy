@@ -17,6 +17,14 @@ const port = process.env.PORT_ || 5000;
 app.use(cors());
 app.use(morgan("combined", { stream: logger.stream }));
 
+app.use((req, res, next) => {
+  console.log(`\tRequesting ${req.url}`);
+  console.log(`\tRequest Parameters (Body):: ${req.body}`);
+  console.log(`\tRequest Parameters (Query):: ${req.query}`);
+  console.log(`\tRequest Parameters (Query):: ${req.params}`);
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/api/v1", (req, res) =>

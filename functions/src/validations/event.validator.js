@@ -307,10 +307,10 @@ export default class EventsValidator {
       check("password")
           .optional()
           .isString()
-          .withMessage("Event title should be a string")
+          .withMessage("Event password should be a string")
           .not()
           .isEmpty()
-          .withMessage("Event title cannot be empty"),
+          .withMessage("Event password cannot be empty"),
     ];
   }
 

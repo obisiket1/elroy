@@ -222,7 +222,7 @@ router.post(
 );
 
 router.post(
-  "/:eventId/attended",
+  "/:attenderId/attended",
   EventController.markAttendance
 );
 

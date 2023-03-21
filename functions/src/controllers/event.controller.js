@@ -758,20 +758,23 @@ export default class EventController {
   static async markAttendance(req, res) {
     try {
       const { id: userId } = req.data;
-      const { eventId } = req.params;
+      const { attenderId } = req.params;
 
-      const event = await Event.findById(eventId);
-      if (!event) {
-        return Response.NotFoundError(res, "Event not found");
-      }
+      // const event = await Event.findById(eventId);
+      // if (!event) {
+      //   return Response.NotFoundError(res, "Event not found");
+      // }
+      const eventAttender = await EventAttenders.findById(attenderId).populate("eventId");
+      if (!eventAttender) return Response.NotFoundError(res, "attender not found");
+
+      const event = eventAttender.eventId;
 
       if (new Date(event.startDate) > new Date(Date.now())) {
         return Response.BadRequestError(res, "Event is yet to happen");
       }
 
       await EventAttenders.findOneAndUpdate({
-        eventId: event._id, 
-        userId
+        _id: eventAttender._id
       }, {
         $set: { attending: true } 
       });
