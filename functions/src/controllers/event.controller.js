@@ -612,7 +612,10 @@ export default class EventController {
     try {
       const { eventId } = req.params;
 
-      const events = await EventAttenders.find({ eventId });
+      const events = await EventAttenders.find({ eventId }).populate({
+        select: "firstName lastName profilePhotoUrl",
+        path: "userId",
+      });
 
       Response.Success(res, { events });
     } catch (err) {

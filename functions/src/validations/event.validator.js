@@ -33,6 +33,7 @@ export default class EventsValidator {
           .withMessage("Event title cannot be empty"),
       check("description")
           .exists()
+          .optional()
           .withMessage("Event description is required")
           .isString()
           .withMessage("Event description should be a string")
@@ -45,10 +46,12 @@ export default class EventsValidator {
           ),
       check("categoryId")
           .exists()
+          .optional()
           .withMessage("Event category is required")
           .custom(Helper.validateMongooseId("Event category")),
       check("startDate")
           .exists()
+          .optional()
           .withMessage("Event start date is required")
           .isDate()
           .withMessage("Event start date should be a date")
@@ -59,6 +62,7 @@ export default class EventsValidator {
           }),
       check("endDate")
           .exists()
+          .optional()
           .withMessage("Event end date is required")
           .isDate()
           .withMessage("Event end date should be a date")
